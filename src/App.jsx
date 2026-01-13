@@ -1,8 +1,6 @@
 import './App.css';
-const heroBackground =
-  'https://images.unsplash.com/photo-1504542522245-7f57b2e1641a?auto=format&fit=crop&w=1600&q=80';
-const logo =
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Star_of_David.svg/240px-Star_of_David.svg.png';
+import heroBackground from './assets/hero-background.png';
+import logo from './assets/logo (2).png';
 
 const budgetItems = [
   {
