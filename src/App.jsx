@@ -1,101 +1,42 @@
+import { useEffect, useState } from 'react';
 import './App.css';
 import heroBackground from './assets/hero-background.png';
 import logo from './assets/logo (2).png';
 
-const budgetItems = [
-  {
-    name: 'ספסל תפילה',
-    cost: '$500',
-    units: 120,
-    donated: 62,
-  },
-  {
-    name: 'לבני קיר',
-    cost: '$80',
-    units: 18000,
-    donated: 10250,
-  },
-  {
-    name: 'חלון זכוכית',
-    cost: '$3,000',
-    units: 48,
-    donated: 19,
-  },
-  {
-    name: 'חדר לימוד',
-    cost: '$50,000',
-    units: 6,
-    donated: 2,
-  },
-  {
-    name: 'ספרייה מרכזית',
-    cost: '$120,000',
-    units: 1,
-    donated: 0,
-  },
-];
-
-const levels = [
-  {
-    name: 'זהב',
-    subtitle: 'תרומות גדולות ומשמעותיות',
-    items: ['חדר תפילה', 'אגף לימוד', 'ספרייה מרכזית'],
-    benefits: [
-      'שלט קבוע בכניסה',
-      'אזכור בולט באתר',
-      'דוא"ל עם תמונת הפריט שנתרם',
-    ],
-  },
-  {
-    name: 'כסף',
-    subtitle: 'תרומות בינוניות לפריטים מרכזיים',
-    items: ['חלון מעוטר', 'ספסל מיוחד', 'ארון קודש'],
-    benefits: ['אזכור באתר', 'דוא"ל עם תמונת הפריט שנתרם'],
-  },
-  {
-    name: 'ארד',
-    subtitle: 'תרומות קטנות ונגישות לכל אחד',
-    items: ['לבנה', 'כיסא', 'פריט עיצוב'],
-    benefits: ['אזכור ברשימת התורמים', 'דוא"ל עם תמונת הפריט שנתרם'],
-  },
-];
-
-const statusMarkers = [
-  {
-    name: 'ספרייה מרכזית',
-    dedication: 'מוקדש לזכר הרב שלמה',
-    status: 'זמין לתרומה',
-    top: '22%',
-    left: '18%',
-  },
-  {
-    name: 'אגף לימוד',
-    dedication: 'נחנך ע"י משפחת כהן',
-    status: 'נתרם',
-    top: '38%',
-    left: '48%',
-  },
-  {
-    name: 'חלון דרומי',
-    dedication: 'לע"נ לאה בת רחל',
-    status: 'נתרם',
-    top: '58%',
-    left: '32%',
-  },
-  {
-    name: 'ספסל צפוני',
-    dedication: 'לרפואת דוד בן רבקה',
-    status: 'זמין לתרומה',
-    top: '68%',
-    left: '65%',
-  },
-];
-
-const progress = 865000;
-const target = 2000000;
-const percent = Math.round((progress / target) * 100);
+const initialDataState = {
+  budgetItems: [],
+  levels: [],
+  statusMarkers: [],
+  personalPages: [],
+  progress: 0,
+  target: 0,
+};
 
 function App() {
+  const [data, setData] = useState(initialDataState);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const response = await fetch('/api/initial-data');
+        if (!response.ok) {
+          throw new Error('Failed to fetch initial data');
+        }
+        const payload = await response.json();
+        setData(payload);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const percent =
+    data.target > 0 ? Math.round((data.progress / data.target) * 100) : 0;
   return (
     <div className="app">
       <header className="hero" style={{ backgroundImage: `url(${heroBackground})` }}>
@@ -136,11 +77,11 @@ function App() {
           <div className="progress-card">
             <div>
               <p className="progress-label">יעד כולל</p>
-              <p className="progress-value">${target.toLocaleString()}</p>
+              <p className="progress-value">${data.target.toLocaleString()}</p>
             </div>
             <div>
               <p className="progress-label">נאסף עד כה</p>
-              <p className="progress-value">${progress.toLocaleString()}</p>
+              <p className="progress-value">${data.progress.toLocaleString()}</p>
             </div>
             <div className="progress-bar">
               <div className="progress-fill" style={{ width: `${percent}%` }} />
@@ -151,13 +92,21 @@ function App() {
       </header>
 
       <main>
+        {isLoading ? (
+          <section className="section">
+            <div className="section-header">
+              <h2>טוען נתונים...</h2>
+              <p>המערכת מושכת את המידע מהמסד הנתונים.</p>
+            </div>
+          </section>
+        ) : null}
         <section id="donations" className="section">
           <div className="section-header">
             <h2>עמוד תרומות</h2>
             <p>פירוט התקציב והפריטים המוחשיים שמרכיבים את הבנייה.</p>
           </div>
           <div className="budget-grid">
-            {budgetItems.map((item) => (
+            {data.budgetItems.map((item) => (
               <article key={item.name} className="budget-card">
                 <h3>{item.name}</h3>
                 <p className="budget-cost">{item.cost} ליחידה</p>
@@ -183,7 +132,7 @@ function App() {
             <p>שלוש רמות ברורות עם ערך רגשי ותועלות משמעותיות.</p>
           </div>
           <div className="levels-grid">
-            {levels.map((level) => (
+            {data.levels.map((level) => (
               <article key={level.name} className="level-card">
                 <h3>רמת {level.name}</h3>
                 <p className="level-subtitle">{level.subtitle}</p>
@@ -298,7 +247,7 @@ function App() {
           </div>
           <div className="status-board">
             <img src={heroBackground} alt="הדמיית בית הכנסת" />
-            {statusMarkers.map((marker) => (
+            {data.statusMarkers.map((marker) => (
               <div
                 key={marker.name}
                 className={`marker ${marker.status === 'נתרם' ? 'donated' : 'available'}`}
@@ -330,24 +279,14 @@ function App() {
             <p>אפשרות לכל תורם או מגייס ליצור דף אישי עם יעד משלו.</p>
           </div>
           <div className="personal-grid">
-            <article>
-              <h3>משפחת לוי</h3>
-              <p>יעד אישי: $150,000</p>
-              <p>הושג עד כה: $68,000</p>
-              <button type="button">צפייה בדף האישי</button>
-            </article>
-            <article>
-              <h3>נוער גבעת זאב</h3>
-              <p>יעד אישי: $45,000</p>
-              <p>הושג עד כה: $31,500</p>
-              <button type="button">צפייה בדף האישי</button>
-            </article>
-            <article>
-              <h3>קבוצת המתנדבים</h3>
-              <p>יעד אישי: $80,000</p>
-              <p>הושג עד כה: $52,300</p>
-              <button type="button">צפייה בדף האישי</button>
-            </article>
+            {data.personalPages.map((page) => (
+              <article key={page.name}>
+                <h3>{page.name}</h3>
+                <p>יעד אישי: ${page.goal.toLocaleString()}</p>
+                <p>הושג עד כה: ${page.progress.toLocaleString()}</p>
+                <button type="button">צפייה בדף האישי</button>
+              </article>
+            ))}
           </div>
         </section>
 
