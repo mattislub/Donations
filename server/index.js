@@ -1,7 +1,9 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import { fetchInitialData, initializeDatabase } from './db.js';
+
+dotenv.config({ path: new URL('../.env', import.meta.url) });
 
 const app = express();
 const PORT = process.env.PORT ?? 3001;
