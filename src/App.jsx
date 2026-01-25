@@ -12,16 +12,22 @@ function App() {
   const [adminForm, setAdminForm] = useState({ username: '', password: '' });
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [adminError, setAdminError] = useState('');
-  const getViewFromHash = () => {
-    if (window.location.hash === '#admin') {
+  const getViewFromLocation = () => {
+    const { hash, pathname } = window.location;
+    if (hash === '#admin' || pathname === '/admin') {
       return 'admin';
     }
-    if (window.location.hash === '#personal-page') {
+    if (
+      hash === '#personal-page' ||
+      hash === '#personal' ||
+      pathname === '/personal-page' ||
+      pathname === '/personal'
+    ) {
       return 'personal-page';
     }
     return 'home';
   };
-  const [currentView, setCurrentView] = useState(getViewFromHash);
+  const [currentView, setCurrentView] = useState(getViewFromLocation);
 
   useEffect(() => {
     const loadData = async () => {
