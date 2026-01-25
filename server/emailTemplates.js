@@ -74,6 +74,7 @@ const copy = {
 
 const brand = {
   navy: '#0f2a55',
+  headerBackground: '#2f4f7f',
   gold: '#f6c453',
   background: '#f5f6f8',
   text: '#1f2937',
@@ -124,9 +125,12 @@ export const buildDonationEmail = ({ data, language, isAdmin }) => {
   const html = `
     <div style="background: ${brand.background}; padding: 32px; font-family: 'Segoe UI', Arial, sans-serif;">
       <table role="presentation" cellspacing="0" cellpadding="0" style="max-width: 680px; margin: 0 auto; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);" dir="${direction}">
-        <tr style="background: ${brand.navy}; color: #fff;">
-          <td style="padding: 24px;">
-            <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 56px; display: block; margin-bottom: 12px;" />
+        <tr style="background: ${brand.headerBackground}; color: #fff;">
+          <td style="padding: 26px 24px 24px; text-align: center;">
+            <div style="text-align: center;">
+              <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 72px; display: block; margin: 0 auto 10px;" />
+              <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev background" style="height: 120px; display: block; margin: 0 auto 8px; opacity: 0.16;" />
+            </div>
             <h1 style="margin: 0; font-size: 22px; line-height: 1.4;">${escapeHtml(t.heading)}</h1>
           </td>
         </tr>
@@ -180,9 +184,12 @@ export const buildPersonalPageCreatedEmail = ({ language, pageLink, accessCode }
   const html = `
     <div style="background: ${brand.background}; padding: 32px; font-family: 'Segoe UI', Arial, sans-serif;">
       <table role="presentation" cellspacing="0" cellpadding="0" style="max-width: 680px; margin: 0 auto; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);" dir="${direction}">
-        <tr style="background: ${brand.navy}; color: #fff;">
-          <td style="padding: 24px;">
-            <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 56px; display: block; margin-bottom: 12px;" />
+        <tr style="background: ${brand.headerBackground}; color: #fff;">
+          <td style="padding: 26px 24px 24px; text-align: center;">
+            <div style="text-align: center;">
+              <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 72px; display: block; margin: 0 auto 10px;" />
+              <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev background" style="height: 120px; display: block; margin: 0 auto 8px; opacity: 0.16;" />
+            </div>
             <h1 style="margin: 0; font-size: 22px; line-height: 1.4;">${escapeHtml(t.createdHeading)}</h1>
           </td>
         </tr>
@@ -244,9 +251,12 @@ export const buildPersonalPageInviteEmail = ({
   const html = `
     <div style="background: ${brand.background}; padding: 32px; font-family: 'Segoe UI', Arial, sans-serif;">
       <table role="presentation" cellspacing="0" cellpadding="0" style="max-width: 680px; margin: 0 auto; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);" dir="${direction}">
-        <tr style="background: ${brand.navy}; color: #fff;">
-          <td style="padding: 24px;">
-            <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 56px; display: block; margin-bottom: 12px;" />
+        <tr style="background: ${brand.headerBackground}; color: #fff;">
+          <td style="padding: 26px 24px 24px; text-align: center;">
+            <div style="text-align: center;">
+              <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 72px; display: block; margin: 0 auto 10px;" />
+              <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev background" style="height: 120px; display: block; margin: 0 auto 8px; opacity: 0.16;" />
+            </div>
             <h1 style="margin: 0; font-size: 22px; line-height: 1.4;">${escapeHtml(t.inviteHeading)}</h1>
           </td>
         </tr>
