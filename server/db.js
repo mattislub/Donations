@@ -156,8 +156,24 @@ const createTablesSql = `
   CREATE TABLE IF NOT EXISTS personal_pages (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
+    slug TEXT UNIQUE,
+    owner_name TEXT,
+    owner_email TEXT,
+    owner_phone TEXT,
+    notes TEXT,
+    access_code TEXT,
     goal INTEGER NOT NULL,
-    progress INTEGER NOT NULL
+    progress INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+  );
+
+  CREATE TABLE IF NOT EXISTS personal_page_invites (
+    id SERIAL PRIMARY KEY,
+    page_id INTEGER NOT NULL REFERENCES personal_pages(id) ON DELETE CASCADE,
+    recipient_email TEXT NOT NULL,
+    message TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
   );
 
   CREATE TABLE IF NOT EXISTS progress_stats (
@@ -274,6 +290,17 @@ async function seedProgressStats() {
 
 export async function initializeDatabase() {
   await pool.query(createTablesSql);
+  await pool.query(
+    `ALTER TABLE personal_pages
+      ADD COLUMN IF NOT EXISTS slug TEXT UNIQUE,
+      ADD COLUMN IF NOT EXISTS owner_name TEXT,
+      ADD COLUMN IF NOT EXISTS owner_email TEXT,
+      ADD COLUMN IF NOT EXISTS owner_phone TEXT,
+      ADD COLUMN IF NOT EXISTS notes TEXT,
+      ADD COLUMN IF NOT EXISTS access_code TEXT,
+      ADD COLUMN IF NOT EXISTS created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT NOW()`
+  );
   await seedBudgetItems();
   await seedLevels();
   await seedStatusMarkers();
@@ -301,7 +328,7 @@ export async function fetchInitialData() {
     'SELECT progress, target FROM progress_stats ORDER BY id LIMIT 1'
   );
   const personalPagesPromise = pool.query(
-    'SELECT name, goal, progress FROM personal_pages ORDER BY id'
+    'SELECT name, goal, progress, slug FROM personal_pages ORDER BY id'
   );
 
   const [
@@ -385,6 +412,55 @@ export async function upsertAdminProfile({ fullName, phone, email, address }) {
        address = EXCLUDED.address,
        updated_at = NOW()`,
     [fullName, phone, email, address]
+  );
+}
+
+export async function createPersonalPage({
+  name,
+  goal,
+  ownerName,
+  ownerEmail,
+  ownerPhone,
+  notes,
+  slug,
+  accessCode,
+}) {
+  const { rows } = await pool.query(
+    `INSERT INTO personal_pages
+      (name, goal, progress, owner_name, owner_email, owner_phone, notes, slug, access_code, created_at, updated_at)
+     VALUES ($1, $2, 0, $3, $4, $5, $6, $7, $8, NOW(), NOW())
+     RETURNING id, name, goal, progress, slug`,
+    [name, goal, ownerName, ownerEmail, ownerPhone, notes, slug, accessCode]
+  );
+  return rows[0];
+}
+
+export async function findPersonalPageBySlug(slug) {
+  const { rows } = await pool.query(
+    'SELECT id, name, goal, progress, slug, owner_name, owner_email, access_code FROM personal_pages WHERE slug = $1',
+    [slug]
+  );
+  return rows[0];
+}
+
+export async function findPersonalPageByAccess({ email, accessCode }) {
+  const { rows } = await pool.query(
+    `SELECT id, name, goal, progress, slug, owner_name, owner_email
+     FROM personal_pages
+     WHERE owner_email = $1 AND access_code = $2`,
+    [email, accessCode]
+  );
+  return rows[0];
+}
+
+export async function addPersonalPageInvites({ pageId, recipients, message }) {
+  if (!recipients.length) {
+    return;
+  }
+  const insertSql =
+    'INSERT INTO personal_page_invites (page_id, recipient_email, message) VALUES ($1, $2, $3)';
+  await Promise.all(
+    recipients.map((email) => pool.query(insertSql, [pageId, email, message ?? null]))
   );
 }
 
