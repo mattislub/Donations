@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import heroBackground from '../assets/hero-background.png';
 import NavBar from '../components/NavBar';
 import heroBackground from '../assets/hero-background.png';
 
