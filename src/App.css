@@ -461,6 +461,34 @@ textarea {
   margin-bottom: 24px;
 }
 
+.admin-section-background {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.admin-section-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 22, 48, 0.7);
+}
+
+.admin-section-background > * {
+  position: relative;
+  z-index: 1;
+}
+
+.admin-section-background .section-header h2,
+.admin-section-background .section-header p {
+  color: #fff;
+}
+
+.admin-section-background .admin-page-actions .secondary {
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
 .admin-page-actions {
   margin-bottom: 24px;
 }
