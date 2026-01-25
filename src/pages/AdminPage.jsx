@@ -22,6 +22,8 @@ function AdminPage({
     address: '',
   });
   const [profileStatus, setProfileStatus] = useState(null);
+  const adminSectionClassName = 'section admin-section admin-section-background';
+  const adminSectionStyle = { backgroundImage: `url(${heroBackground})` };
 
   const handleAccessCodeChange = (field) => (event) => {
     setAccessCodeForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -81,7 +83,7 @@ function AdminPage({
 
   return (
     <>
-      <header className="hero">
+      <header className="hero" style={{ backgroundImage: `url(${heroBackground})` }}>
         <div className="overlay" />
         <NavBar t={t} language={language} onLanguageChange={onLanguageChange} />
       </header>
