@@ -99,6 +99,10 @@
   max-width: 720px;
 }
 
+.hero-content.personal-hero {
+  max-width: 680px;
+}
+
 .hero-eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -123,6 +127,13 @@
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 32px;
+}
+
+.personal-page-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .primary,
@@ -431,6 +442,18 @@ textarea {
 
 .personal-grid article {
   text-align: center;
+}
+
+.personal-page {
+  background: #f5f6f8;
+}
+
+.personal-page-grid article {
+  text-align: start;
+}
+
+.personal-form {
+  border: 1px solid #e5e7eb;
 }
 
 .admin-section .section-header {
