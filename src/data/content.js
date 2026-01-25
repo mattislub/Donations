@@ -81,6 +81,9 @@ export const uiTranslations = {
       currency: 'Currency',
       message: 'Personal message',
       submit: 'Continue to payment and confirmation',
+      sending: 'Sending...',
+      success: 'Thank you! Your details were sent successfully.',
+      error: 'Something went wrong. Please try again shortly.',
       note: 'A receipt and thank-you letter will be sent automatically after payment.',
       placeholders: {
         name: 'Jordan Levine',
@@ -295,6 +298,9 @@ export const uiTranslations = {
       currency: 'מטבע',
       message: 'הודעה אישית',
       submit: 'המשך לתשלום ואישור',
+      sending: 'שולח...',
+      success: 'תודה! הפרטים נשלחו בהצלחה.',
+      error: 'אירעה תקלה. נסו שוב בעוד רגע.',
       note: 'לאחר התשלום תישלח קבלה ומכתב תודה אוטומטי.',
       placeholders: {
         name: 'ישראל ישראלי',

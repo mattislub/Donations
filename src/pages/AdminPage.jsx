@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import heroBackground from '../assets/hero-background.png';
 import NavBar from '../components/NavBar';
+import heroBackground from '../assets/hero-background.png';
 
 function AdminPage({
   t,
@@ -81,12 +82,12 @@ function AdminPage({
 
   return (
     <>
-      <header className="hero" style={{ backgroundImage: `url(${heroBackground})` }}>
+      <header className="hero">
         <div className="overlay" />
         <NavBar t={t} language={language} onLanguageChange={onLanguageChange} />
       </header>
       <main>
-        <section className="section muted admin-section">
+        <section className={adminSectionClassName} style={adminSectionStyle}>
           <div className="section-header">
             <h2>{t.admin.title}</h2>
             <p>{t.admin.description}</p>
