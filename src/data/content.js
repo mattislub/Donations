@@ -162,7 +162,7 @@ export const uiTranslations = {
     },
     admin: {
       title: 'Admin Management',
-      description: 'Secure area for staff to manage donations, content, and reports.',
+      description: 'Secure area for staff to manage administrators, users, and account settings.',
       loginTitle: 'Admin login',
       loginDescription: 'Sign in to reach the management dashboard.',
       backHome: 'Back to home',
@@ -172,23 +172,47 @@ export const uiTranslations = {
       signOut: 'Sign out',
       error: 'Incorrect credentials. Please try again.',
       dashboardTitle: 'Management dashboard',
-      cards: [
-        {
-          title: 'Donation approvals',
-          description: 'Review new pledges and approve or decline them.',
+      management: {
+        title: 'Administrators & users',
+        description: 'Control access levels, invite new managers, and keep user records updated.',
+        items: [
+          {
+            title: 'Admin roles',
+            description: 'Assign permissions for finance, content, and support.',
+          },
+          {
+            title: 'User directory',
+            description: 'Review donors, volunteers, and community members in one list.',
+          },
+          {
+            title: 'Activity log',
+            description: 'Track sign-ins and sensitive changes for compliance.',
+          },
+        ],
+        actions: ['Add admin', 'Invite user', 'Export user list'],
+      },
+      security: {
+        title: 'Password code',
+        description: 'Define a shared access code for trusted administrators.',
+        codeLabel: 'New access code',
+        confirmLabel: 'Confirm access code',
+        hint: 'Use 6-10 digits and update it at least once per quarter.',
+        save: 'Save code',
+      },
+      profile: {
+        title: 'Personal details',
+        description: 'Update the contact details shown to donors and staff.',
+        fullName: 'Full name',
+        phone: 'Phone number',
+        email: 'Email address',
+        address: 'Mailing address',
+        save: 'Save details',
+        placeholders: {
+          fullName: 'Moshe Cohen',
+          phone: '050-123-4567',
+          email: 'admin@community.org',
+          address: '12 Community Blvd, Givat Ze’ev',
         },
-        {
-          title: 'Content updates',
-          description: 'Update hero copy, progress numbers, and reports.',
-        },
-        {
-          title: 'Community messages',
-          description: 'Send updates to donors and volunteers.',
-        },
-      ],
-      quickActions: {
-        title: 'Quick actions',
-        items: ['Export donation report', 'Open donor list', 'Add a new level'],
       },
     },
     languageLabel: 'Language',
@@ -347,7 +371,7 @@ export const uiTranslations = {
     },
     admin: {
       title: 'ניהול מנהל',
-      description: 'אזור מאובטח לצוות לניהול תרומות, תוכן ודוחות.',
+      description: 'אזור מאובטח לניהול מנהלים, משתמשים והגדרות חשבון.',
       loginTitle: 'התחברות מנהל',
       loginDescription: 'התחברו כדי להגיע ללוח הניהול.',
       backHome: 'חזרה לדף הבית',
@@ -357,23 +381,47 @@ export const uiTranslations = {
       signOut: 'התנתקות',
       error: 'פרטי ההתחברות שגויים. נסו שוב.',
       dashboardTitle: 'לוח ניהול',
-      cards: [
-        {
-          title: 'אישורי תרומות',
-          description: 'סקירת התחייבויות חדשות ואישור או דחייה שלהן.',
+      management: {
+        title: 'ניהול מנהלים ומשתמשים',
+        description: 'שליטה בהרשאות, הוספת מנהלים חדשים ועדכון כרטיסי משתמש.',
+        items: [
+          {
+            title: 'הרשאות מנהלים',
+            description: 'שיוך הרשאות כספים, תוכן ותמיכה לצוות.',
+          },
+          {
+            title: 'ספר משתמשים',
+            description: 'רשימת תורמים, מתנדבים וחברי קהילה במקום אחד.',
+          },
+          {
+            title: 'יומן פעילות',
+            description: 'מעקב כניסות ושינויים רגישים לצורך בקרה.',
+          },
+        ],
+        actions: ['הוספת מנהל', 'הזמנת משתמש', 'ייצוא רשימת משתמשים'],
+      },
+      security: {
+        title: 'קוד סיסמה',
+        description: 'הגדירו קוד גישה משותף למנהלים המורשים.',
+        codeLabel: 'קוד גישה חדש',
+        confirmLabel: 'אימות קוד גישה',
+        hint: 'מומלץ קוד בן 6-10 ספרות ולעדכן אחת לרבעון.',
+        save: 'שמירת קוד',
+      },
+      profile: {
+        title: 'פרטים אישיים',
+        description: 'עדכון פרטי הקשר שמוצגים לתורמים ולצוות.',
+        fullName: 'שם מלא',
+        phone: 'טלפון',
+        email: 'דוא״ל',
+        address: 'כתובת למשלוח',
+        save: 'שמירת פרטים',
+        placeholders: {
+          fullName: 'משה כהן',
+          phone: '050-123-4567',
+          email: 'admin@community.org',
+          address: 'שדרות הקהילה 12, גבעת זאב',
         },
-        {
-          title: 'עדכוני תוכן',
-          description: 'עדכון טקסטים, נתוני התקדמות ודוחות.',
-        },
-        {
-          title: 'הודעות קהילה',
-          description: 'שליחת עדכונים לתורמים ולמתנדבים.',
-        },
-      ],
-      quickActions: {
-        title: 'פעולות מהירות',
-        items: ['ייצוא דוח תרומות', 'פתיחת רשימת תורמים', 'הוספת רמת תרומה'],
       },
     },
     languageLabel: 'שפה',
