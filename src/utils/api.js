@@ -1,0 +1,20 @@
+const normalizeBaseUrl = (value) => {
+  if (!value) {
+    return '';
+  }
+  return value.endsWith('/') ? value.slice(0, -1) : value;
+};
+
+export const apiBaseUrl = normalizeBaseUrl(
+  import.meta.env.VITE_API_BASE_URL,
+);
+
+export const buildApiUrl = (path) => {
+  if (!path) {
+    return apiBaseUrl || '';
+  }
+  if (path.startsWith('/')) {
+    return `${apiBaseUrl}${path}`;
+  }
+  return `${apiBaseUrl}/${path}`;
+};

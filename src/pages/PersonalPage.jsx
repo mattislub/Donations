@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import heroBackground from '../assets/hero-background.png';
 import NavBar from '../components/NavBar';
 import { personalPageNames } from '../data/content';
+import { buildApiUrl } from '../utils/api';
 import { translateValue } from '../utils/translation';
 
 function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading }) {
@@ -79,7 +80,7 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
     });
 
     try {
-      const response = await fetch('/api/personal-pages', {
+      const response = await fetch(buildApiUrl('/api/personal-pages'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formState, language }),
@@ -118,7 +119,7 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
     setLoggedInPage(null);
 
     try {
-      const response = await fetch('/api/personal-pages/login', {
+      const response = await fetch(buildApiUrl('/api/personal-pages/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginState),
@@ -145,16 +146,19 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
     setIsSendingInvites(true);
 
     try {
-      const response = await fetch(`/api/personal-pages/${loggedInPage.slug}/invite`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          accessCode: loginState.accessCode,
-          recipients: inviteState.recipients,
-          message: inviteState.message,
-          language,
-        }),
-      });
+      const response = await fetch(
+        buildApiUrl(`/api/personal-pages/${loggedInPage.slug}/invite`),
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            accessCode: loginState.accessCode,
+            recipients: inviteState.recipients,
+            message: inviteState.message,
+            language,
+          }),
+        },
+      );
 
       if (!response.ok) {
         throw new Error('Failed to send invites');
