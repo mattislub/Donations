@@ -4,6 +4,7 @@ import { initialDataState, uiTranslations } from './data/content';
 import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
 import PersonalPage from './pages/PersonalPage';
+import { buildApiUrl } from './utils/api';
 
 function App() {
   const [data, setData] = useState(initialDataState);
@@ -32,7 +33,7 @@ function App() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch('/api/initial-data');
+        const response = await fetch(buildApiUrl('/api/initial-data'));
         if (!response.ok) {
           throw new Error('Failed to fetch initial data');
         }

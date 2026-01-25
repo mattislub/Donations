@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import NavBar from '../components/NavBar';
 import heroBackground from '../assets/hero-background.png';
+import { buildApiUrl } from '../utils/api';
 
 function AdminPage({
   t,
@@ -62,7 +63,7 @@ function AdminPage({
     }
 
     try {
-      const response = await fetch('/api/admin/access-code', {
+      const response = await fetch(buildApiUrl('/api/admin/access-code'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: accessCodeForm.code }),
@@ -84,7 +85,7 @@ function AdminPage({
     setProfileStatus(null);
 
     try {
-      const response = await fetch('/api/admin/profile', {
+      const response = await fetch(buildApiUrl('/api/admin/profile'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(profileForm),

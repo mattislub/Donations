@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { budgetItemNames, levelItems, levelNames } from '../../data/content';
+import { buildApiUrl } from '../../utils/api';
 import { translateValue, translateWithFallback } from '../../utils/translation';
 
 function StepsSection({ t, language }) {
@@ -26,7 +27,7 @@ function StepsSection({ t, language }) {
     setStatus({ type: 'sending', message: t.form.sending });
 
     try {
-      const response = await fetch('/api/donation-email', {
+      const response = await fetch(buildApiUrl('/api/donation-email'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
