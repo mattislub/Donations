@@ -233,6 +233,7 @@ main {
 .budget-grid,
 .levels-grid,
 .personal-grid,
+.personal-page-grid,
 .info-grid {
   display: grid;
   gap: 24px;
@@ -461,6 +462,12 @@ textarea {
 
 .personal-form {
   border: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 24px;
+  border-radius: 20px;
+  display: grid;
+  gap: 16px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
 }
 
 .admin-section .section-header {

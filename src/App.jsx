@@ -3,6 +3,7 @@ import './App.css';
 import { initialDataState, uiTranslations } from './data/content';
 import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
+import PersonalPage from './pages/PersonalPage';
 
 function App() {
   const [data, setData] = useState(initialDataState);
@@ -11,7 +12,15 @@ function App() {
   const [adminForm, setAdminForm] = useState({ username: '', password: '' });
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [adminError, setAdminError] = useState('');
-  const getViewFromHash = () => (window.location.hash === '#admin' ? 'admin' : 'home');
+  const getViewFromHash = () => {
+    if (window.location.hash === '#admin') {
+      return 'admin';
+    }
+    if (window.location.hash === '#personal-page') {
+      return 'personal-page';
+    }
+    return 'home';
+  };
   const [currentView, setCurrentView] = useState(getViewFromHash);
 
   useEffect(() => {
@@ -83,6 +92,14 @@ function App() {
           onAdminChange={handleAdminChange}
           onAdminSubmit={handleAdminSubmit}
           onAdminSignOut={handleAdminSignOut}
+        />
+      ) : currentView === 'personal-page' ? (
+        <PersonalPage
+          t={t}
+          language={language}
+          onLanguageChange={setLanguage}
+          personalPages={data.personalPages}
+          isLoading={isLoading}
         />
       ) : (
         <HomePage

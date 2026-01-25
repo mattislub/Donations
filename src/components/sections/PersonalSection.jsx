@@ -2,6 +2,10 @@ import { personalPageNames } from '../../data/content';
 import { translateValue } from '../../utils/translation';
 
 function PersonalSection({ t, language, personalPages }) {
+  const handleOpenPersonalPage = () => {
+    window.location.hash = '#personal-page';
+  };
+
   return (
     <section id="personal" className="section">
       <div className="section-header">
@@ -18,7 +22,9 @@ function PersonalSection({ t, language, personalPages }) {
             <p>
               {t.personal.progress}: ${page.progress.toLocaleString()}
             </p>
-            <button type="button">{t.personal.action}</button>
+            <button type="button" onClick={handleOpenPersonalPage}>
+              {t.personal.action}
+            </button>
           </article>
         ))}
       </div>
