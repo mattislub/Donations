@@ -74,22 +74,72 @@ function AdminPage({
                 </button>
               </div>
               <div className="admin-grid">
-                {t.admin.cards.map((card) => (
-                  <article key={card.title} className="admin-card">
-                    <h4>{card.title}</h4>
-                    <p>{card.description}</p>
-                  </article>
-                ))}
-              </div>
-              <div className="admin-actions">
-                <h4>{t.admin.quickActions.title}</h4>
-                <div className="admin-action-list">
-                  {t.admin.quickActions.items.map((item) => (
-                    <button key={item} type="button">
-                      {item}
+                <article className="admin-card admin-card-wide">
+                  <h4>{t.admin.management.title}</h4>
+                  <p>{t.admin.management.description}</p>
+                  <div className="admin-subgrid">
+                    {t.admin.management.items.map((item) => (
+                      <div key={item.title} className="admin-subcard">
+                        <h5>{item.title}</h5>
+                        <p>{item.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="admin-action-list admin-action-list-muted">
+                    {t.admin.management.actions.map((action) => (
+                      <button key={action} type="button">
+                        {action}
+                      </button>
+                    ))}
+                  </div>
+                </article>
+                <article className="admin-card">
+                  <h4>{t.admin.security.title}</h4>
+                  <p>{t.admin.security.description}</p>
+                  <form className="admin-form">
+                    <label>
+                      {t.admin.security.codeLabel}
+                      <input type="password" placeholder="••••••" />
+                    </label>
+                    <label>
+                      {t.admin.security.confirmLabel}
+                      <input type="password" placeholder="••••••" />
+                    </label>
+                    <p className="form-note">{t.admin.security.hint}</p>
+                    <button className="primary" type="button">
+                      {t.admin.security.save}
                     </button>
-                  ))}
-                </div>
+                  </form>
+                </article>
+                <article className="admin-card admin-card-wide">
+                  <h4>{t.admin.profile.title}</h4>
+                  <p>{t.admin.profile.description}</p>
+                  <form className="admin-form">
+                    <div className="form-row">
+                      <label>
+                        {t.admin.profile.fullName}
+                        <input type="text" placeholder={t.admin.profile.placeholders.fullName} />
+                      </label>
+                      <label>
+                        {t.admin.profile.phone}
+                        <input type="tel" placeholder={t.admin.profile.placeholders.phone} />
+                      </label>
+                    </div>
+                    <div className="form-row">
+                      <label>
+                        {t.admin.profile.email}
+                        <input type="email" placeholder={t.admin.profile.placeholders.email} />
+                      </label>
+                      <label>
+                        {t.admin.profile.address}
+                        <input type="text" placeholder={t.admin.profile.placeholders.address} />
+                      </label>
+                    </div>
+                    <button className="primary" type="button">
+                      {t.admin.profile.save}
+                    </button>
+                  </form>
+                </article>
               </div>
             </div>
           )}
