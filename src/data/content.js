@@ -135,6 +135,40 @@ export const uiTranslations = {
         notes: 'Share a short description or dedication.',
       },
       submit: 'Create personal donation page',
+      sending: 'Sending...',
+      createSuccess: 'Your page request was received. A link has been sent by email.',
+      createError: 'Unable to create the page. Please try again.',
+      manageTitle: 'Manage your personal page',
+      manageDescription:
+        'Log in with the access code from your email to share your link and invite supporters.',
+      loginTitle: 'Login to your page',
+      loginDescription: 'Enter the email and access code we sent you.',
+      loginFields: {
+        email: 'Email address',
+        accessCode: 'Access code',
+      },
+      loginPlaceholders: {
+        email: 'example@email.com',
+        accessCode: '••••••',
+      },
+      loginAction: 'Sign in',
+      loginSuccess: 'Login successful. You can now send invitations.',
+      loginError: 'Login failed. Please check your email and access code.',
+      shareLabel: 'Share your personal page link',
+      inviteTitle: 'Send donation requests',
+      inviteDescription:
+        'Add a list of emails (one per line or separated by commas) and we will send your request.',
+      inviteFields: {
+        recipients: 'Recipients list',
+        message: 'Personal message (optional)',
+      },
+      invitePlaceholders: {
+        recipients: 'name1@email.com, name2@email.com',
+        message: 'Write a short note to your supporters.',
+      },
+      inviteAction: 'Send requests',
+      inviteSuccess: 'Your invitations were sent successfully.',
+      inviteError: 'Unable to send invitations. Please try again.',
     },
     info: {
       title: 'More information',
@@ -389,6 +423,40 @@ export const uiTranslations = {
         notes: 'כתבו כאן תיאור קצר או הקדשה.',
       },
       submit: 'יצירת דף תרומה אישי',
+      sending: 'שולח...',
+      createSuccess: 'הבקשה התקבלה וקישור נשלח למייל.',
+      createError: 'לא ניתן ליצור את הדף. נסו שוב.',
+      manageTitle: 'ניהול דף תרומה אישי',
+      manageDescription:
+        'התחברו עם קוד הגישה שקיבלתם במייל כדי לשתף את הקישור ולבקש תרומות.',
+      loginTitle: 'התחברות לדף האישי',
+      loginDescription: 'הזינו את המייל וקוד הגישה שקיבלתם.',
+      loginFields: {
+        email: 'דוא״ל',
+        accessCode: 'קוד גישה',
+      },
+      loginPlaceholders: {
+        email: 'example@email.com',
+        accessCode: '••••••',
+      },
+      loginAction: 'התחברות',
+      loginSuccess: 'ההתחברות הצליחה. ניתן לשלוח בקשות.',
+      loginError: 'ההתחברות נכשלה. בדקו את המייל וקוד הגישה.',
+      shareLabel: 'קישור לדף האישי שלכם',
+      inviteTitle: 'שליחת בקשות תרומה',
+      inviteDescription:
+        'הוסיפו רשימת מיילים (שורה לכל כתובת או מופרדים בפסיקים) והמערכת תשלח עבורכם.',
+      inviteFields: {
+        recipients: 'רשימת נמענים',
+        message: 'הודעה אישית (אופציונלי)',
+      },
+      invitePlaceholders: {
+        recipients: 'name1@email.com, name2@email.com',
+        message: 'כתבו הודעה קצרה לתומכים.',
+      },
+      inviteAction: 'שליחת בקשה',
+      inviteSuccess: 'ההודעות נשלחו בהצלחה.',
+      inviteError: 'לא ניתן לשלוח הודעות. נסו שוב.',
     },
     info: {
       title: 'עוד מידע',
