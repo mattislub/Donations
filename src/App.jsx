@@ -11,8 +11,15 @@ function App() {
   const [adminForm, setAdminForm] = useState({ username: '', password: '' });
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [adminError, setAdminError] = useState('');
-  const getViewFromHash = () => (window.location.hash === '#admin' ? 'admin' : 'home');
-  const [currentView, setCurrentView] = useState(getViewFromHash);
+  const getViewFromLocation = () => {
+    if (window.location.hash === '#admin') {
+      return 'admin';
+    }
+
+    const normalizedPath = window.location.pathname.replace(/\/+$/, '');
+    return normalizedPath === '/admin' ? 'admin' : 'home';
+  };
+  const [currentView, setCurrentView] = useState(getViewFromLocation);
 
   useEffect(() => {
     const loadData = async () => {
@@ -34,12 +41,16 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      setCurrentView(getViewFromHash());
+    const handleLocationChange = () => {
+      setCurrentView(getViewFromLocation());
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    window.addEventListener('popstate', handleLocationChange);
+    return () => {
+      window.removeEventListener('hashchange', handleLocationChange);
+      window.removeEventListener('popstate', handleLocationChange);
+    };
   }, []);
 
   const percent = data.target > 0 ? Math.round((data.progress / data.target) * 100) : 0;
