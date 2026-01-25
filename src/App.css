@@ -437,6 +437,10 @@ textarea {
   margin-bottom: 24px;
 }
 
+.admin-page-actions {
+  margin-bottom: 24px;
+}
+
 .admin-login {
   display: flex;
   justify-content: center;
