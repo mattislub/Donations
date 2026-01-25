@@ -165,7 +165,7 @@ export const uiTranslations = {
     },
     admin: {
       title: 'Admin Management',
-      description: 'Secure area for staff to manage administrators, users, and account settings.',
+      description: 'Secure area for staff to manage CRM tasks, users, and donation settings.',
       loginTitle: 'Admin login',
       loginDescription: 'Sign in to reach the management dashboard.',
       backHome: 'Back to home',
@@ -175,24 +175,61 @@ export const uiTranslations = {
       signOut: 'Sign out',
       error: 'Incorrect credentials. Please try again.',
       dashboardTitle: 'Management dashboard',
-      management: {
-        title: 'Administrators & users',
-        description: 'Control access levels, invite new managers, and keep user records updated.',
-        items: [
+      crm: {
+        title: 'CRM Command Center',
+        description: 'A unified view for managing every donation touchpoint in real time.',
+        actions: ['Create report', 'Sync payments', 'Add user'],
+        stats: [
           {
-            title: 'Admin roles',
-            description: 'Assign permissions for finance, content, and support.',
+            label: 'Active users',
+            value: '1,284',
+            meta: '32 new this week',
           },
           {
-            title: 'User directory',
-            description: 'Review donors, volunteers, and community members in one list.',
+            label: 'Personal pages',
+            value: '86',
+            meta: '12 awaiting approval',
           },
           {
-            title: 'Activity log',
-            description: 'Track sign-ins and sensitive changes for compliance.',
+            label: 'Donation items',
+            value: '214',
+            meta: '24 fully funded',
+          },
+          {
+            label: 'General goal',
+            value: '₪1.8M',
+            meta: '68% collected',
           },
         ],
-        actions: ['Add admin', 'Invite user', 'Export user list'],
+        modules: [
+          {
+            title: 'User management',
+            description: 'Segment donors, volunteers, and staff with clear roles.',
+            meta: '4 segments · 18 pending requests',
+          },
+          {
+            title: 'Personal donation pages',
+            description: 'Review, publish, and optimize personalized fundraising pages.',
+            meta: '9 drafts · 5 scheduled updates',
+          },
+          {
+            title: 'Donation items',
+            description: 'Track physical items, milestones, and remaining inventory.',
+            meta: '12 items low on supply',
+          },
+          {
+            title: 'General donation goal',
+            description: 'Monitor the overall campaign progress and goal alignment.',
+            meta: 'Target reached in 9 weeks at current pace',
+          },
+        ],
+        sidebar: {
+          eyebrow: 'Quick view',
+          title: 'CRM Highlights',
+          description: 'Stay aligned with the fundraising team’s daily priorities.',
+          tasksTitle: 'Today’s focus',
+          tasks: ['Approve new user accounts', 'Review donation pages', 'Update item availability'],
+        },
       },
       security: {
         title: 'Password code',
@@ -382,7 +419,7 @@ export const uiTranslations = {
     },
     admin: {
       title: 'ניהול מנהל',
-      description: 'אזור מאובטח לניהול מנהלים, משתמשים והגדרות חשבון.',
+      description: 'אזור מאובטח לניהול CRM, משתמשים והגדרות תרומה.',
       loginTitle: 'התחברות מנהל',
       loginDescription: 'התחברו כדי להגיע ללוח הניהול.',
       backHome: 'חזרה לדף הבית',
@@ -392,24 +429,61 @@ export const uiTranslations = {
       signOut: 'התנתקות',
       error: 'פרטי ההתחברות שגויים. נסו שוב.',
       dashboardTitle: 'לוח ניהול',
-      management: {
-        title: 'ניהול מנהלים ומשתמשים',
-        description: 'שליטה בהרשאות, הוספת מנהלים חדשים ועדכון כרטיסי משתמש.',
-        items: [
+      crm: {
+        title: 'מרכז שליטה CRM',
+        description: 'תצוגה אחודה לניהול כל נקודות המגע עם תורמים בזמן אמת.',
+        actions: ['יצירת דוח', 'סנכרון תשלומים', 'הוספת משתמש'],
+        stats: [
           {
-            title: 'הרשאות מנהלים',
-            description: 'שיוך הרשאות כספים, תוכן ותמיכה לצוות.',
+            label: 'משתמשים פעילים',
+            value: '1,284',
+            meta: '32 חדשים השבוע',
           },
           {
-            title: 'ספר משתמשים',
-            description: 'רשימת תורמים, מתנדבים וחברי קהילה במקום אחד.',
+            label: 'דפים אישיים',
+            value: '86',
+            meta: '12 ממתינים לאישור',
           },
           {
-            title: 'יומן פעילות',
-            description: 'מעקב כניסות ושינויים רגישים לצורך בקרה.',
+            label: 'פריטים לתרומה',
+            value: '214',
+            meta: '24 מומנו במלואם',
+          },
+          {
+            label: 'יעד כללי',
+            value: '₪1.8M',
+            meta: '68% נאסף',
           },
         ],
-        actions: ['הוספת מנהל', 'הזמנת משתמש', 'ייצוא רשימת משתמשים'],
+        modules: [
+          {
+            title: 'ניהול משתמשים',
+            description: 'סיווג תורמים, מתנדבים וצוות לפי הרשאות.',
+            meta: '4 קבוצות · 18 בקשות פתוחות',
+          },
+          {
+            title: 'דפי תרומה אישיים',
+            description: 'בדיקה, פרסום ושיפור דפי גיוס מותאמים.',
+            meta: '9 טיוטות · 5 עדכונים מתוזמנים',
+          },
+          {
+            title: 'פריטים לתרומה',
+            description: 'מעקב אחר פריטים מוחשיים, אבני דרך ומלאי.',
+            meta: '12 פריטים במלאי נמוך',
+          },
+          {
+            title: 'יעד תרומה כללי',
+            description: 'מעקב אחר התקדמות הקמפיין מול היעד הכולל.',
+            meta: 'קצב נוכחי: יעד בעוד 9 שבועות',
+          },
+        ],
+        sidebar: {
+          eyebrow: 'סקירה מהירה',
+          title: 'דגשים יומיים',
+          description: 'יישור קו עם סדרי העדיפויות של צוות הגיוס.',
+          tasksTitle: 'מיקוד להיום',
+          tasks: ['אישור משתמשים חדשים', 'בדיקת דפי תרומה', 'עדכון זמינות פריטים'],
+        },
       },
       security: {
         title: 'קוד סיסמה',
