@@ -135,6 +135,36 @@ const uiTranslations = {
       hours: 'Hours: Sun-Thu 09:00-18:00',
       note: 'Thank you for building a warm, welcoming future with us.',
     },
+    admin: {
+      title: 'Admin Management',
+      description: 'Secure area for staff to manage donations, content, and reports.',
+      loginTitle: 'Admin login',
+      loginDescription: 'Sign in to reach the management dashboard.',
+      username: 'Username',
+      password: 'Password',
+      signIn: 'Sign in',
+      signOut: 'Sign out',
+      error: 'Incorrect credentials. Please try again.',
+      dashboardTitle: 'Management dashboard',
+      cards: [
+        {
+          title: 'Donation approvals',
+          description: 'Review new pledges and approve or decline them.',
+        },
+        {
+          title: 'Content updates',
+          description: 'Update hero copy, progress numbers, and reports.',
+        },
+        {
+          title: 'Community messages',
+          description: 'Send updates to donors and volunteers.',
+        },
+      ],
+      quickActions: {
+        title: 'Quick actions',
+        items: ['Export donation report', 'Open donor list', 'Add a new level'],
+      },
+    },
     languageLabel: 'Language',
   },
   he: {
@@ -259,6 +289,36 @@ const uiTranslations = {
       hours: 'שעות פעילות: א׳-ה׳ 09:00-18:00',
       note: 'תודה שאתם בונים איתנו עתיד קהילתי חם ומחבק.',
     },
+    admin: {
+      title: 'ניהול מנהל',
+      description: 'אזור מאובטח לצוות לניהול תרומות, תוכן ודוחות.',
+      loginTitle: 'התחברות מנהל',
+      loginDescription: 'התחברו כדי להגיע ללוח הניהול.',
+      username: 'שם משתמש',
+      password: 'סיסמה',
+      signIn: 'התחברות',
+      signOut: 'התנתקות',
+      error: 'פרטי ההתחברות שגויים. נסו שוב.',
+      dashboardTitle: 'לוח ניהול',
+      cards: [
+        {
+          title: 'אישורי תרומות',
+          description: 'סקירת התחייבויות חדשות ואישור או דחייה שלהן.',
+        },
+        {
+          title: 'עדכוני תוכן',
+          description: 'עדכון טקסטים, נתוני התקדמות ודוחות.',
+        },
+        {
+          title: 'הודעות קהילה',
+          description: 'שליחת עדכונים לתורמים ולמתנדבים.',
+        },
+      ],
+      quickActions: {
+        title: 'פעולות מהירות',
+        items: ['ייצוא דוח תרומות', 'פתיחת רשימת תורמים', 'הוספת רמת תרומה'],
+      },
+    },
     languageLabel: 'שפה',
   },
 };
@@ -364,6 +424,9 @@ function App() {
   const [data, setData] = useState(initialDataState);
   const [isLoading, setIsLoading] = useState(true);
   const [language, setLanguage] = useState('en');
+  const [adminForm, setAdminForm] = useState({ username: '', password: '' });
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  const [adminError, setAdminError] = useState('');
 
   useEffect(() => {
     const loadData = async () => {
@@ -388,6 +451,30 @@ function App() {
     data.target > 0 ? Math.round((data.progress / data.target) * 100) : 0;
   const t = uiTranslations[language];
   const isRtl = language === 'he';
+  const adminCredentials = { username: 'admin', password: 'donations2024' };
+
+  const handleAdminChange = (field) => (event) => {
+    setAdminForm((prev) => ({ ...prev, [field]: event.target.value }));
+  };
+
+  const handleAdminSubmit = (event) => {
+    event.preventDefault();
+    if (
+      adminForm.username.trim() === adminCredentials.username &&
+      adminForm.password === adminCredentials.password
+    ) {
+      setIsAdminAuthenticated(true);
+      setAdminError('');
+      setAdminForm({ username: '', password: '' });
+      return;
+    }
+    setAdminError(t.admin.error);
+  };
+
+  const handleAdminSignOut = () => {
+    setIsAdminAuthenticated(false);
+    setAdminError('');
+  };
 
   return (
     <div className="app" dir={isRtl ? 'rtl' : 'ltr'}>
@@ -666,6 +753,77 @@ function App() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section id="admin" className="section muted admin-section">
+          <div className="section-header">
+            <h2>{t.admin.title}</h2>
+            <p>{t.admin.description}</p>
+          </div>
+          {!isAdminAuthenticated ? (
+            <div className="admin-login">
+              <div className="admin-login-card">
+                <h3>{t.admin.loginTitle}</h3>
+                <p>{t.admin.loginDescription}</p>
+                <form onSubmit={handleAdminSubmit}>
+                  <label>
+                    {t.admin.username}
+                    <input
+                      type="text"
+                      value={adminForm.username}
+                      onChange={handleAdminChange('username')}
+                      placeholder={t.admin.username}
+                      autoComplete="username"
+                    />
+                  </label>
+                  <label>
+                    {t.admin.password}
+                    <input
+                      type="password"
+                      value={adminForm.password}
+                      onChange={handleAdminChange('password')}
+                      placeholder="••••••••"
+                      autoComplete="current-password"
+                    />
+                  </label>
+                  {adminError ? <p className="form-error">{adminError}</p> : null}
+                  <button className="primary" type="submit">
+                    {t.admin.signIn}
+                  </button>
+                </form>
+              </div>
+            </div>
+          ) : (
+            <div className="admin-panel">
+              <div className="admin-panel-header">
+                <div>
+                  <h3>{t.admin.dashboardTitle}</h3>
+                  <p>{t.admin.description}</p>
+                </div>
+                <button type="button" className="secondary" onClick={handleAdminSignOut}>
+                  {t.admin.signOut}
+                </button>
+              </div>
+              <div className="admin-grid">
+                {t.admin.cards.map((card) => (
+                  <article key={card.title} className="admin-card">
+                    <h4>{card.title}</h4>
+                    <p>{card.description}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="admin-actions">
+                <h4>{t.admin.quickActions.title}</h4>
+                <div className="admin-action-list">
+                  {t.admin.quickActions.items.map((item) => (
+                    <button key={item} type="button">
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         <section className="section muted">
