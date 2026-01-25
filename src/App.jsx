@@ -43,12 +43,16 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      setCurrentView(getViewFromHash());
+    const handleLocationChange = () => {
+      setCurrentView(getViewFromLocation());
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    window.addEventListener('popstate', handleLocationChange);
+    return () => {
+      window.removeEventListener('hashchange', handleLocationChange);
+      window.removeEventListener('popstate', handleLocationChange);
+    };
   }, []);
 
   const percent = data.target > 0 ? Math.round((data.progress / data.target) * 100) : 0;
