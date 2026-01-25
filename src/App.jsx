@@ -108,6 +108,35 @@ const uiTranslations = {
       progress: 'Raised so far',
       action: 'View personal page',
     },
+    personalPage: {
+      title: 'Personal donation pages',
+      description:
+        'Browse community members who fundraise through personal pages and choose to donate through them.',
+      listTitle: 'Active personal pages',
+      listDescription: 'Pick a fundraiser to donate through their personal link.',
+      donateAction: 'Donate through this page',
+      createTitle: 'Create a new personal page',
+      createDescription:
+        'Fill in the details to open a new fundraising page with a private goal and contact details.',
+      backToHome: 'Back to main page',
+      fields: {
+        pageTitle: 'Page title',
+        goal: 'Donation goal',
+        fullName: 'Full name',
+        email: 'Email address',
+        phone: 'Phone number',
+        notes: 'Additional details',
+      },
+      placeholders: {
+        pageTitle: 'Levi family campaign',
+        goal: '50000',
+        fullName: 'Jordan Levine',
+        email: 'example@email.com',
+        phone: '050-0000000',
+        notes: 'Share a short description or dedication.',
+      },
+      submit: 'Create personal donation page',
+    },
     info: {
       title: 'More information',
       description: 'Optional pages for community updates and FAQs.',
@@ -261,6 +290,35 @@ const uiTranslations = {
       goal: 'יעד אישי',
       progress: 'הושג עד כה',
       action: 'צפייה בדף האישי',
+    },
+    personalPage: {
+      title: 'דפי תרומה אישיים',
+      description:
+        'עמוד ייעודי עם רשימת מגייסים והאפשרות לתרום דרך דף אישי של כל אחד.',
+      listTitle: 'רשימת דפי תרומה פעילים',
+      listDescription: 'בחרו מגייס ותרמו דרך הדף האישי שלו.',
+      donateAction: 'תרומה דרך הדף',
+      createTitle: 'יצירת דף תרומה חדש',
+      createDescription:
+        'מלאו פרטים ליצירת דף אישי עם יעד פרטי ופרטי קשר מלאים.',
+      backToHome: 'חזרה לעמוד הראשי',
+      fields: {
+        pageTitle: 'שם הדף',
+        goal: 'יעד סכום תרומה',
+        fullName: 'שם מלא',
+        email: 'אימייל',
+        phone: 'טלפון',
+        notes: 'פרטים נוספים',
+      },
+      placeholders: {
+        pageTitle: 'קמפיין משפחת לוי',
+        goal: '50000',
+        fullName: 'ישראל ישראלי',
+        email: 'example@email.com',
+        phone: '050-0000000',
+        notes: 'כתבו כאן תיאור קצר או הקדשה.',
+      },
+      submit: 'יצירת דף תרומה אישי',
     },
     info: {
       title: 'עוד מידע',
@@ -427,6 +485,7 @@ function App() {
   const [adminForm, setAdminForm] = useState({ username: '', password: '' });
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [adminError, setAdminError] = useState('');
+  const [activePage, setActivePage] = useState('main');
 
   useEffect(() => {
     const loadData = async () => {
@@ -476,6 +535,24 @@ function App() {
     setAdminError('');
   };
 
+  const handleNavClick = (target) => (event) => {
+    if (target === 'personal') {
+      event.preventDefault();
+      setActivePage('personal');
+      return;
+    }
+
+    if (activePage !== 'main') {
+      event.preventDefault();
+      setActivePage('main');
+      if (target !== 'home') {
+        setTimeout(() => {
+          document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' });
+        }, 0);
+      }
+    }
+  };
+
   return (
     <div className="app" dir={isRtl ? 'rtl' : 'ltr'}>
       <header className="hero" style={{ backgroundImage: `url(${heroBackground})` }}>
@@ -489,12 +566,24 @@ function App() {
             </div>
           </div>
           <div className="nav-links">
-            <a href="#home">{t.nav.home}</a>
-            <a href="#donations">{t.nav.donations}</a>
-            <a href="#levels">{t.nav.levels}</a>
-            <a href="#status">{t.nav.status}</a>
-            <a href="#personal">{t.nav.personal}</a>
-            <a href="#contact">{t.nav.contact}</a>
+            <a href="#home" onClick={handleNavClick('home')}>
+              {t.nav.home}
+            </a>
+            <a href="#donations" onClick={handleNavClick('donations')}>
+              {t.nav.donations}
+            </a>
+            <a href="#levels" onClick={handleNavClick('levels')}>
+              {t.nav.levels}
+            </a>
+            <a href="#status" onClick={handleNavClick('status')}>
+              {t.nav.status}
+            </a>
+            <a href="#personal" onClick={handleNavClick('personal')}>
+              {t.nav.personal}
+            </a>
+            <a href="#contact" onClick={handleNavClick('contact')}>
+              {t.nav.contact}
+            </a>
           </div>
           <div className="lang-toggle" aria-label={t.languageLabel}>
             <button
@@ -514,347 +603,479 @@ function App() {
           </div>
         </nav>
 
-        <div id="home" className="hero-content">
-          <p className="hero-eyebrow">{t.hero.eyebrow}</p>
-          <h1>{t.hero.title}</h1>
-          <p className="hero-description">{t.hero.description}</p>
-          <div className="hero-actions">
-            <a className="primary" href="#donations">
-              {t.hero.donateNow}
-            </a>
-            <a className="secondary" href="#levels">
-              {t.hero.chooseLevel}
-            </a>
+        {activePage === 'main' ? (
+          <div id="home" className="hero-content">
+            <p className="hero-eyebrow">{t.hero.eyebrow}</p>
+            <h1>{t.hero.title}</h1>
+            <p className="hero-description">{t.hero.description}</p>
+            <div className="hero-actions">
+              <a className="primary" href="#donations">
+                {t.hero.donateNow}
+              </a>
+              <a className="secondary" href="#levels">
+                {t.hero.chooseLevel}
+              </a>
+            </div>
+            <div className="progress-card">
+              <div>
+                <p className="progress-label">{t.hero.totalGoal}</p>
+                <p className="progress-value">${data.target.toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="progress-label">{t.hero.raisedSoFar}</p>
+                <p className="progress-value">${data.progress.toLocaleString()}</p>
+              </div>
+              <div className="progress-bar">
+                <div className="progress-fill" style={{ width: `${percent}%` }} />
+              </div>
+              <p className="progress-percent">
+                {percent}% {t.hero.progress}
+              </p>
+            </div>
           </div>
-          <div className="progress-card">
-            <div>
-              <p className="progress-label">{t.hero.totalGoal}</p>
-              <p className="progress-value">${data.target.toLocaleString()}</p>
+        ) : (
+          <div className="hero-content personal-hero">
+            <p className="hero-eyebrow">{t.nav.personal}</p>
+            <h1>{t.personalPage.title}</h1>
+            <p className="hero-description">{t.personalPage.description}</p>
+            <div className="hero-actions">
+              <button
+                className="secondary"
+                type="button"
+                onClick={() => setActivePage('main')}
+              >
+                {t.personalPage.backToHome}
+              </button>
+              <a className="primary" href="#create-personal-page">
+                {t.personalPage.createTitle}
+              </a>
             </div>
-            <div>
-              <p className="progress-label">{t.hero.raisedSoFar}</p>
-              <p className="progress-value">${data.progress.toLocaleString()}</p>
-            </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: `${percent}%` }} />
-            </div>
-            <p className="progress-percent">
-              {percent}% {t.hero.progress}
-            </p>
           </div>
-        </div>
+        )}
       </header>
 
-      <main>
-        {isLoading ? (
-          <section className="section">
-            <div className="section-header">
-              <h2>{t.loading.title}</h2>
-              <p>{t.loading.description}</p>
-            </div>
-          </section>
-        ) : null}
-        <section id="donations" className="section">
-          <div className="section-header">
-            <h2>{t.donations.title}</h2>
-            <p>{t.donations.description}</p>
-          </div>
-          <div className="budget-grid">
-            {data.budgetItems.map((item) => (
-              <article key={item.name} className="budget-card">
-                <h3>{translateValue(budgetItemNames, language, item.name)}</h3>
-                <p className="budget-cost">
-                  {item.cost} {t.donations.costLabel}
-                </p>
-                <div className="budget-stats">
-                  <div>
-                    <span>{t.donations.unitsLabel}</span>
-                    <strong>{item.units}</strong>
-                  </div>
-                  <div>
-                    <span>{t.donations.donatedLabel}</span>
-                    <strong>{item.donated}</strong>
-                  </div>
+      {activePage === 'main' ? (
+        <>
+          <main>
+            {isLoading ? (
+              <section className="section">
+                <div className="section-header">
+                  <h2>{t.loading.title}</h2>
+                  <p>{t.loading.description}</p>
                 </div>
-                <button type="button">{t.donations.action}</button>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="levels" className="section muted">
-          <div className="section-header">
-            <h2>{t.levels.title}</h2>
-            <p>{t.levels.description}</p>
-          </div>
-          <div className="levels-grid">
-            {data.levels.map((level) => (
-              <article key={level.name} className="level-card">
-                <h3>
-                  {t.levels.action}{' '}
-                  {translateValue(levelNames, language, level.name)}
-                </h3>
-                <p className="level-subtitle">
-                  {translateValue(levelSubtitles, language, level.subtitle)}
-                </p>
-                <div>
-                  <h4>{t.levels.itemsTitle}</h4>
-                  <ul>
-                    {level.items.map((item) => (
-                      <li key={item}>{translateValue(levelItems, language, item)}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4>{t.levels.benefitsTitle}</h4>
-                  <ul>
-                    {level.benefits.map((benefit) => (
-                      <li key={benefit}>
-                        {translateValue(levelBenefits, language, benefit)}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <button type="button">
-                  {t.levels.action} {translateValue(levelNames, language, level.name)}
-                </button>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="section-header">
-            <h2>{t.steps.title}</h2>
-            <p>{t.steps.description}</p>
-          </div>
-          <div className="steps-grid">
-            {t.steps.items.map((step, index) => (
-              <div key={step.title} className="step">
-                <span>{index + 1}</span>
-                <h3>{step.title}</h3>
-                <p>{step.description}</p>
+              </section>
+            ) : null}
+            <section id="donations" className="section">
+              <div className="section-header">
+                <h2>{t.donations.title}</h2>
+                <p>{t.donations.description}</p>
               </div>
-            ))}
-          </div>
-
-          <form className="donation-form">
-            <div className="form-row">
-              <label>
-                {t.form.donationLevel}
-                <select>
-                  {Object.keys(levelNames).map((level) => (
-                    <option key={level}>
-                      {translateValue(levelNames, language, level)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                {t.form.itemSelection}
-                <select>
-                  {['חדר לימוד', 'חלון מעוטר', 'לבני קיר'].map((item) => (
-                    <option key={item}>
-                      {translateWithFallback(
-                        budgetItemNames,
-                        levelItems,
-                        language,
-                        item
-                      )}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-            <div className="form-row">
-              <label>
-                {t.form.fullName}
-                <input type="text" placeholder={t.form.placeholders.name} />
-              </label>
-              <label>
-                {t.form.email}
-                <input type="email" placeholder={t.form.placeholders.email} />
-              </label>
-            </div>
-            <div className="form-row">
-              <label>
-                {t.form.dedication}
-                <input type="text" placeholder={t.form.placeholders.dedication} />
-              </label>
-              <label>
-                {t.form.currency}
-                <select>
-                  <option>USD</option>
-                  <option>ILS</option>
-                  <option>EUR</option>
-                </select>
-              </label>
-            </div>
-            <label className="full-width">
-              {t.form.message}
-              <textarea rows="4" placeholder={t.form.placeholders.message} />
-            </label>
-            <button className="primary" type="button">
-              {t.form.submit}
-            </button>
-            <p className="form-note">{t.form.note}</p>
-          </form>
-        </section>
-
-        <section id="status" className="section muted">
-          <div className="section-header">
-            <h2>{t.status.title}</h2>
-            <p>{t.status.description}</p>
-          </div>
-          <div className="status-board">
-            <img src={heroBackground} alt={t.status.title} />
-            {data.statusMarkers.map((marker) => (
-              <div
-                key={marker.name}
-                className={`marker ${statusKeyMap[marker.status] || 'available'}`}
-                style={{ top: marker.top, left: marker.left }}
-              >
-                <span>{translateValue(statusNames, language, marker.name)}</span>
-                <div className="marker-card">
-                  <strong>{translateValue(statusLabels, language, marker.status)}</strong>
-                  <p>{translateValue(statusDedications, language, marker.dedication)}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="before-after">
-            <div>
-              <h3>{t.status.before}</h3>
-              <p>{t.status.beforeDescription}</p>
-            </div>
-            <div>
-              <h3>{t.status.after}</h3>
-              <p>{t.status.afterDescription}</p>
-            </div>
-          </div>
-        </section>
-
-        <section id="personal" className="section">
-          <div className="section-header">
-            <h2>{t.personal.title}</h2>
-            <p>{t.personal.description}</p>
-          </div>
-          <div className="personal-grid">
-            {data.personalPages.map((page) => (
-              <article key={page.name}>
-                <h3>{translateValue(personalPageNames, language, page.name)}</h3>
-                <p>
-                  {t.personal.goal}: ${page.goal.toLocaleString()}
-                </p>
-                <p>
-                  {t.personal.progress}: ${page.progress.toLocaleString()}
-                </p>
-                <button type="button">{t.personal.action}</button>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="admin" className="section muted admin-section">
-          <div className="section-header">
-            <h2>{t.admin.title}</h2>
-            <p>{t.admin.description}</p>
-          </div>
-          {!isAdminAuthenticated ? (
-            <div className="admin-login">
-              <div className="admin-login-card">
-                <h3>{t.admin.loginTitle}</h3>
-                <p>{t.admin.loginDescription}</p>
-                <form onSubmit={handleAdminSubmit}>
-                  <label>
-                    {t.admin.username}
-                    <input
-                      type="text"
-                      value={adminForm.username}
-                      onChange={handleAdminChange('username')}
-                      placeholder={t.admin.username}
-                      autoComplete="username"
-                    />
-                  </label>
-                  <label>
-                    {t.admin.password}
-                    <input
-                      type="password"
-                      value={adminForm.password}
-                      onChange={handleAdminChange('password')}
-                      placeholder="••••••••"
-                      autoComplete="current-password"
-                    />
-                  </label>
-                  {adminError ? <p className="form-error">{adminError}</p> : null}
-                  <button className="primary" type="submit">
-                    {t.admin.signIn}
-                  </button>
-                </form>
-              </div>
-            </div>
-          ) : (
-            <div className="admin-panel">
-              <div className="admin-panel-header">
-                <div>
-                  <h3>{t.admin.dashboardTitle}</h3>
-                  <p>{t.admin.description}</p>
-                </div>
-                <button type="button" className="secondary" onClick={handleAdminSignOut}>
-                  {t.admin.signOut}
-                </button>
-              </div>
-              <div className="admin-grid">
-                {t.admin.cards.map((card) => (
-                  <article key={card.title} className="admin-card">
-                    <h4>{card.title}</h4>
-                    <p>{card.description}</p>
+              <div className="budget-grid">
+                {data.budgetItems.map((item) => (
+                  <article key={item.name} className="budget-card">
+                    <h3>{translateValue(budgetItemNames, language, item.name)}</h3>
+                    <p className="budget-cost">
+                      {item.cost} {t.donations.costLabel}
+                    </p>
+                    <div className="budget-stats">
+                      <div>
+                        <span>{t.donations.unitsLabel}</span>
+                        <strong>{item.units}</strong>
+                      </div>
+                      <div>
+                        <span>{t.donations.donatedLabel}</span>
+                        <strong>{item.donated}</strong>
+                      </div>
+                    </div>
+                    <button type="button">{t.donations.action}</button>
                   </article>
                 ))}
               </div>
-              <div className="admin-actions">
-                <h4>{t.admin.quickActions.title}</h4>
-                <div className="admin-action-list">
-                  {t.admin.quickActions.items.map((item) => (
-                    <button key={item} type="button">
-                      {item}
+            </section>
+
+            <section id="levels" className="section muted">
+              <div className="section-header">
+                <h2>{t.levels.title}</h2>
+                <p>{t.levels.description}</p>
+              </div>
+              <div className="levels-grid">
+                {data.levels.map((level) => (
+                  <article key={level.name} className="level-card">
+                    <h3>
+                      {t.levels.action}{' '}
+                      {translateValue(levelNames, language, level.name)}
+                    </h3>
+                    <p className="level-subtitle">
+                      {translateValue(levelSubtitles, language, level.subtitle)}
+                    </p>
+                    <div>
+                      <h4>{t.levels.itemsTitle}</h4>
+                      <ul>
+                        {level.items.map((item) => (
+                          <li key={item}>{translateValue(levelItems, language, item)}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4>{t.levels.benefitsTitle}</h4>
+                      <ul>
+                        {level.benefits.map((benefit) => (
+                          <li key={benefit}>
+                            {translateValue(levelBenefits, language, benefit)}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <button type="button">
+                      {t.levels.action}{' '}
+                      {translateValue(levelNames, language, level.name)}
                     </button>
-                  ))}
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="section">
+              <div className="section-header">
+                <h2>{t.steps.title}</h2>
+                <p>{t.steps.description}</p>
+              </div>
+              <div className="steps-grid">
+                {t.steps.items.map((step, index) => (
+                  <div key={step.title} className="step">
+                    <span>{index + 1}</span>
+                    <h3>{step.title}</h3>
+                    <p>{step.description}</p>
+                  </div>
+                ))}
+              </div>
+
+              <form className="donation-form">
+                <div className="form-row">
+                  <label>
+                    {t.form.donationLevel}
+                    <select>
+                      {Object.keys(levelNames).map((level) => (
+                        <option key={level}>
+                          {translateValue(levelNames, language, level)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    {t.form.itemSelection}
+                    <select>
+                      {['חדר לימוד', 'חלון מעוטר', 'לבני קיר'].map((item) => (
+                        <option key={item}>
+                          {translateWithFallback(
+                            budgetItemNames,
+                            levelItems,
+                            language,
+                            item
+                          )}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <div className="form-row">
+                  <label>
+                    {t.form.fullName}
+                    <input type="text" placeholder={t.form.placeholders.name} />
+                  </label>
+                  <label>
+                    {t.form.email}
+                    <input type="email" placeholder={t.form.placeholders.email} />
+                  </label>
+                </div>
+                <div className="form-row">
+                  <label>
+                    {t.form.dedication}
+                    <input type="text" placeholder={t.form.placeholders.dedication} />
+                  </label>
+                  <label>
+                    {t.form.currency}
+                    <select>
+                      <option>USD</option>
+                      <option>ILS</option>
+                      <option>EUR</option>
+                    </select>
+                  </label>
+                </div>
+                <label className="full-width">
+                  {t.form.message}
+                  <textarea rows="4" placeholder={t.form.placeholders.message} />
+                </label>
+                <button className="primary" type="button">
+                  {t.form.submit}
+                </button>
+                <p className="form-note">{t.form.note}</p>
+              </form>
+            </section>
+
+            <section id="status" className="section muted">
+              <div className="section-header">
+                <h2>{t.status.title}</h2>
+                <p>{t.status.description}</p>
+              </div>
+              <div className="status-board">
+                <img src={heroBackground} alt={t.status.title} />
+                {data.statusMarkers.map((marker) => (
+                  <div
+                    key={marker.name}
+                    className={`marker ${statusKeyMap[marker.status] || 'available'}`}
+                    style={{ top: marker.top, left: marker.left }}
+                  >
+                    <span>{translateValue(statusNames, language, marker.name)}</span>
+                    <div className="marker-card">
+                      <strong>
+                        {translateValue(statusLabels, language, marker.status)}
+                      </strong>
+                      <p>
+                        {translateValue(statusDedications, language, marker.dedication)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="before-after">
+                <div>
+                  <h3>{t.status.before}</h3>
+                  <p>{t.status.beforeDescription}</p>
+                </div>
+                <div>
+                  <h3>{t.status.after}</h3>
+                  <p>{t.status.afterDescription}</p>
                 </div>
               </div>
+            </section>
+
+            <section id="personal" className="section">
+              <div className="section-header">
+                <h2>{t.personal.title}</h2>
+                <p>{t.personal.description}</p>
+              </div>
+              <div className="personal-grid">
+                {data.personalPages.map((page) => (
+                  <article key={page.name}>
+                    <h3>{translateValue(personalPageNames, language, page.name)}</h3>
+                    <p>
+                      {t.personal.goal}: ${page.goal.toLocaleString()}
+                    </p>
+                    <p>
+                      {t.personal.progress}: ${page.progress.toLocaleString()}
+                    </p>
+                    <button type="button">{t.personal.action}</button>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section id="admin" className="section muted admin-section">
+              <div className="section-header">
+                <h2>{t.admin.title}</h2>
+                <p>{t.admin.description}</p>
+              </div>
+              {!isAdminAuthenticated ? (
+                <div className="admin-login">
+                  <div className="admin-login-card">
+                    <h3>{t.admin.loginTitle}</h3>
+                    <p>{t.admin.loginDescription}</p>
+                    <form onSubmit={handleAdminSubmit}>
+                      <label>
+                        {t.admin.username}
+                        <input
+                          type="text"
+                          value={adminForm.username}
+                          onChange={handleAdminChange('username')}
+                          placeholder={t.admin.username}
+                          autoComplete="username"
+                        />
+                      </label>
+                      <label>
+                        {t.admin.password}
+                        <input
+                          type="password"
+                          value={adminForm.password}
+                          onChange={handleAdminChange('password')}
+                          placeholder="••••••••"
+                          autoComplete="current-password"
+                        />
+                      </label>
+                      {adminError ? <p className="form-error">{adminError}</p> : null}
+                      <button className="primary" type="submit">
+                        {t.admin.signIn}
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              ) : (
+                <div className="admin-panel">
+                  <div className="admin-panel-header">
+                    <div>
+                      <h3>{t.admin.dashboardTitle}</h3>
+                      <p>{t.admin.description}</p>
+                    </div>
+                    <button
+                      type="button"
+                      className="secondary"
+                      onClick={handleAdminSignOut}
+                    >
+                      {t.admin.signOut}
+                    </button>
+                  </div>
+                  <div className="admin-grid">
+                    {t.admin.cards.map((card) => (
+                      <article key={card.title} className="admin-card">
+                        <h4>{card.title}</h4>
+                        <p>{card.description}</p>
+                      </article>
+                    ))}
+                  </div>
+                  <div className="admin-actions">
+                    <h4>{t.admin.quickActions.title}</h4>
+                    <div className="admin-action-list">
+                      {t.admin.quickActions.items.map((item) => (
+                        <button key={item} type="button">
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </section>
+
+            <section className="section muted">
+              <div className="section-header">
+                <h2>{t.info.title}</h2>
+                <p>{t.info.description}</p>
+              </div>
+              <div className="info-grid">
+                {t.info.items.map((item) => (
+                  <article key={item.title}>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </main>
+
+          <footer id="contact">
+            <div>
+              <h3>{t.footer.contact}</h3>
+              <p>{t.footer.phone}</p>
+              <p>{t.footer.email}</p>
             </div>
-          )}
-        </section>
+            <div>
+              <h3>{t.footer.addressTitle}</h3>
+              <p>{t.footer.address}</p>
+              <p>{t.footer.hours}</p>
+            </div>
+            <p className="footer-note">{t.footer.note}</p>
+          </footer>
+        </>
+      ) : (
+        <main className="personal-page">
+          <section className="section">
+            <div className="section-header">
+              <h2>{t.personalPage.title}</h2>
+              <p>{t.personalPage.description}</p>
+            </div>
+            <div className="personal-page-actions">
+              <button
+                className="secondary"
+                type="button"
+                onClick={() => setActivePage('main')}
+              >
+                {t.personalPage.backToHome}
+              </button>
+              <a className="primary" href="#create-personal-page">
+                {t.personalPage.createTitle}
+              </a>
+            </div>
+          </section>
 
-        <section className="section muted">
-          <div className="section-header">
-            <h2>{t.info.title}</h2>
-            <p>{t.info.description}</p>
-          </div>
-          <div className="info-grid">
-            {t.info.items.map((item) => (
-              <article key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-      </main>
+          <section className="section muted">
+            <div className="section-header">
+              <h2>{t.personalPage.listTitle}</h2>
+              <p>{t.personalPage.listDescription}</p>
+            </div>
+            <div className="personal-grid personal-page-grid">
+              {data.personalPages.map((page) => (
+                <article key={page.name}>
+                  <h3>{translateValue(personalPageNames, language, page.name)}</h3>
+                  <p>
+                    {t.personal.goal}: ${page.goal.toLocaleString()}
+                  </p>
+                  <p>
+                    {t.personal.progress}: ${page.progress.toLocaleString()}
+                  </p>
+                  <button type="button">{t.personalPage.donateAction}</button>
+                </article>
+              ))}
+            </div>
+          </section>
 
-      <footer id="contact">
-        <div>
-          <h3>{t.footer.contact}</h3>
-          <p>{t.footer.phone}</p>
-          <p>{t.footer.email}</p>
-        </div>
-        <div>
-          <h3>{t.footer.addressTitle}</h3>
-          <p>{t.footer.address}</p>
-          <p>{t.footer.hours}</p>
-        </div>
-        <p className="footer-note">{t.footer.note}</p>
-      </footer>
+          <section id="create-personal-page" className="section">
+            <div className="section-header">
+              <h2>{t.personalPage.createTitle}</h2>
+              <p>{t.personalPage.createDescription}</p>
+            </div>
+            <form className="donation-form personal-form">
+              <div className="form-row">
+                <label>
+                  {t.personalPage.fields.pageTitle}
+                  <input
+                    type="text"
+                    placeholder={t.personalPage.placeholders.pageTitle}
+                  />
+                </label>
+                <label>
+                  {t.personalPage.fields.goal}
+                  <input
+                    type="number"
+                    placeholder={t.personalPage.placeholders.goal}
+                  />
+                </label>
+              </div>
+              <div className="form-row">
+                <label>
+                  {t.personalPage.fields.fullName}
+                  <input
+                    type="text"
+                    placeholder={t.personalPage.placeholders.fullName}
+                  />
+                </label>
+                <label>
+                  {t.personalPage.fields.email}
+                  <input
+                    type="email"
+                    placeholder={t.personalPage.placeholders.email}
+                  />
+                </label>
+              </div>
+              <div className="form-row">
+                <label>
+                  {t.personalPage.fields.phone}
+                  <input
+                    type="tel"
+                    placeholder={t.personalPage.placeholders.phone}
+                  />
+                </label>
+              </div>
+              <label className="full-width">
+                {t.personalPage.fields.notes}
+                <textarea rows="4" placeholder={t.personalPage.placeholders.notes} />
+              </label>
+              <button className="primary" type="button">
+                {t.personalPage.submit}
+              </button>
+            </form>
+          </section>
+        </main>
+      )}
     </div>
   );
 }
