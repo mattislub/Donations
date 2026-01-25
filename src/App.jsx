@@ -12,9 +12,358 @@ const initialDataState = {
   target: 0,
 };
 
+const uiTranslations = {
+  en: {
+    logoTitle: 'Beit Tefilah Givat Ze’ev',
+    logoSubtitle: 'Building a community synagogue together',
+    nav: {
+      home: 'Home',
+      donations: 'Donations',
+      levels: 'Donation Levels',
+      status: 'Build Status',
+      personal: 'Personal Pages',
+      contact: 'Contact',
+    },
+    hero: {
+      eyebrow: 'A community vision connecting generations',
+      title: 'Building a community synagogue together',
+      description:
+        'We invite you to take part in building a new synagogue that will serve as a spiritual, educational, and social hub. Every contribution lays another stone, adds meaning, and leaves a lasting legacy.',
+      donateNow: 'Donate now',
+      chooseLevel: 'Choose a donation level',
+      totalGoal: 'Total goal',
+      raisedSoFar: 'Raised so far',
+      progress: 'completed',
+    },
+    loading: {
+      title: 'Loading data...',
+      description: 'We are fetching the latest information from the database.',
+    },
+    donations: {
+      title: 'Donation Page',
+      description: 'Budget details and tangible items that make up the build.',
+      costLabel: 'per unit',
+      unitsLabel: 'Units',
+      donatedLabel: 'Donated',
+      action: 'Choose to donate',
+    },
+    levels: {
+      title: 'Donation Levels',
+      description: 'Three clear levels with meaningful value and benefits.',
+      itemsTitle: 'Sample items',
+      benefitsTitle: 'Benefits',
+      action: 'Choose a',
+    },
+    steps: {
+      title: 'Select a donation item',
+      description: 'A simple, clear process for choosing an item and adding a dedication.',
+      items: [
+        {
+          title: 'Choose a donation level',
+          description: 'Gold, Silver, or Bronze based on your ability and desire.',
+        },
+        {
+          title: 'Select an item',
+          description: 'View available items and track remaining quantities.',
+        },
+        {
+          title: 'Enter details',
+          description: 'Donor name, contact details, and dedication.',
+        },
+        {
+          title: 'Secure payment',
+          description: 'Choose a currency and pay securely with instant confirmation.',
+        },
+      ],
+    },
+    form: {
+      donationLevel: 'Donation level',
+      itemSelection: 'Select an item',
+      fullName: 'Full name',
+      email: 'Email',
+      dedication: 'Dedication / In memory / For healing',
+      currency: 'Currency',
+      message: 'Personal message',
+      submit: 'Continue to payment and confirmation',
+      note: 'A receipt and thank-you letter will be sent automatically after payment.',
+      placeholders: {
+        name: 'Jordan Levine',
+        email: 'example@email.com',
+        dedication: 'In memory of...',
+        message: 'Write your dedication or blessing here.',
+      },
+    },
+    status: {
+      title: 'Donation Status',
+      description: 'A live map showing donated and available items.',
+      before: 'Before',
+      beforeDescription: 'Initial planning, fundraising, and site preparation.',
+      after: 'After',
+      afterDescription: 'The synagogue will stand as a vibrant community center.',
+    },
+    personal: {
+      title: 'Personal Donation Pages',
+      description: 'Each donor or fundraiser can create a page with their own goal.',
+      goal: 'Personal goal',
+      progress: 'Raised so far',
+      action: 'View personal page',
+    },
+    info: {
+      title: 'More information',
+      description: 'Optional pages for community updates and FAQs.',
+      items: [
+        {
+          title: 'About the community',
+          description: 'The community story, unique customs, and long-term vision.',
+        },
+        {
+          title: 'Construction updates',
+          description: 'Monthly reports, onsite photos, and progress timelines.',
+        },
+        {
+          title: 'Frequently asked questions',
+          description: 'How are receipts issued? What is the dedication policy?',
+        },
+      ],
+    },
+    footer: {
+      contact: 'Contact us',
+      phone: 'Phone: 02-0000000',
+      email: 'Email: info@community.org',
+      addressTitle: 'Address',
+      address: '12 Community Blvd, Givat Ze’ev',
+      hours: 'Hours: Sun-Thu 09:00-18:00',
+      note: 'Thank you for building a warm, welcoming future with us.',
+    },
+    languageLabel: 'Language',
+  },
+  he: {
+    logoTitle: 'בית תפילה גבעת זאב',
+    logoSubtitle: 'בונים יחד בית כנסת קהילתי',
+    nav: {
+      home: 'בית',
+      donations: 'תרומות',
+      levels: 'רמות תרומה',
+      status: 'סטטוס בנייה',
+      personal: 'דפי תרומה אישיים',
+      contact: 'צרו קשר',
+    },
+    hero: {
+      eyebrow: 'חזון קהילתי וחיבור בין דורות',
+      title: 'בונים יחד בית כנסת קהילתי',
+      description:
+        'אנו מזמינים אתכם לקחת חלק בהקמת בית כנסת חדש שישמש מרכז רוחני, חינוכי וחברתי. כל תרומה בונה אבן נוספת, מעניקה משמעות ומשאירה חותם לדורות הבאים.',
+      donateNow: 'לתרומה עכשיו',
+      chooseLevel: 'לבחור רמת תרומה',
+      totalGoal: 'יעד כולל',
+      raisedSoFar: 'נאסף עד כה',
+      progress: 'הושלמו',
+    },
+    loading: {
+      title: 'טוען נתונים...',
+      description: 'המערכת מושכת את המידע מהמסד הנתונים.',
+    },
+    donations: {
+      title: 'עמוד תרומות',
+      description: 'פירוט התקציב והפריטים המוחשיים שמרכיבים את הבנייה.',
+      costLabel: 'ליחידה',
+      unitsLabel: 'מספר יחידות',
+      donatedLabel: 'נתרם',
+      action: 'בחרו לתרום',
+    },
+    levels: {
+      title: 'רמות תרומה',
+      description: 'שלוש רמות ברורות עם ערך רגשי ותועלות משמעותיות.',
+      itemsTitle: 'פריטים לדוגמה',
+      benefitsTitle: 'הטבות',
+      action: 'בחרו תרומת',
+    },
+    steps: {
+      title: 'בחירת פריט לתרומה',
+      description: 'תהליך פשוט וברור לבחירת פריט, מילוי פרטים והקדשה אישית.',
+      items: [
+        {
+          title: 'בחירת רמת תרומה',
+          description: 'זהב, כסף או ארד בהתאם ליכולת ולרצון.',
+        },
+        {
+          title: 'בחירת פריט',
+          description: 'צפייה בפריטים הזמינים ומעקב אחרי היתרה.',
+        },
+        {
+          title: 'מילוי פרטים',
+          description: 'שם התורם, פרטי קשר והקדשה אישית.',
+        },
+        {
+          title: 'תשלום מאובטח',
+          description: 'בחירת מטבע ותשלום מאובטח עם אישור מיידי.',
+        },
+      ],
+    },
+    form: {
+      donationLevel: 'רמת תרומה',
+      itemSelection: 'בחירת פריט',
+      fullName: 'שם מלא',
+      email: 'אימייל',
+      dedication: 'הקדשה / לעילוי נשמה / לרפואה',
+      currency: 'מטבע',
+      message: 'הודעה אישית',
+      submit: 'המשך לתשלום ואישור',
+      note: 'לאחר התשלום תישלח קבלה ומכתב תודה אוטומטי.',
+      placeholders: {
+        name: 'ישראל ישראלי',
+        email: 'example@email.com',
+        dedication: 'לזכר...',
+        message: 'כתבו כאן הקדשה או ברכה.',
+      },
+    },
+    status: {
+      title: 'עמוד סטטוס התרומות',
+      description: 'מפת מצב מרגשת עם סימון הפריטים שכבר נתרמו והפריטים הזמינים.',
+      before: 'לפני',
+      beforeDescription: 'תכנון ראשוני, איסוף התרומות והכנת השטח.',
+      after: 'אחרי',
+      afterDescription: 'בית הכנסת יעמוד כמרכז קהילתי מלא חיים ומאור פנים.',
+    },
+    personal: {
+      title: 'דפי תרומה אישיים',
+      description: 'אפשרות לכל תורם או מגייס ליצור דף אישי עם יעד משלו.',
+      goal: 'יעד אישי',
+      progress: 'הושג עד כה',
+      action: 'צפייה בדף האישי',
+    },
+    info: {
+      title: 'עוד מידע',
+      description: 'עמודים אופציונליים שניתן להוסיף לעדכוני קהילה ולשאלות נפוצות.',
+      items: [
+        {
+          title: 'על הקהילה',
+          description: 'סיפור הקהילה, המנהגים המיוחדים והחזון לשנים הבאות.',
+        },
+        {
+          title: 'עדכוני בנייה',
+          description: 'דוח חודשי, תמונות מהשטח ולוחות זמנים להתקדמות.',
+        },
+        {
+          title: 'שאלות נפוצות',
+          description: 'איך מתקבלת הקבלה? מהי מדיניות ההקדשות? איך מצטרפים?',
+        },
+      ],
+    },
+    footer: {
+      contact: 'צרו קשר',
+      phone: 'טלפון: 02-0000000',
+      email: 'דוא"ל: info@community.org',
+      addressTitle: 'כתובת',
+      address: 'שדרות הקהילה 12, גבעת זאב',
+      hours: 'שעות פעילות: א׳-ה׳ 09:00-18:00',
+      note: 'תודה שאתם בונים איתנו עתיד קהילתי חם ומחבק.',
+    },
+    languageLabel: 'שפה',
+  },
+};
+
+const budgetItemNames = {
+  'ספסל תפילה': { en: 'Prayer Bench', he: 'ספסל תפילה' },
+  'לבני קיר': { en: 'Wall Bricks', he: 'לבני קיר' },
+  'חלון זכוכית': { en: 'Stained Glass Window', he: 'חלון זכוכית' },
+  'חדר לימוד': { en: 'Study Room', he: 'חדר לימוד' },
+  'ספרייה מרכזית': { en: 'Central Library', he: 'ספרייה מרכזית' },
+};
+
+const levelNames = {
+  זהב: { en: 'Gold', he: 'זהב' },
+  כסף: { en: 'Silver', he: 'כסף' },
+  ארד: { en: 'Bronze', he: 'ארד' },
+};
+
+const levelSubtitles = {
+  'תרומות גדולות ומשמעותיות': { en: 'Major gifts with lasting impact', he: 'תרומות גדולות ומשמעותיות' },
+  'תרומות בינוניות לפריטים מרכזיים': {
+    en: 'Mid-size gifts for central items',
+    he: 'תרומות בינוניות לפריטים מרכזיים',
+  },
+  'תרומות קטנות ונגישות לכל אחד': {
+    en: 'Accessible gifts for every supporter',
+    he: 'תרומות קטנות ונגישות לכל אחד',
+  },
+};
+
+const levelItems = {
+  'חדר תפילה': { en: 'Prayer Hall', he: 'חדר תפילה' },
+  'אגף לימוד': { en: 'Study Wing', he: 'אגף לימוד' },
+  'ספרייה מרכזית': { en: 'Central Library', he: 'ספרייה מרכזית' },
+  'חלון מעוטר': { en: 'Decorative Window', he: 'חלון מעוטר' },
+  'ספסל מיוחד': { en: 'Special Bench', he: 'ספסל מיוחד' },
+  'ארון קודש': { en: 'Holy Ark', he: 'ארון קודש' },
+  לבנה: { en: 'Brick', he: 'לבנה' },
+  כיסא: { en: 'Chair', he: 'כיסא' },
+  'פריט עיצוב': { en: 'Design Feature', he: 'פריט עיצוב' },
+};
+
+const levelBenefits = {
+  'שלט קבוע בכניסה': { en: 'Permanent entrance plaque', he: 'שלט קבוע בכניסה' },
+  'אזכור בולט באתר': { en: 'Featured mention on the site', he: 'אזכור בולט באתר' },
+  'דוא"ל עם תמונת הפריט שנתרם': {
+    en: 'Email with a photo of the donated item',
+    he: 'דוא"ל עם תמונת הפריט שנתרם',
+  },
+  'אזכור באתר': { en: 'Mention on the site', he: 'אזכור באתר' },
+  'אזכור ברשימת התורמים': { en: 'Mention in the donor list', he: 'אזכור ברשימת התורמים' },
+};
+
+const statusNames = {
+  'ספרייה מרכזית': { en: 'Central Library', he: 'ספרייה מרכזית' },
+  'אגף לימוד': { en: 'Study Wing', he: 'אגף לימוד' },
+  'חלון דרומי': { en: 'Southern Window', he: 'חלון דרומי' },
+  'ספסל צפוני': { en: 'Northern Bench', he: 'ספסל צפוני' },
+};
+
+const statusDedications = {
+  'מוקדש לזכר הרב שלמה': {
+    en: 'Dedicated to the memory of Rabbi Shlomo',
+    he: 'מוקדש לזכר הרב שלמה',
+  },
+  'נחנך ע"י משפחת כהן': {
+    en: 'Dedicated by the Cohen family',
+    he: 'נחנך ע"י משפחת כהן',
+  },
+  'לע"נ לאה בת רחל': {
+    en: 'In memory of Leah bat Rachel',
+    he: 'לע"נ לאה בת רחל',
+  },
+  'לרפואת דוד בן רבקה': {
+    en: 'For the healing of David ben Rivka',
+    he: 'לרפואת דוד בן רבקה',
+  },
+};
+
+const statusLabels = {
+  'זמין לתרומה': { en: 'Available', he: 'זמין לתרומה' },
+  נתרם: { en: 'Donated', he: 'נתרם' },
+};
+
+const statusKeyMap = {
+  'זמין לתרומה': 'available',
+  Available: 'available',
+  נתרם: 'donated',
+  Donated: 'donated',
+};
+
+const personalPageNames = {
+  'משפחת לוי': { en: 'Levi Family', he: 'משפחת לוי' },
+  'נוער גבעת זאב': { en: 'Givat Ze’ev Youth', he: 'נוער גבעת זאב' },
+  'קבוצת המתנדבים': { en: 'Volunteer Group', he: 'קבוצת המתנדבים' },
+};
+
+const translateValue = (map, language, value) => map[value]?.[language] ?? value;
+const translateWithFallback = (primaryMap, fallbackMap, language, value) =>
+  primaryMap[value]?.[language] ?? fallbackMap[value]?.[language] ?? value;
+
 function App() {
   const [data, setData] = useState(initialDataState);
   const [isLoading, setIsLoading] = useState(true);
+  const [language, setLanguage] = useState('en');
 
   useEffect(() => {
     const loadData = async () => {
@@ -37,56 +386,74 @@ function App() {
 
   const percent =
     data.target > 0 ? Math.round((data.progress / data.target) * 100) : 0;
+  const t = uiTranslations[language];
+  const isRtl = language === 'he';
+
   return (
-    <div className="app">
+    <div className="app" dir={isRtl ? 'rtl' : 'ltr'}>
       <header className="hero" style={{ backgroundImage: `url(${heroBackground})` }}>
         <div className="overlay" />
         <nav className="nav">
           <div className="logo-group">
-            <img src={logo} alt="לוגו בית תפילה" />
+            <img src={logo} alt={t.logoTitle} />
             <div>
-              <p className="logo-title">בית תפילה גבעת זאב</p>
-              <p className="logo-subtitle">בונים יחד בית כנסת קהילתי</p>
+              <p className="logo-title">{t.logoTitle}</p>
+              <p className="logo-subtitle">{t.logoSubtitle}</p>
             </div>
           </div>
           <div className="nav-links">
-            <a href="#home">בית</a>
-            <a href="#donations">תרומות</a>
-            <a href="#levels">רמות תרומה</a>
-            <a href="#status">סטטוס בנייה</a>
-            <a href="#personal">דפי תרומה אישיים</a>
-            <a href="#contact">צרו קשר</a>
+            <a href="#home">{t.nav.home}</a>
+            <a href="#donations">{t.nav.donations}</a>
+            <a href="#levels">{t.nav.levels}</a>
+            <a href="#status">{t.nav.status}</a>
+            <a href="#personal">{t.nav.personal}</a>
+            <a href="#contact">{t.nav.contact}</a>
+          </div>
+          <div className="lang-toggle" aria-label={t.languageLabel}>
+            <button
+              type="button"
+              className={language === 'en' ? 'active' : ''}
+              onClick={() => setLanguage('en')}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              className={language === 'he' ? 'active' : ''}
+              onClick={() => setLanguage('he')}
+            >
+              עברית
+            </button>
           </div>
         </nav>
 
         <div id="home" className="hero-content">
-          <p className="hero-eyebrow">חזון קהילתי וחיבור בין דורות</p>
-          <h1>בונים יחד בית כנסת קהילתי</h1>
-          <p className="hero-description">
-            אנו מזמינים אתכם לקחת חלק בהקמת בית כנסת חדש שישמש מרכז רוחני, חינוכי וחברתי.
-            כל תרומה בונה אבן נוספת, מעניקה משמעות ומשאירה חותם לדורות הבאים.
-          </p>
+          <p className="hero-eyebrow">{t.hero.eyebrow}</p>
+          <h1>{t.hero.title}</h1>
+          <p className="hero-description">{t.hero.description}</p>
           <div className="hero-actions">
             <a className="primary" href="#donations">
-              לתרומה עכשיו
+              {t.hero.donateNow}
             </a>
             <a className="secondary" href="#levels">
-              לבחור רמת תרומה
+              {t.hero.chooseLevel}
             </a>
           </div>
           <div className="progress-card">
             <div>
-              <p className="progress-label">יעד כולל</p>
+              <p className="progress-label">{t.hero.totalGoal}</p>
               <p className="progress-value">${data.target.toLocaleString()}</p>
             </div>
             <div>
-              <p className="progress-label">נאסף עד כה</p>
+              <p className="progress-label">{t.hero.raisedSoFar}</p>
               <p className="progress-value">${data.progress.toLocaleString()}</p>
             </div>
             <div className="progress-bar">
               <div className="progress-fill" style={{ width: `${percent}%` }} />
             </div>
-            <p className="progress-percent">{percent}% הושלמו</p>
+            <p className="progress-percent">
+              {percent}% {t.hero.progress}
+            </p>
           </div>
         </div>
       </header>
@@ -95,32 +462,34 @@ function App() {
         {isLoading ? (
           <section className="section">
             <div className="section-header">
-              <h2>טוען נתונים...</h2>
-              <p>המערכת מושכת את המידע מהמסד הנתונים.</p>
+              <h2>{t.loading.title}</h2>
+              <p>{t.loading.description}</p>
             </div>
           </section>
         ) : null}
         <section id="donations" className="section">
           <div className="section-header">
-            <h2>עמוד תרומות</h2>
-            <p>פירוט התקציב והפריטים המוחשיים שמרכיבים את הבנייה.</p>
+            <h2>{t.donations.title}</h2>
+            <p>{t.donations.description}</p>
           </div>
           <div className="budget-grid">
             {data.budgetItems.map((item) => (
               <article key={item.name} className="budget-card">
-                <h3>{item.name}</h3>
-                <p className="budget-cost">{item.cost} ליחידה</p>
+                <h3>{translateValue(budgetItemNames, language, item.name)}</h3>
+                <p className="budget-cost">
+                  {item.cost} {t.donations.costLabel}
+                </p>
                 <div className="budget-stats">
                   <div>
-                    <span>מספר יחידות</span>
+                    <span>{t.donations.unitsLabel}</span>
                     <strong>{item.units}</strong>
                   </div>
                   <div>
-                    <span>נתרם</span>
+                    <span>{t.donations.donatedLabel}</span>
                     <strong>{item.donated}</strong>
                   </div>
                 </div>
-                <button type="button">בחרו לתרום</button>
+                <button type="button">{t.donations.action}</button>
               </article>
             ))}
           </div>
@@ -128,31 +497,40 @@ function App() {
 
         <section id="levels" className="section muted">
           <div className="section-header">
-            <h2>רמות תרומה</h2>
-            <p>שלוש רמות ברורות עם ערך רגשי ותועלות משמעותיות.</p>
+            <h2>{t.levels.title}</h2>
+            <p>{t.levels.description}</p>
           </div>
           <div className="levels-grid">
             {data.levels.map((level) => (
               <article key={level.name} className="level-card">
-                <h3>רמת {level.name}</h3>
-                <p className="level-subtitle">{level.subtitle}</p>
+                <h3>
+                  {t.levels.action}{' '}
+                  {translateValue(levelNames, language, level.name)}
+                </h3>
+                <p className="level-subtitle">
+                  {translateValue(levelSubtitles, language, level.subtitle)}
+                </p>
                 <div>
-                  <h4>פריטים לדוגמה</h4>
+                  <h4>{t.levels.itemsTitle}</h4>
                   <ul>
                     {level.items.map((item) => (
-                      <li key={item}>{item}</li>
+                      <li key={item}>{translateValue(levelItems, language, item)}</li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <h4>הטבות</h4>
+                  <h4>{t.levels.benefitsTitle}</h4>
                   <ul>
                     {level.benefits.map((benefit) => (
-                      <li key={benefit}>{benefit}</li>
+                      <li key={benefit}>
+                        {translateValue(levelBenefits, language, benefit)}
+                      </li>
                     ))}
                   </ul>
                 </div>
-                <button type="button">בחרו תרומת {level.name}</button>
+                <button type="button">
+                  {t.levels.action} {translateValue(levelNames, language, level.name)}
+                </button>
               </article>
             ))}
           </div>
@@ -160,68 +538,64 @@ function App() {
 
         <section className="section">
           <div className="section-header">
-            <h2>בחירת פריט לתרומה</h2>
-            <p>תהליך פשוט וברור לבחירת פריט, מילוי פרטים והקדשה אישית.</p>
+            <h2>{t.steps.title}</h2>
+            <p>{t.steps.description}</p>
           </div>
           <div className="steps-grid">
-            <div className="step">
-              <span>1</span>
-              <h3>בחירת רמת תרומה</h3>
-              <p>זהב, כסף או ארד בהתאם ליכולת ולרצון.</p>
-            </div>
-            <div className="step">
-              <span>2</span>
-              <h3>בחירת פריט</h3>
-              <p>צפייה בפריטים הזמינים ומעקב אחרי היתרה.</p>
-            </div>
-            <div className="step">
-              <span>3</span>
-              <h3>מילוי פרטים</h3>
-              <p>שם התורם, פרטי קשר והקדשה אישית.</p>
-            </div>
-            <div className="step">
-              <span>4</span>
-              <h3>תשלום מאובטח</h3>
-              <p>בחירת מטבע ותשלום מאובטח עם אישור מיידי.</p>
-            </div>
+            {t.steps.items.map((step, index) => (
+              <div key={step.title} className="step">
+                <span>{index + 1}</span>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+              </div>
+            ))}
           </div>
 
           <form className="donation-form">
             <div className="form-row">
               <label>
-                רמת תרומה
+                {t.form.donationLevel}
                 <select>
-                  <option>זהב</option>
-                  <option>כסף</option>
-                  <option>ארד</option>
+                  {Object.keys(levelNames).map((level) => (
+                    <option key={level}>
+                      {translateValue(levelNames, language, level)}
+                    </option>
+                  ))}
                 </select>
               </label>
               <label>
-                בחירת פריט
+                {t.form.itemSelection}
                 <select>
-                  <option>חדר לימוד</option>
-                  <option>חלון מעוטר</option>
-                  <option>לבני קיר</option>
+                  {['חדר לימוד', 'חלון מעוטר', 'לבני קיר'].map((item) => (
+                    <option key={item}>
+                      {translateWithFallback(
+                        budgetItemNames,
+                        levelItems,
+                        language,
+                        item
+                      )}
+                    </option>
+                  ))}
                 </select>
               </label>
             </div>
             <div className="form-row">
               <label>
-                שם מלא
-                <input type="text" placeholder="ישראל ישראלי" />
+                {t.form.fullName}
+                <input type="text" placeholder={t.form.placeholders.name} />
               </label>
               <label>
-                אימייל
-                <input type="email" placeholder="example@email.com" />
+                {t.form.email}
+                <input type="email" placeholder={t.form.placeholders.email} />
               </label>
             </div>
             <div className="form-row">
               <label>
-                הקדשה / לעילוי נשמה / לרפואה
-                <input type="text" placeholder="לזכר..." />
+                {t.form.dedication}
+                <input type="text" placeholder={t.form.placeholders.dedication} />
               </label>
               <label>
-                מטבע
+                {t.form.currency}
                 <select>
                   <option>USD</option>
                   <option>ILS</option>
@@ -230,61 +604,65 @@ function App() {
               </label>
             </div>
             <label className="full-width">
-              הודעה אישית
-              <textarea rows="4" placeholder="כתבו כאן הקדשה או ברכה." />
+              {t.form.message}
+              <textarea rows="4" placeholder={t.form.placeholders.message} />
             </label>
             <button className="primary" type="button">
-              המשך לתשלום ואישור
+              {t.form.submit}
             </button>
-            <p className="form-note">לאחר התשלום תישלח קבלה ומכתב תודה אוטומטי.</p>
+            <p className="form-note">{t.form.note}</p>
           </form>
         </section>
 
         <section id="status" className="section muted">
           <div className="section-header">
-            <h2>עמוד סטטוס התרומות</h2>
-            <p>מפת מצב מרגשת עם סימון הפריטים שכבר נתרמו והפריטים הזמינים.</p>
+            <h2>{t.status.title}</h2>
+            <p>{t.status.description}</p>
           </div>
           <div className="status-board">
-            <img src={heroBackground} alt="הדמיית בית הכנסת" />
+            <img src={heroBackground} alt={t.status.title} />
             {data.statusMarkers.map((marker) => (
               <div
                 key={marker.name}
-                className={`marker ${marker.status === 'נתרם' ? 'donated' : 'available'}`}
+                className={`marker ${statusKeyMap[marker.status] || 'available'}`}
                 style={{ top: marker.top, left: marker.left }}
               >
-                <span>{marker.name}</span>
+                <span>{translateValue(statusNames, language, marker.name)}</span>
                 <div className="marker-card">
-                  <strong>{marker.status}</strong>
-                  <p>{marker.dedication}</p>
+                  <strong>{translateValue(statusLabels, language, marker.status)}</strong>
+                  <p>{translateValue(statusDedications, language, marker.dedication)}</p>
                 </div>
               </div>
             ))}
           </div>
           <div className="before-after">
             <div>
-              <h3>לפני</h3>
-              <p>תכנון ראשוני, איסוף התרומות והכנת השטח.</p>
+              <h3>{t.status.before}</h3>
+              <p>{t.status.beforeDescription}</p>
             </div>
             <div>
-              <h3>אחרי</h3>
-              <p>בית הכנסת יעמוד כמרכז קהילתי מלא חיים ומאור פנים.</p>
+              <h3>{t.status.after}</h3>
+              <p>{t.status.afterDescription}</p>
             </div>
           </div>
         </section>
 
         <section id="personal" className="section">
           <div className="section-header">
-            <h2>דפי תרומה אישיים</h2>
-            <p>אפשרות לכל תורם או מגייס ליצור דף אישי עם יעד משלו.</p>
+            <h2>{t.personal.title}</h2>
+            <p>{t.personal.description}</p>
           </div>
           <div className="personal-grid">
             {data.personalPages.map((page) => (
               <article key={page.name}>
-                <h3>{page.name}</h3>
-                <p>יעד אישי: ${page.goal.toLocaleString()}</p>
-                <p>הושג עד כה: ${page.progress.toLocaleString()}</p>
-                <button type="button">צפייה בדף האישי</button>
+                <h3>{translateValue(personalPageNames, language, page.name)}</h3>
+                <p>
+                  {t.personal.goal}: ${page.goal.toLocaleString()}
+                </p>
+                <p>
+                  {t.personal.progress}: ${page.progress.toLocaleString()}
+                </p>
+                <button type="button">{t.personal.action}</button>
               </article>
             ))}
           </div>
@@ -292,38 +670,32 @@ function App() {
 
         <section className="section muted">
           <div className="section-header">
-            <h2>עוד מידע</h2>
-            <p>עמודים אופציונליים שניתן להוסיף לעדכוני קהילה ולשאלות נפוצות.</p>
+            <h2>{t.info.title}</h2>
+            <p>{t.info.description}</p>
           </div>
           <div className="info-grid">
-            <article>
-              <h3>על הקהילה</h3>
-              <p>סיפור הקהילה, המנהגים המיוחדים והחזון לשנים הבאות.</p>
-            </article>
-            <article>
-              <h3>עדכוני בנייה</h3>
-              <p>דוח חודשי, תמונות מהשטח ולוחות זמנים להתקדמות.</p>
-            </article>
-            <article>
-              <h3>שאלות נפוצות</h3>
-              <p>איך מתקבלת הקבלה? מהי מדיניות ההקדשות? איך מצטרפים?</p>
-            </article>
+            {t.info.items.map((item) => (
+              <article key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </article>
+            ))}
           </div>
         </section>
       </main>
 
       <footer id="contact">
         <div>
-          <h3>צרו קשר</h3>
-          <p>טלפון: 02-0000000</p>
-          <p>דוא"ל: info@community.org</p>
+          <h3>{t.footer.contact}</h3>
+          <p>{t.footer.phone}</p>
+          <p>{t.footer.email}</p>
         </div>
         <div>
-          <h3>כתובת</h3>
-          <p>שדרות הקהילה 12, גבעת זאב</p>
-          <p>שעות פעילות: א׳-ה׳ 09:00-18:00</p>
+          <h3>{t.footer.addressTitle}</h3>
+          <p>{t.footer.address}</p>
+          <p>{t.footer.hours}</p>
         </div>
-        <p className="footer-note">תודה שאתם בונים איתנו עתיד קהילתי חם ומחבק.</p>
+        <p className="footer-note">{t.footer.note}</p>
       </footer>
     </div>
   );

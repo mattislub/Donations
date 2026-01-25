@@ -18,7 +18,7 @@
 body {
   margin: 0;
   background-color: #f5f6f8;
-  direction: rtl;
+  direction: ltr;
 }
 
 a {
