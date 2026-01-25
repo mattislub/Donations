@@ -201,6 +201,9 @@ export const uiTranslations = {
         confirmLabel: 'Confirm access code',
         hint: 'Use 6-10 digits and update it at least once per quarter.',
         save: 'Save code',
+        success: 'Access code saved to the database.',
+        error: 'Unable to save the access code. Please try again.',
+        mismatch: 'The access codes do not match.',
       },
       profile: {
         title: 'Personal details',
@@ -210,6 +213,8 @@ export const uiTranslations = {
         email: 'Email address',
         address: 'Mailing address',
         save: 'Save details',
+        success: 'Profile details saved to the database.',
+        error: 'Unable to save profile details. Please try again.',
         placeholders: {
           fullName: 'Moshe Cohen',
           phone: '050-123-4567',
@@ -413,6 +418,9 @@ export const uiTranslations = {
         confirmLabel: 'אימות קוד גישה',
         hint: 'מומלץ קוד בן 6-10 ספרות ולעדכן אחת לרבעון.',
         save: 'שמירת קוד',
+        success: 'קוד הגישה נשמר במסד הנתונים.',
+        error: 'לא ניתן לשמור את קוד הגישה. נסו שוב.',
+        mismatch: 'קודי הגישה אינם תואמים.',
       },
       profile: {
         title: 'פרטים אישיים',
@@ -422,6 +430,8 @@ export const uiTranslations = {
         email: 'דוא״ל',
         address: 'כתובת למשלוח',
         save: 'שמירת פרטים',
+        success: 'הפרטים נשמרו במסד הנתונים.',
+        error: 'לא ניתן לשמור את הפרטים. נסו שוב.',
         placeholders: {
           fullName: 'משה כהן',
           phone: '050-123-4567',

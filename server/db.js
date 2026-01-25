@@ -165,6 +165,21 @@ const createTablesSql = `
     progress INTEGER NOT NULL,
     target INTEGER NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS admin_access_codes (
+    id INTEGER PRIMARY KEY DEFAULT 1,
+    code TEXT NOT NULL,
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+  );
+
+  CREATE TABLE IF NOT EXISTS admin_profile (
+    id INTEGER PRIMARY KEY DEFAULT 1,
+    full_name TEXT,
+    phone TEXT,
+    email TEXT,
+    address TEXT,
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+  );
 `;
 
 async function tableHasRows(tableName) {
@@ -346,6 +361,31 @@ export async function fetchInitialData() {
     target: progressStats.target,
     personalPages: personalPagesResult.rows,
   };
+}
+
+export async function upsertAccessCode(code) {
+  await pool.query(
+    `INSERT INTO admin_access_codes (id, code, updated_at)
+     VALUES (1, $1, NOW())
+     ON CONFLICT (id)
+     DO UPDATE SET code = EXCLUDED.code, updated_at = NOW()`,
+    [code]
+  );
+}
+
+export async function upsertAdminProfile({ fullName, phone, email, address }) {
+  await pool.query(
+    `INSERT INTO admin_profile (id, full_name, phone, email, address, updated_at)
+     VALUES (1, $1, $2, $3, $4, NOW())
+     ON CONFLICT (id)
+     DO UPDATE SET
+       full_name = EXCLUDED.full_name,
+       phone = EXCLUDED.phone,
+       email = EXCLUDED.email,
+       address = EXCLUDED.address,
+       updated_at = NOW()`,
+    [fullName, phone, email, address]
+  );
 }
 
 export default pool;
