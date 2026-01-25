@@ -109,6 +109,35 @@ const uiTranslations = {
       progress: 'Raised so far',
       action: 'View personal page',
     },
+    personalPage: {
+      title: 'Personal donation pages',
+      description:
+        'Browse community members who fundraise through personal pages and choose to donate through them.',
+      listTitle: 'Active personal pages',
+      listDescription: 'Pick a fundraiser to donate through their personal link.',
+      donateAction: 'Donate through this page',
+      createTitle: 'Create a new personal page',
+      createDescription:
+        'Fill in the details to open a new fundraising page with a private goal and contact details.',
+      backToHome: 'Back to main page',
+      fields: {
+        pageTitle: 'Page title',
+        goal: 'Donation goal',
+        fullName: 'Full name',
+        email: 'Email address',
+        phone: 'Phone number',
+        notes: 'Additional details',
+      },
+      placeholders: {
+        pageTitle: 'Levi family campaign',
+        goal: '50000',
+        fullName: 'Jordan Levine',
+        email: 'example@email.com',
+        phone: '050-0000000',
+        notes: 'Share a short description or dedication.',
+      },
+      submit: 'Create personal donation page',
+    },
     info: {
       title: 'More information',
       description: 'Optional pages for community updates and FAQs.',
@@ -264,6 +293,35 @@ const uiTranslations = {
       goal: 'יעד אישי',
       progress: 'הושג עד כה',
       action: 'צפייה בדף האישי',
+    },
+    personalPage: {
+      title: 'דפי תרומה אישיים',
+      description:
+        'עמוד ייעודי עם רשימת מגייסים והאפשרות לתרום דרך דף אישי של כל אחד.',
+      listTitle: 'רשימת דפי תרומה פעילים',
+      listDescription: 'בחרו מגייס ותרמו דרך הדף האישי שלו.',
+      donateAction: 'תרומה דרך הדף',
+      createTitle: 'יצירת דף תרומה חדש',
+      createDescription:
+        'מלאו פרטים ליצירת דף אישי עם יעד פרטי ופרטי קשר מלאים.',
+      backToHome: 'חזרה לעמוד הראשי',
+      fields: {
+        pageTitle: 'שם הדף',
+        goal: 'יעד סכום תרומה',
+        fullName: 'שם מלא',
+        email: 'אימייל',
+        phone: 'טלפון',
+        notes: 'פרטים נוספים',
+      },
+      placeholders: {
+        pageTitle: 'קמפיין משפחת לוי',
+        goal: '50000',
+        fullName: 'ישראל ישראלי',
+        email: 'example@email.com',
+        phone: '050-0000000',
+        notes: 'כתבו כאן תיאור קצר או הקדשה.',
+      },
+      submit: 'יצירת דף תרומה אישי',
     },
     info: {
       title: 'עוד מידע',
@@ -491,6 +549,24 @@ function App() {
     setAdminError('');
   };
 
+  const handleNavClick = (target) => (event) => {
+    if (target === 'personal') {
+      event.preventDefault();
+      setActivePage('personal');
+      return;
+    }
+
+    if (activePage !== 'main') {
+      event.preventDefault();
+      setActivePage('main');
+      if (target !== 'home') {
+        setTimeout(() => {
+          document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' });
+        }, 0);
+      }
+    }
+  };
+
   return (
     <div className="app" dir={isRtl ? 'rtl' : 'ltr'}>
       <header className="hero" style={{ backgroundImage: `url(${heroBackground})` }}>
@@ -530,33 +606,35 @@ function App() {
           </div>
         </nav>
 
-        <div id="home" className="hero-content">
-          <p className="hero-eyebrow">{t.hero.eyebrow}</p>
-          <h1>{t.hero.title}</h1>
-          <p className="hero-description">{t.hero.description}</p>
-          <div className="hero-actions">
-            <a className="primary" href="#donations">
-              {t.hero.donateNow}
-            </a>
-            <a className="secondary" href="#levels">
-              {t.hero.chooseLevel}
-            </a>
-          </div>
-          <div className="progress-card">
-            <div>
-              <p className="progress-label">{t.hero.totalGoal}</p>
-              <p className="progress-value">${data.target.toLocaleString()}</p>
+        {activePage === 'main' ? (
+          <div id="home" className="hero-content">
+            <p className="hero-eyebrow">{t.hero.eyebrow}</p>
+            <h1>{t.hero.title}</h1>
+            <p className="hero-description">{t.hero.description}</p>
+            <div className="hero-actions">
+              <a className="primary" href="#donations">
+                {t.hero.donateNow}
+              </a>
+              <a className="secondary" href="#levels">
+                {t.hero.chooseLevel}
+              </a>
             </div>
-            <div>
-              <p className="progress-label">{t.hero.raisedSoFar}</p>
-              <p className="progress-value">${data.progress.toLocaleString()}</p>
+            <div className="progress-card">
+              <div>
+                <p className="progress-label">{t.hero.totalGoal}</p>
+                <p className="progress-value">${data.target.toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="progress-label">{t.hero.raisedSoFar}</p>
+                <p className="progress-value">${data.progress.toLocaleString()}</p>
+              </div>
+              <div className="progress-bar">
+                <div className="progress-fill" style={{ width: `${percent}%` }} />
+              </div>
+              <p className="progress-percent">
+                {percent}% {t.hero.progress}
+              </p>
             </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: `${percent}%` }} />
-            </div>
-            <p className="progress-percent">
-              {percent}% {t.hero.progress}
-            </p>
           </div>
         </div>
       </header>
@@ -746,6 +824,8 @@ function App() {
                       ))}
                     </select>
                   </label>
+                </div>
+                <div className="form-row">
                   <label>
                     {t.form.itemSelection}
                     <select>
