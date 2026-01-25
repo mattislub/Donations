@@ -15,7 +15,7 @@ function NavBar({ t, language, onLanguageChange }) {
         <a href="#donations">{t.nav.donations}</a>
         <a href="#levels">{t.nav.levels}</a>
         <a href="#status">{t.nav.status}</a>
-        <a href="#personal">{t.nav.personal}</a>
+        <a href="#personal-page">{t.nav.personal}</a>
         <a href="#contact">{t.nav.contact}</a>
         <a href="#admin">{t.nav.admin}</a>
       </div>
