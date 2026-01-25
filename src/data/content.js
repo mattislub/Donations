@@ -175,6 +175,202 @@ export const uiTranslations = {
       signOut: 'Sign out',
       error: 'Incorrect credentials. Please try again.',
       dashboardTitle: 'Management dashboard',
+      pages: {
+        users: {
+          title: 'User management',
+          subtitle: 'Access, roles, and approvals',
+          description: 'Manage staff access, donor profiles, and volunteer permissions.',
+          actions: ['Invite user', 'Export list'],
+          stats: [
+            {
+              label: 'Active users',
+              value: '1,284',
+              meta: '32 new this week',
+            },
+            {
+              label: 'Pending approvals',
+              value: '18',
+              meta: 'Needs review today',
+            },
+            {
+              label: 'Volunteer teams',
+              value: '6',
+              meta: '2 coordinators per team',
+            },
+          ],
+          roles: [
+            {
+              title: 'Donor profiles',
+              description: 'Track preferred giving methods, receipts, and notes.',
+              meta: '482 tagged donors',
+            },
+            {
+              title: 'Staff permissions',
+              description: 'Assign CRM access based on campaign responsibilities.',
+              meta: '4 role templates',
+            },
+            {
+              title: 'Volunteer access',
+              description: 'Limit access to personal pages and lead lists.',
+              meta: '12 active volunteers',
+            },
+          ],
+        },
+        campaign: {
+          title: 'Campaign settings',
+          subtitle: 'Goals, controls, and approvals',
+          description: 'Define the global target and govern personal page goals.',
+          actions: ['Publish update', 'Send reminder'],
+          stats: [
+            {
+              label: 'Global target',
+              value: '₪1.8M',
+              meta: '68% collected',
+            },
+            {
+              label: 'Personal goals',
+              value: '86',
+              meta: '12 waiting for approval',
+            },
+            {
+              label: 'Average gift',
+              value: '₪1,240',
+              meta: 'Up 6% this month',
+            },
+          ],
+          formTitle: 'Goal configuration',
+          formDescription: 'Adjust the overall target and guardrails for personal pages.',
+          fields: {
+            totalGoal: 'Global fundraising goal',
+            defaultPersonalGoal: 'Default personal page goal',
+            allowPersonalGoals: 'Allow updates to personal page goals',
+            requireApproval: 'Require approval for goal changes',
+          },
+          save: 'Save campaign settings',
+          guidelines: [
+            {
+              title: 'Goal tiers',
+              description: 'Define stretch targets for quarterly milestones.',
+              meta: '3 tiers active',
+            },
+            {
+              title: 'Personal page reviews',
+              description: 'Monitor edits to personal pages before publishing.',
+              meta: 'Average review time: 2 days',
+            },
+            {
+              title: 'Messaging guidelines',
+              description: 'Keep updates consistent across all fundraising pages.',
+              meta: 'Last updated 3 days ago',
+            },
+          ],
+        },
+        items: {
+          title: 'Donation items',
+          subtitle: 'Inventory and milestones',
+          description: 'Track the physical and symbolic items supporters can fund.',
+          actions: ['Add item', 'Update availability'],
+          stats: [
+            {
+              label: 'Active items',
+              value: '214',
+              meta: '24 fully funded',
+            },
+            {
+              label: 'Low inventory',
+              value: '12',
+              meta: 'Needs restock',
+            },
+            {
+              label: 'Recently added',
+              value: '6',
+              meta: 'Added this week',
+            },
+          ],
+          list: [
+            {
+              title: 'Torah ark lighting',
+              description: 'Special lighting fixtures for the main sanctuary.',
+              meta: '₪12,000 remaining',
+              status: 'Low inventory',
+              statusStyle: 'warning',
+            },
+            {
+              title: 'Classroom chairs',
+              description: 'Ergonomic chairs for youth study halls.',
+              meta: '40 of 120 funded',
+              status: 'In progress',
+              statusStyle: 'info',
+            },
+            {
+              title: 'Library shelves',
+              description: 'New shelving for donated books and scrolls.',
+              meta: 'Fully funded',
+              status: 'Complete',
+              statusStyle: 'success',
+            },
+            {
+              title: 'Outdoor seating',
+              description: 'Benches and pergolas for community gatherings.',
+              meta: '₪28,000 remaining',
+              status: 'Needs attention',
+              statusStyle: 'alert',
+            },
+          ],
+        },
+        donors: {
+          title: 'Donor list',
+          subtitle: 'Gifts, sources, and items',
+          description: 'Review contributions, pledged items, and the referral source.',
+          actions: ['Export donors', 'Send thank-you'],
+          stats: [
+            {
+              label: 'Total donors',
+              value: '1,284',
+              meta: '112 new this month',
+            },
+            {
+              label: 'Average gift',
+              value: '₪1,240',
+              meta: 'Top gift ₪18,000',
+            },
+            {
+              label: 'Referral sources',
+              value: '8',
+              meta: 'Most from personal pages',
+            },
+          ],
+          tableTitle: 'Recent contributions',
+          tableDescription: 'Track donations by amount, item, and referral source.',
+          tableHeaders: ['Donor', 'Amount', 'Item', 'Source'],
+          list: [
+            {
+              name: 'Leah Cohen',
+              amount: '₪3,600',
+              item: 'Library shelves',
+              source: 'Personal page · Yael Levi',
+            },
+            {
+              name: 'David Rahamim',
+              amount: '₪1,800',
+              item: 'Classroom chairs',
+              source: 'Website campaign',
+            },
+            {
+              name: 'Miriam Azulay',
+              amount: '₪7,200',
+              item: 'Torah ark lighting',
+              source: 'Volunteer outreach',
+            },
+            {
+              name: 'Shlomo Segal',
+              amount: '₪2,400',
+              item: 'Outdoor seating',
+              source: 'Community event',
+            },
+          ],
+        },
+      },
       crm: {
         title: 'CRM Command Center',
         description: 'A unified view for managing every donation touchpoint in real time.',
@@ -429,6 +625,202 @@ export const uiTranslations = {
       signOut: 'התנתקות',
       error: 'פרטי ההתחברות שגויים. נסו שוב.',
       dashboardTitle: 'לוח ניהול',
+      pages: {
+        users: {
+          title: 'ניהול משתמשים',
+          subtitle: 'גישה, תפקידים ואישורים',
+          description: 'ניהול אנשי צוות, פרופילי תורמים והרשאות מתנדבים.',
+          actions: ['הזמנת משתמש', 'ייצוא רשימה'],
+          stats: [
+            {
+              label: 'משתמשים פעילים',
+              value: '1,284',
+              meta: '32 חדשים השבוע',
+            },
+            {
+              label: 'ממתינים לאישור',
+              value: '18',
+              meta: 'לטיפול היום',
+            },
+            {
+              label: 'צוותי מתנדבים',
+              value: '6',
+              meta: '2 רכזים לכל צוות',
+            },
+          ],
+          roles: [
+            {
+              title: 'פרופילי תורמים',
+              description: 'מעקב אחר אופן תרומה מועדף, קבלות והערות.',
+              meta: '482 תורמים מתויגים',
+            },
+            {
+              title: 'הרשאות צוות',
+              description: 'חלוקת גישה לפי תחומי אחריות בקמפיין.',
+              meta: '4 תבניות תפקיד',
+            },
+            {
+              title: 'גישה למתנדבים',
+              description: 'גישה מוגבלת לדפי תרומה ורשימות לידים.',
+              meta: '12 מתנדבים פעילים',
+            },
+          ],
+        },
+        campaign: {
+          title: 'הגדרות קמפיין',
+          subtitle: 'יעדים, בקרה ואישורים',
+          description: 'הגדרת יעד כללי ושליטה ביעדי דפים אישיים.',
+          actions: ['פרסום עדכון', 'שליחת תזכורת'],
+          stats: [
+            {
+              label: 'יעד כללי',
+              value: '₪1.8M',
+              meta: '68% נאסף',
+            },
+            {
+              label: 'יעדים אישיים',
+              value: '86',
+              meta: '12 ממתינים לאישור',
+            },
+            {
+              label: 'תרומה ממוצעת',
+              value: '₪1,240',
+              meta: 'עלייה של 6% החודש',
+            },
+          ],
+          formTitle: 'הגדרת יעדים',
+          formDescription: 'עדכון יעד כולל והגדרות לדפים אישיים.',
+          fields: {
+            totalGoal: 'יעד תרומה כללי',
+            defaultPersonalGoal: 'יעד אישי ברירת מחדל',
+            allowPersonalGoals: 'אפשר שינוי יעד בדפי תרומה אישיים',
+            requireApproval: 'דרוש אישור לשינוי יעד',
+          },
+          save: 'שמירת הגדרות קמפיין',
+          guidelines: [
+            {
+              title: 'יעדי ביניים',
+              description: 'הגדרת יעדי ביניים לרבעונים הקרובים.',
+              meta: '3 יעדים פעילים',
+            },
+            {
+              title: 'אישורי דפים אישיים',
+              description: 'בדיקה לפני פרסום שינויים בדפים אישיים.',
+              meta: 'זמן טיפול ממוצע: יומיים',
+            },
+            {
+              title: 'אחידות מסרים',
+              description: 'שמירה על מסרים עקביים לאורך הקמפיין.',
+              meta: 'עודכן לפני 3 ימים',
+            },
+          ],
+        },
+        items: {
+          title: 'פריטים לתרומה',
+          subtitle: 'מלאי ואבני דרך',
+          description: 'מעקב אחר פריטים מוחשיים וסמליים לתרומה.',
+          actions: ['הוספת פריט', 'עדכון זמינות'],
+          stats: [
+            {
+              label: 'פריטים פעילים',
+              value: '214',
+              meta: '24 מומנו במלואם',
+            },
+            {
+              label: 'מלאי נמוך',
+              value: '12',
+              meta: 'דורש השלמה',
+            },
+            {
+              label: 'פריטים חדשים',
+              value: '6',
+              meta: 'נוספו השבוע',
+            },
+          ],
+          list: [
+            {
+              title: 'תאורת היכל',
+              description: 'גופי תאורה מיוחדים לאולם המרכזי.',
+              meta: '₪12,000 נותרו',
+              status: 'מלאי נמוך',
+              statusStyle: 'warning',
+            },
+            {
+              title: 'כיסאות כיתות',
+              description: 'כיסאות ארגונומיים לבית המדרש לנוער.',
+              meta: '40 מתוך 120 מומנו',
+              status: 'בתהליך',
+              statusStyle: 'info',
+            },
+            {
+              title: 'מדפי ספריה',
+              description: 'מדפים חדשים לספרים ולתשמישי קדושה.',
+              meta: 'מומן במלואו',
+              status: 'הושלם',
+              statusStyle: 'success',
+            },
+            {
+              title: 'פינות ישיבה חוץ',
+              description: 'ספסלים ופרגולות להתכנסויות קהילתיות.',
+              meta: '₪28,000 נותרו',
+              status: 'דורש טיפול',
+              statusStyle: 'alert',
+            },
+          ],
+        },
+        donors: {
+          title: 'רשימת תורמים',
+          subtitle: 'תרומות, מקור ופריטים',
+          description: 'ריכוז תורמים, פריטי תרומה ומקור ההגעה.',
+          actions: ['ייצוא תורמים', 'שליחת תודה'],
+          stats: [
+            {
+              label: 'סה״כ תורמים',
+              value: '1,284',
+              meta: '112 חדשים החודש',
+            },
+            {
+              label: 'תרומה ממוצעת',
+              value: '₪1,240',
+              meta: 'תרומה מובילה ₪18,000',
+            },
+            {
+              label: 'מקורות הגעה',
+              value: '8',
+              meta: 'רובם דרך דפים אישיים',
+            },
+          ],
+          tableTitle: 'תרומות אחרונות',
+          tableDescription: 'מעקב אחר תרומות לפי סכום, פריט ומקור הגעה.',
+          tableHeaders: ['תורם', 'סכום', 'פריט', 'מקור'],
+          list: [
+            {
+              name: 'לאה כהן',
+              amount: '₪3,600',
+              item: 'מדפי ספריה',
+              source: 'דף אישי · יעל לוי',
+            },
+            {
+              name: 'דוד רחמים',
+              amount: '₪1,800',
+              item: 'כיסאות כיתות',
+              source: 'קמפיין האתר',
+            },
+            {
+              name: 'מרים אזולאי',
+              amount: '₪7,200',
+              item: 'תאורת היכל',
+              source: 'פניית מתנדבים',
+            },
+            {
+              name: 'שלמה סגל',
+              amount: '₪2,400',
+              item: 'פינות ישיבה חוץ',
+              source: 'אירוע קהילתי',
+            },
+          ],
+        },
+      },
       crm: {
         title: 'מרכז שליטה CRM',
         description: 'תצוגה אחודה לניהול כל נקודות המגע עם תורמים בזמן אמת.',
