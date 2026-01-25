@@ -23,6 +23,7 @@ const uiTranslations = {
       status: 'Build Status',
       personal: 'Personal Pages',
       contact: 'Contact',
+      admin: 'Admin',
     },
     hero: {
       eyebrow: 'A community vision connecting generations',
@@ -169,6 +170,7 @@ const uiTranslations = {
       description: 'Secure area for staff to manage donations, content, and reports.',
       loginTitle: 'Admin login',
       loginDescription: 'Sign in to reach the management dashboard.',
+      backHome: 'Back to home',
       username: 'Username',
       password: 'Password',
       signIn: 'Sign in',
@@ -206,6 +208,7 @@ const uiTranslations = {
       status: 'סטטוס בנייה',
       personal: 'דפי תרומה אישיים',
       contact: 'צרו קשר',
+      admin: 'מנהל',
     },
     hero: {
       eyebrow: 'חזון קהילתי וחיבור בין דורות',
@@ -352,6 +355,7 @@ const uiTranslations = {
       description: 'אזור מאובטח לצוות לניהול תרומות, תוכן ודוחות.',
       loginTitle: 'התחברות מנהל',
       loginDescription: 'התחברו כדי להגיע ללוח הניהול.',
+      backHome: 'חזרה לדף הבית',
       username: 'שם משתמש',
       password: 'סיסמה',
       signIn: 'התחברות',
@@ -485,7 +489,8 @@ function App() {
   const [adminForm, setAdminForm] = useState({ username: '', password: '' });
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [adminError, setAdminError] = useState('');
-  const [activePage, setActivePage] = useState('main');
+  const getViewFromHash = () => (window.location.hash === '#admin' ? 'admin' : 'home');
+  const [currentView, setCurrentView] = useState(getViewFromHash);
 
   useEffect(() => {
     const loadData = async () => {
@@ -504,6 +509,15 @@ function App() {
     };
 
     loadData();
+  }, []);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setCurrentView(getViewFromHash());
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   const percent =
@@ -566,24 +580,13 @@ function App() {
             </div>
           </div>
           <div className="nav-links">
-            <a href="#home" onClick={handleNavClick('home')}>
-              {t.nav.home}
-            </a>
-            <a href="#donations" onClick={handleNavClick('donations')}>
-              {t.nav.donations}
-            </a>
-            <a href="#levels" onClick={handleNavClick('levels')}>
-              {t.nav.levels}
-            </a>
-            <a href="#status" onClick={handleNavClick('status')}>
-              {t.nav.status}
-            </a>
-            <a href="#personal" onClick={handleNavClick('personal')}>
-              {t.nav.personal}
-            </a>
-            <a href="#contact" onClick={handleNavClick('contact')}>
-              {t.nav.contact}
-            </a>
+            <a href="#home">{t.nav.home}</a>
+            <a href="#donations">{t.nav.donations}</a>
+            <a href="#levels">{t.nav.levels}</a>
+            <a href="#status">{t.nav.status}</a>
+            <a href="#personal">{t.nav.personal}</a>
+            <a href="#contact">{t.nav.contact}</a>
+            <a href="#admin">{t.nav.admin}</a>
           </div>
           <div className="lang-toggle" aria-label={t.languageLabel}>
             <button
@@ -633,28 +636,88 @@ function App() {
               </p>
             </div>
           </div>
-        ) : (
-          <div className="hero-content personal-hero">
-            <p className="hero-eyebrow">{t.nav.personal}</p>
-            <h1>{t.personalPage.title}</h1>
-            <p className="hero-description">{t.personalPage.description}</p>
-            <div className="hero-actions">
-              <button
-                className="secondary"
-                type="button"
-                onClick={() => setActivePage('main')}
-              >
-                {t.personalPage.backToHome}
-              </button>
-              <a className="primary" href="#create-personal-page">
-                {t.personalPage.createTitle}
-              </a>
-            </div>
-          </div>
-        )}
+        </div>
       </header>
 
-      {activePage === 'main' ? (
+      {currentView === 'admin' ? (
+        <main>
+          <section className="section muted admin-section">
+            <div className="section-header">
+              <h2>{t.admin.title}</h2>
+              <p>{t.admin.description}</p>
+            </div>
+            <div className="admin-page-actions">
+              <a className="secondary" href="#home">
+                {t.admin.backHome}
+              </a>
+            </div>
+            {!isAdminAuthenticated ? (
+              <div className="admin-login">
+                <div className="admin-login-card">
+                  <h3>{t.admin.loginTitle}</h3>
+                  <p>{t.admin.loginDescription}</p>
+                  <form onSubmit={handleAdminSubmit}>
+                    <label>
+                      {t.admin.username}
+                      <input
+                        type="text"
+                        value={adminForm.username}
+                        onChange={handleAdminChange('username')}
+                        placeholder={t.admin.username}
+                        autoComplete="username"
+                      />
+                    </label>
+                    <label>
+                      {t.admin.password}
+                      <input
+                        type="password"
+                        value={adminForm.password}
+                        onChange={handleAdminChange('password')}
+                        placeholder="••••••••"
+                        autoComplete="current-password"
+                      />
+                    </label>
+                    {adminError ? <p className="form-error">{adminError}</p> : null}
+                    <button className="primary" type="submit">
+                      {t.admin.signIn}
+                    </button>
+                  </form>
+                </div>
+              </div>
+            ) : (
+              <div className="admin-panel">
+                <div className="admin-panel-header">
+                  <div>
+                    <h3>{t.admin.dashboardTitle}</h3>
+                    <p>{t.admin.description}</p>
+                  </div>
+                  <button type="button" className="secondary" onClick={handleAdminSignOut}>
+                    {t.admin.signOut}
+                  </button>
+                </div>
+                <div className="admin-grid">
+                  {t.admin.cards.map((card) => (
+                    <article key={card.title} className="admin-card">
+                      <h4>{card.title}</h4>
+                      <p>{card.description}</p>
+                    </article>
+                  ))}
+                </div>
+                <div className="admin-actions">
+                  <h4>{t.admin.quickActions.title}</h4>
+                  <div className="admin-action-list">
+                    {t.admin.quickActions.items.map((item) => (
+                      <button key={item} type="button">
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </section>
+        </main>
+      ) : (
         <>
           <main>
             {isLoading ? (
@@ -727,8 +790,7 @@ function App() {
                       </ul>
                     </div>
                     <button type="button">
-                      {t.levels.action}{' '}
-                      {translateValue(levelNames, language, level.name)}
+                      {t.levels.action} {translateValue(levelNames, language, level.name)}
                     </button>
                   </article>
                 ))}
@@ -762,6 +824,8 @@ function App() {
                       ))}
                     </select>
                   </label>
+                </div>
+                <div className="form-row">
                   <label>
                     {t.form.itemSelection}
                     <select>
@@ -828,12 +892,8 @@ function App() {
                   >
                     <span>{translateValue(statusNames, language, marker.name)}</span>
                     <div className="marker-card">
-                      <strong>
-                        {translateValue(statusLabels, language, marker.status)}
-                      </strong>
-                      <p>
-                        {translateValue(statusDedications, language, marker.dedication)}
-                      </p>
+                      <strong>{translateValue(statusLabels, language, marker.status)}</strong>
+                      <p>{translateValue(statusDedications, language, marker.dedication)}</p>
                     </div>
                   </div>
                 ))}
@@ -871,81 +931,6 @@ function App() {
               </div>
             </section>
 
-            <section id="admin" className="section muted admin-section">
-              <div className="section-header">
-                <h2>{t.admin.title}</h2>
-                <p>{t.admin.description}</p>
-              </div>
-              {!isAdminAuthenticated ? (
-                <div className="admin-login">
-                  <div className="admin-login-card">
-                    <h3>{t.admin.loginTitle}</h3>
-                    <p>{t.admin.loginDescription}</p>
-                    <form onSubmit={handleAdminSubmit}>
-                      <label>
-                        {t.admin.username}
-                        <input
-                          type="text"
-                          value={adminForm.username}
-                          onChange={handleAdminChange('username')}
-                          placeholder={t.admin.username}
-                          autoComplete="username"
-                        />
-                      </label>
-                      <label>
-                        {t.admin.password}
-                        <input
-                          type="password"
-                          value={adminForm.password}
-                          onChange={handleAdminChange('password')}
-                          placeholder="••••••••"
-                          autoComplete="current-password"
-                        />
-                      </label>
-                      {adminError ? <p className="form-error">{adminError}</p> : null}
-                      <button className="primary" type="submit">
-                        {t.admin.signIn}
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              ) : (
-                <div className="admin-panel">
-                  <div className="admin-panel-header">
-                    <div>
-                      <h3>{t.admin.dashboardTitle}</h3>
-                      <p>{t.admin.description}</p>
-                    </div>
-                    <button
-                      type="button"
-                      className="secondary"
-                      onClick={handleAdminSignOut}
-                    >
-                      {t.admin.signOut}
-                    </button>
-                  </div>
-                  <div className="admin-grid">
-                    {t.admin.cards.map((card) => (
-                      <article key={card.title} className="admin-card">
-                        <h4>{card.title}</h4>
-                        <p>{card.description}</p>
-                      </article>
-                    ))}
-                  </div>
-                  <div className="admin-actions">
-                    <h4>{t.admin.quickActions.title}</h4>
-                    <div className="admin-action-list">
-                      {t.admin.quickActions.items.map((item) => (
-                        <button key={item} type="button">
-                          {item}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </section>
-
             <section className="section muted">
               <div className="section-header">
                 <h2>{t.info.title}</h2>
@@ -976,105 +961,6 @@ function App() {
             <p className="footer-note">{t.footer.note}</p>
           </footer>
         </>
-      ) : (
-        <main className="personal-page">
-          <section className="section">
-            <div className="section-header">
-              <h2>{t.personalPage.title}</h2>
-              <p>{t.personalPage.description}</p>
-            </div>
-            <div className="personal-page-actions">
-              <button
-                className="secondary"
-                type="button"
-                onClick={() => setActivePage('main')}
-              >
-                {t.personalPage.backToHome}
-              </button>
-              <a className="primary" href="#create-personal-page">
-                {t.personalPage.createTitle}
-              </a>
-            </div>
-          </section>
-
-          <section className="section muted">
-            <div className="section-header">
-              <h2>{t.personalPage.listTitle}</h2>
-              <p>{t.personalPage.listDescription}</p>
-            </div>
-            <div className="personal-grid personal-page-grid">
-              {data.personalPages.map((page) => (
-                <article key={page.name}>
-                  <h3>{translateValue(personalPageNames, language, page.name)}</h3>
-                  <p>
-                    {t.personal.goal}: ${page.goal.toLocaleString()}
-                  </p>
-                  <p>
-                    {t.personal.progress}: ${page.progress.toLocaleString()}
-                  </p>
-                  <button type="button">{t.personalPage.donateAction}</button>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section id="create-personal-page" className="section">
-            <div className="section-header">
-              <h2>{t.personalPage.createTitle}</h2>
-              <p>{t.personalPage.createDescription}</p>
-            </div>
-            <form className="donation-form personal-form">
-              <div className="form-row">
-                <label>
-                  {t.personalPage.fields.pageTitle}
-                  <input
-                    type="text"
-                    placeholder={t.personalPage.placeholders.pageTitle}
-                  />
-                </label>
-                <label>
-                  {t.personalPage.fields.goal}
-                  <input
-                    type="number"
-                    placeholder={t.personalPage.placeholders.goal}
-                  />
-                </label>
-              </div>
-              <div className="form-row">
-                <label>
-                  {t.personalPage.fields.fullName}
-                  <input
-                    type="text"
-                    placeholder={t.personalPage.placeholders.fullName}
-                  />
-                </label>
-                <label>
-                  {t.personalPage.fields.email}
-                  <input
-                    type="email"
-                    placeholder={t.personalPage.placeholders.email}
-                  />
-                </label>
-              </div>
-              <div className="form-row">
-                <label>
-                  {t.personalPage.fields.phone}
-                  <input
-                    type="tel"
-                    placeholder={t.personalPage.placeholders.phone}
-                  />
-                </label>
-              </div>
-              <label className="full-width">
-                {t.personalPage.fields.notes}
-                <textarea rows="4" placeholder={t.personalPage.placeholders.notes} />
-              </label>
-              <button className="primary" type="button">
-                {t.personalPage.submit}
-              </button>
-            </form>
-          </section>
-        </main>
       )}
     </div>
   );
