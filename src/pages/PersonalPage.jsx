@@ -71,6 +71,12 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
     event.preventDefault();
     setFormStatus(null);
     setIsSubmitting(true);
+    console.info('Submitting personal page creation request.', {
+      pageTitle: formState.pageTitle,
+      goal: formState.goal,
+      fullName: formState.fullName,
+      email: formState.email,
+    });
 
     try {
       const response = await fetch('/api/personal-pages', {
@@ -80,6 +86,12 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
       });
 
       if (!response.ok) {
+        const errorPayload = await response.json().catch(() => null);
+        console.error('Personal page creation failed (client).', {
+          status: response.status,
+          statusText: response.statusText,
+          payload: errorPayload,
+        });
         throw new Error('Failed to create page');
       }
 
@@ -93,6 +105,7 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
         notes: '',
       });
     } catch (error) {
+      console.error('Personal page creation error (client).', error);
       setFormStatus({ type: 'error', message: t.personalPage.createError });
     } finally {
       setIsSubmitting(false);

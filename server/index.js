@@ -97,6 +97,12 @@ const getPageLink = (req, slug) => {
 
 app.post('/api/personal-pages', async (req, res) => {
   const { pageTitle, goal, fullName, email, phone, notes, language } = req.body ?? {};
+  console.info('Personal page creation request received.', {
+    pageTitle,
+    goal,
+    fullName,
+    email,
+  });
 
   if (!pageTitle || !goal || !fullName || !email) {
     return res.status(400).json({ error: 'Required fields are missing.' });
@@ -151,6 +157,11 @@ app.post('/api/personal-pages', async (req, res) => {
     return res.json({ page, pageLink });
   } catch (error) {
     console.error('Failed to create personal page:', error);
+    console.error('Personal page creation context:', {
+      pageTitle,
+      email,
+      slug,
+    });
     return res.status(500).json({ error: 'Failed to create personal page.' });
   }
 });
