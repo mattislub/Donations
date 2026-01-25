@@ -6,7 +6,7 @@
 .hero {
   position: relative;
   background-size: cover;
-  background-position: center;
+  background-position: top center;
   padding: 32px 6vw 120px;
   color: #fff;
 }
@@ -369,6 +369,7 @@ textarea {
   width: 100%;
   height: 420px;
   object-fit: cover;
+  object-position: top;
 }
 
 .marker {
