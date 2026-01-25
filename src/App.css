@@ -375,6 +375,12 @@ textarea {
   margin: 4px 0 8px;
 }
 
+.form-success {
+  color: #15803d;
+  font-size: 0.95rem;
+  margin: 4px 0 8px;
+}
+
 .status-board {
   position: relative;
   border-radius: 24px;
@@ -509,15 +515,52 @@ textarea {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+.admin-card-wide {
+  grid-column: 1 / -1;
+}
+
 .admin-card {
   background: #f8fafc;
   border-radius: 16px;
   padding: 18px;
   border: 1px solid #e2e8f0;
+  display: grid;
+  gap: 12px;
 }
 
 .admin-card h4 {
   margin-bottom: 8px;
+}
+
+.admin-subgrid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.admin-subcard {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+}
+
+.admin-subcard h5 {
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.admin-form {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-form .form-row {
+  margin: 0;
+}
+
+.admin-form .primary {
+  align-self: flex-start;
 }
 
 .admin-actions {
@@ -539,6 +582,10 @@ textarea {
   color: #fff;
   font-weight: 600;
   cursor: pointer;
+}
+
+.admin-action-list-muted button {
+  background: #16325f;
 }
 
 footer {
