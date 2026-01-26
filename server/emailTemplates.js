@@ -129,7 +129,9 @@ export const buildDonationEmail = ({ data, language, isAdmin }) => {
       <table role="presentation" cellspacing="0" cellpadding="0" style="max-width: 680px; margin: 0 auto; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);" dir="${direction}">
         <tr style="background: ${brand.headerBackground}; color: ${brand.headerText};">
           <td style="padding: 24px;">
-            <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 56px; display: block; margin-bottom: 12px;" />
+            <div style="text-align: center; margin-bottom: 12px;">
+              <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 56px; display: inline-block;" />
+            </div>
             <h1 style="margin: 0; font-size: 22px; line-height: 1.4;">${escapeHtml(t.heading)}</h1>
           </td>
         </tr>
@@ -185,7 +187,9 @@ export const buildPersonalPageCreatedEmail = ({ language, pageLink, accessCode }
       <table role="presentation" cellspacing="0" cellpadding="0" style="max-width: 680px; margin: 0 auto; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);" dir="${direction}">
         <tr style="background: ${brand.headerBackground}; color: ${brand.headerText};">
           <td style="padding: 24px;">
-            <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 56px; display: block; margin-bottom: 12px;" />
+            <div style="text-align: center; margin-bottom: 12px;">
+              <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 56px; display: inline-block;" />
+            </div>
             <h1 style="margin: 0; font-size: 22px; line-height: 1.4;">${escapeHtml(t.createdHeading)}</h1>
           </td>
         </tr>
@@ -249,7 +253,9 @@ export const buildPersonalPageInviteEmail = ({
       <table role="presentation" cellspacing="0" cellpadding="0" style="max-width: 680px; margin: 0 auto; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);" dir="${direction}">
         <tr style="background: ${brand.headerBackground}; color: ${brand.headerText};">
           <td style="padding: 24px;">
-            <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 56px; display: block; margin-bottom: 12px;" />
+            <div style="text-align: center; margin-bottom: 12px;">
+              <img src="cid:brand-logo" alt="Beit Tefilah Givat Ze’ev" style="height: 56px; display: inline-block;" />
+            </div>
             <h1 style="margin: 0; font-size: 22px; line-height: 1.4;">${escapeHtml(t.inviteHeading)}</h1>
           </td>
         </tr>
