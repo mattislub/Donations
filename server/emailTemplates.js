@@ -74,6 +74,7 @@ const copy = {
 
 const brand = {
   navy: '#0f2a55',
+  headerBackground: '#2f4f7f',
   gold: '#f6c453',
   background: '#f5f6f8',
   text: '#1f2937',
