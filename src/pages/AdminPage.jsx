@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NavBar from '../components/NavBar';
 import heroBackground from '../assets/hero-background.png';
 import { buildApiUrl } from '../utils/api';
@@ -14,6 +14,10 @@ function AdminPage({
   onAdminSubmit,
   onAdminSignOut,
 }) {
+  const cloneAdminContent = (source) => JSON.parse(JSON.stringify(source));
+  const [adminContent, setAdminContent] = useState(() => cloneAdminContent(t.admin));
+  const [adminDraft, setAdminDraft] = useState(() => cloneAdminContent(t.admin));
+  const [isEditMode, setIsEditMode] = useState(false);
   const [accessCodeForm, setAccessCodeForm] = useState({ code: '', confirm: '' });
   const [accessCodeStatus, setAccessCodeStatus] = useState(null);
   const [profileForm, setProfileForm] = useState({
@@ -31,14 +35,53 @@ function AdminPage({
   });
   const adminSectionClassName = 'section admin-section admin-section-background';
   const adminSectionStyle = { backgroundImage: `url(${heroBackground})` };
+  const adminText = isEditMode ? adminDraft : adminContent;
   const adminPages = [
-    { id: 'users', ...t.admin.pages.users },
-    { id: 'campaign', ...t.admin.pages.campaign },
-    { id: 'items', ...t.admin.pages.items },
-    { id: 'donors', ...t.admin.pages.donors },
+    { id: 'users', ...adminText.pages.users },
+    { id: 'campaign', ...adminText.pages.campaign },
+    { id: 'items', ...adminText.pages.items },
+    { id: 'donors', ...adminText.pages.donors },
   ];
   const [activePage, setActivePage] = useState(adminPages[0].id);
   const activePageContent = adminPages.find((page) => page.id === activePage);
+
+  useEffect(() => {
+    const nextAdminContent = cloneAdminContent(t.admin);
+    setAdminContent(nextAdminContent);
+    setAdminDraft(nextAdminContent);
+    setIsEditMode(false);
+  }, [t]);
+
+  const updateAdminDraft = (path, value) => {
+    setAdminDraft((prev) => {
+      const next = cloneAdminContent(prev);
+      let cursor = next;
+      for (let i = 0; i < path.length - 1; i += 1) {
+        cursor = cursor[path[i]];
+      }
+      cursor[path[path.length - 1]] = value;
+      return next;
+    });
+  };
+
+  const handleAdminInputChange = (path) => (event) => {
+    updateAdminDraft(path, event.target.value);
+  };
+
+  const handleEditStart = () => {
+    setAdminDraft(cloneAdminContent(adminContent));
+    setIsEditMode(true);
+  };
+
+  const handleEditCancel = () => {
+    setAdminDraft(cloneAdminContent(adminContent));
+    setIsEditMode(false);
+  };
+
+  const handleEditSave = () => {
+    setAdminContent(cloneAdminContent(adminDraft));
+    setIsEditMode(false);
+  };
 
   const handleAccessCodeChange = (field) => (event) => {
     setAccessCodeForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -58,7 +101,7 @@ function AdminPage({
     setAccessCodeStatus(null);
 
     if (!accessCodeForm.code || accessCodeForm.code !== accessCodeForm.confirm) {
-      setAccessCodeStatus({ type: 'error', message: t.admin.security.mismatch });
+      setAccessCodeStatus({ type: 'error', message: adminText.security.mismatch });
       return;
     }
 
@@ -73,10 +116,10 @@ function AdminPage({
         throw new Error('Failed to save access code');
       }
 
-      setAccessCodeStatus({ type: 'success', message: t.admin.security.success });
+      setAccessCodeStatus({ type: 'success', message: adminText.security.success });
       setAccessCodeForm({ code: '', confirm: '' });
     } catch (error) {
-      setAccessCodeStatus({ type: 'error', message: t.admin.security.error });
+      setAccessCodeStatus({ type: 'error', message: adminText.security.error });
     }
   };
 
@@ -95,9 +138,9 @@ function AdminPage({
         throw new Error('Failed to save profile');
       }
 
-      setProfileStatus({ type: 'success', message: t.admin.profile.success });
+      setProfileStatus({ type: 'success', message: adminText.profile.success });
     } catch (error) {
-      setProfileStatus({ type: 'error', message: t.admin.profile.error });
+      setProfileStatus({ type: 'error', message: adminText.profile.error });
     }
   };
 
@@ -110,32 +153,50 @@ function AdminPage({
       <main>
         <section className={adminSectionClassName} style={adminSectionStyle}>
           <div className="section-header">
-            <h2>{t.admin.title}</h2>
-            <p>{t.admin.description}</p>
+            {isEditMode ? (
+              <>
+                <input
+                  className="admin-edit-input"
+                  type="text"
+                  value={adminDraft.title}
+                  onChange={handleAdminInputChange(['title'])}
+                />
+                <textarea
+                  className="admin-edit-textarea"
+                  value={adminDraft.description}
+                  onChange={handleAdminInputChange(['description'])}
+                />
+              </>
+            ) : (
+              <>
+                <h2>{adminText.title}</h2>
+                <p>{adminText.description}</p>
+              </>
+            )}
           </div>
           <div className="admin-page-actions">
             <a className="secondary" href="#home">
-              {t.admin.backHome}
+              {adminText.backHome}
             </a>
           </div>
           {!isAdminAuthenticated ? (
             <div className="admin-login">
               <div className="admin-login-card">
-                <h3>{t.admin.loginTitle}</h3>
-                <p>{t.admin.loginDescription}</p>
+                <h3>{adminText.loginTitle}</h3>
+                <p>{adminText.loginDescription}</p>
                 <form onSubmit={onAdminSubmit}>
                   <label>
-                    {t.admin.username}
+                    {adminText.username}
                     <input
                       type="text"
                       value={adminForm.username}
                       onChange={onAdminChange('username')}
-                      placeholder={t.admin.username}
+                      placeholder={adminText.username}
                       autoComplete="username"
                     />
                   </label>
                   <label>
-                    {t.admin.password}
+                    {adminText.password}
                     <input
                       type="password"
                       value={adminForm.password}
@@ -146,7 +207,7 @@ function AdminPage({
                   </label>
                   {adminError ? <p className="form-error">{adminError}</p> : null}
                   <button className="primary" type="submit">
-                    {t.admin.signIn}
+                    {adminText.signIn}
                   </button>
                 </form>
               </div>
@@ -155,19 +216,35 @@ function AdminPage({
             <div className="admin-panel">
               <div className="admin-panel-header">
                 <div>
-                  <h3>{t.admin.dashboardTitle}</h3>
-                  <p>{t.admin.description}</p>
+                  <h3>{adminText.dashboardTitle}</h3>
+                  <p>{adminText.description}</p>
                 </div>
-                <button type="button" className="secondary" onClick={onAdminSignOut}>
-                  {t.admin.signOut}
-                </button>
+                <div className="admin-panel-header-actions">
+                  {isEditMode ? (
+                    <>
+                      <button type="button" className="secondary" onClick={handleEditCancel}>
+                        {adminText.editing.cancel}
+                      </button>
+                      <button type="button" className="primary" onClick={handleEditSave}>
+                        {adminText.editing.save}
+                      </button>
+                    </>
+                  ) : (
+                    <button type="button" className="secondary" onClick={handleEditStart}>
+                      {adminText.editing.start}
+                    </button>
+                  )}
+                  <button type="button" className="secondary" onClick={onAdminSignOut}>
+                    {adminText.signOut}
+                  </button>
+                </div>
               </div>
               <div className="admin-page-layout">
                 <aside className="admin-page-nav">
                   <div className="admin-crm-card admin-crm-card-primary">
-                    <p className="admin-crm-eyebrow">{t.admin.crm.sidebar.eyebrow}</p>
-                    <h4>{t.admin.crm.sidebar.title}</h4>
-                    <p>{t.admin.crm.sidebar.description}</p>
+                    <p className="admin-crm-eyebrow">{adminText.crm.sidebar.eyebrow}</p>
+                    <h4>{adminText.crm.sidebar.title}</h4>
+                    <p>{adminText.crm.sidebar.description}</p>
                   </div>
                   <div className="admin-page-tab-list">
                     {adminPages.map((page) => (
@@ -183,10 +260,21 @@ function AdminPage({
                     ))}
                   </div>
                   <div className="admin-crm-card">
-                    <h5>{t.admin.crm.sidebar.tasksTitle}</h5>
+                    <h5>{adminText.crm.sidebar.tasksTitle}</h5>
                     <ul className="admin-crm-task-list">
-                      {t.admin.crm.sidebar.tasks.map((task) => (
-                        <li key={task}>{task}</li>
+                      {adminText.crm.sidebar.tasks.map((task, index) => (
+                        <li key={`${task}-${index}`}>
+                          {isEditMode ? (
+                            <input
+                              className="admin-edit-input"
+                              type="text"
+                              value={task}
+                              onChange={handleAdminInputChange(['crm', 'sidebar', 'tasks', index])}
+                            />
+                          ) : (
+                            task
+                          )}
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -194,44 +282,122 @@ function AdminPage({
                 <section className="admin-page-body">
                   <div className="admin-page-header">
                     <div>
-                      <h4>{activePageContent?.title}</h4>
-                      <p>{activePageContent?.description}</p>
+                      {isEditMode ? (
+                        <>
+                          <input
+                            className="admin-edit-input"
+                            type="text"
+                            value={activePageContent?.title ?? ''}
+                            onChange={handleAdminInputChange(['pages', activePage, 'title'])}
+                          />
+                          <textarea
+                            className="admin-edit-textarea"
+                            value={activePageContent?.description ?? ''}
+                            onChange={handleAdminInputChange(['pages', activePage, 'description'])}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <h4>{activePageContent?.title}</h4>
+                          <p>{activePageContent?.description}</p>
+                        </>
+                      )}
                     </div>
                     <div className="admin-crm-actions">
-                      {activePageContent?.actions?.map((action) => (
-                        <button key={action} type="button" className="secondary">
-                          {action}
-                        </button>
+                      {activePageContent?.actions?.map((action, index) => (
+                        <span key={`${action}-${index}`}>
+                          {isEditMode ? (
+                            <input
+                              className="admin-edit-input"
+                              type="text"
+                              value={action}
+                              onChange={handleAdminInputChange(['pages', activePage, 'actions', index])}
+                            />
+                          ) : (
+                            <button type="button" className="secondary">
+                              {action}
+                            </button>
+                          )}
+                        </span>
                       ))}
                     </div>
                   </div>
                   {activePage === 'users' ? (
                     <div className="admin-page-content">
                       <div className="admin-crm-stats">
-                        {t.admin.pages.users.stats.map((stat) => (
-                          <div key={stat.label} className="admin-crm-stat">
-                            <p className="admin-crm-stat-label">{stat.label}</p>
-                            <p className="admin-crm-stat-value">{stat.value}</p>
-                            <p className="admin-crm-stat-meta">{stat.meta}</p>
+                        {adminText.pages.users.stats.map((stat, index) => (
+                          <div key={`${stat.label}-${index}`} className="admin-crm-stat">
+                            {isEditMode ? (
+                              <div className="admin-edit-group">
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.label}
+                                  onChange={handleAdminInputChange(['pages', 'users', 'stats', index, 'label'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.value}
+                                  onChange={handleAdminInputChange(['pages', 'users', 'stats', index, 'value'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.meta}
+                                  onChange={handleAdminInputChange(['pages', 'users', 'stats', index, 'meta'])}
+                                />
+                              </div>
+                            ) : (
+                              <>
+                                <p className="admin-crm-stat-label">{stat.label}</p>
+                                <p className="admin-crm-stat-value">{stat.value}</p>
+                                <p className="admin-crm-stat-meta">{stat.meta}</p>
+                              </>
+                            )}
                           </div>
                         ))}
                       </div>
                       <div className="admin-crm-modules">
-                        {t.admin.pages.users.roles.map((role) => (
-                          <article key={role.title} className="admin-crm-module">
-                            <h5>{role.title}</h5>
-                            <p>{role.description}</p>
-                            <span>{role.meta}</span>
+                        {adminText.pages.users.roles.map((role, index) => (
+                          <article key={`${role.title}-${index}`} className="admin-crm-module">
+                            {isEditMode ? (
+                              <div className="admin-edit-group">
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={role.title}
+                                  onChange={handleAdminInputChange(['pages', 'users', 'roles', index, 'title'])}
+                                />
+                                <textarea
+                                  className="admin-edit-textarea"
+                                  value={role.description}
+                                  onChange={handleAdminInputChange(['pages', 'users', 'roles', index, 'description'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={role.meta}
+                                  onChange={handleAdminInputChange(['pages', 'users', 'roles', index, 'meta'])}
+                                />
+                              </div>
+                            ) : (
+                              <>
+                                <h5>{role.title}</h5>
+                                <p>{role.description}</p>
+                                <span>{role.meta}</span>
+                              </>
+                            )}
                           </article>
                         ))}
                       </div>
                       <div className="admin-crm-forms">
                         <article className="admin-card">
-                          <h4>{t.admin.security.title}</h4>
-                          <p>{t.admin.security.description}</p>
+                          <h4>{adminText.security.title}</h4>
+                          <p>{adminText.security.description}</p>
                           <form className="admin-form" onSubmit={handleAccessCodeSubmit}>
                             <label>
-                              {t.admin.security.codeLabel}
+                              {adminText.security.codeLabel}
                               <input
                                 type="password"
                                 placeholder="••••••"
@@ -240,7 +406,7 @@ function AdminPage({
                               />
                             </label>
                             <label>
-                              {t.admin.security.confirmLabel}
+                              {adminText.security.confirmLabel}
                               <input
                                 type="password"
                                 placeholder="••••••"
@@ -248,36 +414,36 @@ function AdminPage({
                                 onChange={handleAccessCodeChange('confirm')}
                               />
                             </label>
-                            <p className="form-note">{t.admin.security.hint}</p>
+                            <p className="form-note">{adminText.security.hint}</p>
                             {accessCodeStatus ? (
                               <p className={accessCodeStatus.type === 'success' ? 'form-success' : 'form-error'}>
                                 {accessCodeStatus.message}
                               </p>
                             ) : null}
                             <button className="primary" type="submit">
-                              {t.admin.security.save}
+                              {adminText.security.save}
                             </button>
                           </form>
                         </article>
                         <article className="admin-card admin-card-wide">
-                          <h4>{t.admin.profile.title}</h4>
-                          <p>{t.admin.profile.description}</p>
+                          <h4>{adminText.profile.title}</h4>
+                          <p>{adminText.profile.description}</p>
                           <form className="admin-form" onSubmit={handleProfileSubmit}>
                             <div className="form-row">
                               <label>
-                                {t.admin.profile.fullName}
+                                {adminText.profile.fullName}
                                 <input
                                   type="text"
-                                  placeholder={t.admin.profile.placeholders.fullName}
+                                  placeholder={adminText.profile.placeholders.fullName}
                                   value={profileForm.fullName}
                                   onChange={handleProfileChange('fullName')}
                                 />
                               </label>
                               <label>
-                                {t.admin.profile.phone}
+                                {adminText.profile.phone}
                                 <input
                                   type="tel"
-                                  placeholder={t.admin.profile.placeholders.phone}
+                                  placeholder={adminText.profile.placeholders.phone}
                                   value={profileForm.phone}
                                   onChange={handleProfileChange('phone')}
                                 />
@@ -285,19 +451,19 @@ function AdminPage({
                             </div>
                             <div className="form-row">
                               <label>
-                                {t.admin.profile.email}
+                                {adminText.profile.email}
                                 <input
                                   type="email"
-                                  placeholder={t.admin.profile.placeholders.email}
+                                  placeholder={adminText.profile.placeholders.email}
                                   value={profileForm.email}
                                   onChange={handleProfileChange('email')}
                                 />
                               </label>
                               <label>
-                                {t.admin.profile.address}
+                                {adminText.profile.address}
                                 <input
                                   type="text"
-                                  placeholder={t.admin.profile.placeholders.address}
+                                  placeholder={adminText.profile.placeholders.address}
                                   value={profileForm.address}
                                   onChange={handleProfileChange('address')}
                                 />
@@ -309,7 +475,7 @@ function AdminPage({
                               </p>
                             ) : null}
                             <button className="primary" type="submit">
-                              {t.admin.profile.save}
+                              {adminText.profile.save}
                             </button>
                           </form>
                         </article>
@@ -319,21 +485,64 @@ function AdminPage({
                   {activePage === 'campaign' ? (
                     <div className="admin-page-content">
                       <div className="admin-crm-stats">
-                        {t.admin.pages.campaign.stats.map((stat) => (
-                          <div key={stat.label} className="admin-crm-stat">
-                            <p className="admin-crm-stat-label">{stat.label}</p>
-                            <p className="admin-crm-stat-value">{stat.value}</p>
-                            <p className="admin-crm-stat-meta">{stat.meta}</p>
+                        {adminText.pages.campaign.stats.map((stat, index) => (
+                          <div key={`${stat.label}-${index}`} className="admin-crm-stat">
+                            {isEditMode ? (
+                              <div className="admin-edit-group">
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.label}
+                                  onChange={handleAdminInputChange(['pages', 'campaign', 'stats', index, 'label'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.value}
+                                  onChange={handleAdminInputChange(['pages', 'campaign', 'stats', index, 'value'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.meta}
+                                  onChange={handleAdminInputChange(['pages', 'campaign', 'stats', index, 'meta'])}
+                                />
+                              </div>
+                            ) : (
+                              <>
+                                <p className="admin-crm-stat-label">{stat.label}</p>
+                                <p className="admin-crm-stat-value">{stat.value}</p>
+                                <p className="admin-crm-stat-meta">{stat.meta}</p>
+                              </>
+                            )}
                           </div>
                         ))}
                       </div>
                       <div className="admin-card admin-card-wide">
-                        <h4>{t.admin.pages.campaign.formTitle}</h4>
-                        <p>{t.admin.pages.campaign.formDescription}</p>
+                        {isEditMode ? (
+                          <div className="admin-edit-group">
+                            <input
+                              className="admin-edit-input"
+                              type="text"
+                              value={adminText.pages.campaign.formTitle}
+                              onChange={handleAdminInputChange(['pages', 'campaign', 'formTitle'])}
+                            />
+                            <textarea
+                              className="admin-edit-textarea"
+                              value={adminText.pages.campaign.formDescription}
+                              onChange={handleAdminInputChange(['pages', 'campaign', 'formDescription'])}
+                            />
+                          </div>
+                        ) : (
+                          <>
+                            <h4>{adminText.pages.campaign.formTitle}</h4>
+                            <p>{adminText.pages.campaign.formDescription}</p>
+                          </>
+                        )}
                         <form className="admin-form">
                           <div className="form-row">
                             <label>
-                              {t.admin.pages.campaign.fields.totalGoal}
+                              {adminText.pages.campaign.fields.totalGoal}
                               <input
                                 type="text"
                                 value={campaignForm.totalGoal}
@@ -341,7 +550,7 @@ function AdminPage({
                               />
                             </label>
                             <label>
-                              {t.admin.pages.campaign.fields.defaultPersonalGoal}
+                              {adminText.pages.campaign.fields.defaultPersonalGoal}
                               <input
                                 type="text"
                                 value={campaignForm.defaultPersonalGoal}
@@ -355,7 +564,7 @@ function AdminPage({
                               checked={campaignForm.allowPersonalGoals}
                               onChange={handleCampaignChange('allowPersonalGoals')}
                             />
-                            <span>{t.admin.pages.campaign.fields.allowPersonalGoals}</span>
+                            <span>{adminText.pages.campaign.fields.allowPersonalGoals}</span>
                           </label>
                           <label className="admin-checkbox">
                             <input
@@ -363,19 +572,55 @@ function AdminPage({
                               checked={campaignForm.requireApproval}
                               onChange={handleCampaignChange('requireApproval')}
                             />
-                            <span>{t.admin.pages.campaign.fields.requireApproval}</span>
+                            <span>{adminText.pages.campaign.fields.requireApproval}</span>
                           </label>
                           <button className="primary" type="button">
-                            {t.admin.pages.campaign.save}
+                            {adminText.pages.campaign.save}
                           </button>
                         </form>
                       </div>
                       <div className="admin-crm-modules">
-                        {t.admin.pages.campaign.guidelines.map((item) => (
-                          <article key={item.title} className="admin-crm-module">
-                            <h5>{item.title}</h5>
-                            <p>{item.description}</p>
-                            <span>{item.meta}</span>
+                        {adminText.pages.campaign.guidelines.map((item, index) => (
+                          <article key={`${item.title}-${index}`} className="admin-crm-module">
+                            {isEditMode ? (
+                              <div className="admin-edit-group">
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={item.title}
+                                  onChange={handleAdminInputChange([
+                                    'pages',
+                                    'campaign',
+                                    'guidelines',
+                                    index,
+                                    'title',
+                                  ])}
+                                />
+                                <textarea
+                                  className="admin-edit-textarea"
+                                  value={item.description}
+                                  onChange={handleAdminInputChange([
+                                    'pages',
+                                    'campaign',
+                                    'guidelines',
+                                    index,
+                                    'description',
+                                  ])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={item.meta}
+                                  onChange={handleAdminInputChange(['pages', 'campaign', 'guidelines', index, 'meta'])}
+                                />
+                              </div>
+                            ) : (
+                              <>
+                                <h5>{item.title}</h5>
+                                <p>{item.description}</p>
+                                <span>{item.meta}</span>
+                              </>
+                            )}
                           </article>
                         ))}
                       </div>
@@ -384,25 +629,86 @@ function AdminPage({
                   {activePage === 'items' ? (
                     <div className="admin-page-content">
                       <div className="admin-crm-stats">
-                        {t.admin.pages.items.stats.map((stat) => (
-                          <div key={stat.label} className="admin-crm-stat">
-                            <p className="admin-crm-stat-label">{stat.label}</p>
-                            <p className="admin-crm-stat-value">{stat.value}</p>
-                            <p className="admin-crm-stat-meta">{stat.meta}</p>
+                        {adminText.pages.items.stats.map((stat, index) => (
+                          <div key={`${stat.label}-${index}`} className="admin-crm-stat">
+                            {isEditMode ? (
+                              <div className="admin-edit-group">
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.label}
+                                  onChange={handleAdminInputChange(['pages', 'items', 'stats', index, 'label'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.value}
+                                  onChange={handleAdminInputChange(['pages', 'items', 'stats', index, 'value'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.meta}
+                                  onChange={handleAdminInputChange(['pages', 'items', 'stats', index, 'meta'])}
+                                />
+                              </div>
+                            ) : (
+                              <>
+                                <p className="admin-crm-stat-label">{stat.label}</p>
+                                <p className="admin-crm-stat-value">{stat.value}</p>
+                                <p className="admin-crm-stat-meta">{stat.meta}</p>
+                              </>
+                            )}
                           </div>
                         ))}
                       </div>
                       <div className="admin-items-grid">
-                        {t.admin.pages.items.list.map((item) => (
-                          <article key={item.title} className="admin-crm-module">
-                            <div className="admin-item-header">
-                              <h5>{item.title}</h5>
-                              <span className={`admin-item-status status-${item.statusStyle}`}>
-                                {item.status}
-                              </span>
-                            </div>
-                            <p>{item.description}</p>
-                            <span>{item.meta}</span>
+                        {adminText.pages.items.list.map((item, index) => (
+                          <article key={`${item.title}-${index}`} className="admin-crm-module">
+                            {isEditMode ? (
+                              <div className="admin-edit-group">
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={item.title}
+                                  onChange={handleAdminInputChange(['pages', 'items', 'list', index, 'title'])}
+                                />
+                                <textarea
+                                  className="admin-edit-textarea"
+                                  value={item.description}
+                                  onChange={handleAdminInputChange(['pages', 'items', 'list', index, 'description'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={item.meta}
+                                  onChange={handleAdminInputChange(['pages', 'items', 'list', index, 'meta'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={item.status}
+                                  onChange={handleAdminInputChange(['pages', 'items', 'list', index, 'status'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={item.statusStyle}
+                                  onChange={handleAdminInputChange(['pages', 'items', 'list', index, 'statusStyle'])}
+                                />
+                              </div>
+                            ) : (
+                              <>
+                                <div className="admin-item-header">
+                                  <h5>{item.title}</h5>
+                                  <span className={`admin-item-status status-${item.statusStyle}`}>
+                                    {item.status}
+                                  </span>
+                                </div>
+                                <p>{item.description}</p>
+                                <span>{item.meta}</span>
+                              </>
+                            )}
                           </article>
                         ))}
                       </div>
@@ -411,29 +717,114 @@ function AdminPage({
                   {activePage === 'donors' ? (
                     <div className="admin-page-content">
                       <div className="admin-crm-stats">
-                        {t.admin.pages.donors.stats.map((stat) => (
-                          <div key={stat.label} className="admin-crm-stat">
-                            <p className="admin-crm-stat-label">{stat.label}</p>
-                            <p className="admin-crm-stat-value">{stat.value}</p>
-                            <p className="admin-crm-stat-meta">{stat.meta}</p>
+                        {adminText.pages.donors.stats.map((stat, index) => (
+                          <div key={`${stat.label}-${index}`} className="admin-crm-stat">
+                            {isEditMode ? (
+                              <div className="admin-edit-group">
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.label}
+                                  onChange={handleAdminInputChange(['pages', 'donors', 'stats', index, 'label'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.value}
+                                  onChange={handleAdminInputChange(['pages', 'donors', 'stats', index, 'value'])}
+                                />
+                                <input
+                                  className="admin-edit-input"
+                                  type="text"
+                                  value={stat.meta}
+                                  onChange={handleAdminInputChange(['pages', 'donors', 'stats', index, 'meta'])}
+                                />
+                              </div>
+                            ) : (
+                              <>
+                                <p className="admin-crm-stat-label">{stat.label}</p>
+                                <p className="admin-crm-stat-value">{stat.value}</p>
+                                <p className="admin-crm-stat-meta">{stat.meta}</p>
+                              </>
+                            )}
                           </div>
                         ))}
                       </div>
                       <div className="admin-card admin-card-wide">
-                        <h4>{t.admin.pages.donors.tableTitle}</h4>
-                        <p>{t.admin.pages.donors.tableDescription}</p>
+                        {isEditMode ? (
+                          <div className="admin-edit-group">
+                            <input
+                              className="admin-edit-input"
+                              type="text"
+                              value={adminText.pages.donors.tableTitle}
+                              onChange={handleAdminInputChange(['pages', 'donors', 'tableTitle'])}
+                            />
+                            <textarea
+                              className="admin-edit-textarea"
+                              value={adminText.pages.donors.tableDescription}
+                              onChange={handleAdminInputChange(['pages', 'donors', 'tableDescription'])}
+                            />
+                          </div>
+                        ) : (
+                          <>
+                            <h4>{adminText.pages.donors.tableTitle}</h4>
+                            <p>{adminText.pages.donors.tableDescription}</p>
+                          </>
+                        )}
                         <div className="admin-table">
                           <div className="admin-table-row admin-table-header">
-                            {t.admin.pages.donors.tableHeaders.map((header) => (
-                              <span key={header}>{header}</span>
+                            {adminText.pages.donors.tableHeaders.map((header, index) => (
+                              <span key={`${header}-${index}`}>
+                                {isEditMode ? (
+                                  <input
+                                    className="admin-edit-input"
+                                    type="text"
+                                    value={header}
+                                    onChange={handleAdminInputChange(['pages', 'donors', 'tableHeaders', index])}
+                                  />
+                                ) : (
+                                  header
+                                )}
+                              </span>
                             ))}
                           </div>
-                          {t.admin.pages.donors.list.map((donor) => (
-                            <div key={donor.name} className="admin-table-row">
-                              <span>{donor.name}</span>
-                              <span>{donor.amount}</span>
-                              <span>{donor.item}</span>
-                              <span>{donor.source}</span>
+                          {adminText.pages.donors.list.map((donor, index) => (
+                            <div key={`${donor.name}-${index}`} className="admin-table-row">
+                              {isEditMode ? (
+                                <>
+                                  <input
+                                    className="admin-edit-input"
+                                    type="text"
+                                    value={donor.name}
+                                    onChange={handleAdminInputChange(['pages', 'donors', 'list', index, 'name'])}
+                                  />
+                                  <input
+                                    className="admin-edit-input"
+                                    type="text"
+                                    value={donor.amount}
+                                    onChange={handleAdminInputChange(['pages', 'donors', 'list', index, 'amount'])}
+                                  />
+                                  <input
+                                    className="admin-edit-input"
+                                    type="text"
+                                    value={donor.item}
+                                    onChange={handleAdminInputChange(['pages', 'donors', 'list', index, 'item'])}
+                                  />
+                                  <input
+                                    className="admin-edit-input"
+                                    type="text"
+                                    value={donor.source}
+                                    onChange={handleAdminInputChange(['pages', 'donors', 'list', index, 'source'])}
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  <span>{donor.name}</span>
+                                  <span>{donor.amount}</span>
+                                  <span>{donor.item}</span>
+                                  <span>{donor.source}</span>
+                                </>
+                              )}
                             </div>
                           ))}
                         </div>

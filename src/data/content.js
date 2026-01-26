@@ -209,6 +209,11 @@ export const uiTranslations = {
       signOut: 'Sign out',
       error: 'Incorrect credentials. Please try again.',
       dashboardTitle: 'Management dashboard',
+      editing: {
+        start: 'Edit content',
+        save: 'Save changes',
+        cancel: 'Cancel',
+      },
       pages: {
         users: {
           title: 'User management',
@@ -693,6 +698,11 @@ export const uiTranslations = {
       signOut: 'התנתקות',
       error: 'פרטי ההתחברות שגויים. נסו שוב.',
       dashboardTitle: 'לוח ניהול',
+      editing: {
+        start: 'עריכת תוכן',
+        save: 'שמירת שינויים',
+        cancel: 'ביטול',
+      },
       pages: {
         users: {
           title: 'ניהול משתמשים',
