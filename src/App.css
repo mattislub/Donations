@@ -577,6 +577,34 @@ textarea {
   flex-wrap: wrap;
 }
 
+.admin-panel-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-edit-group {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-edit-input,
+.admin-edit-textarea {
+  width: 100%;
+  border: 1px solid #dbe3f0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.admin-edit-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
 .admin-page-layout {
   display: grid;
   gap: 20px;
