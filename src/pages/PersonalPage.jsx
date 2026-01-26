@@ -5,6 +5,14 @@ import { personalPageNames } from '../data/content';
 import { buildApiUrl } from '../utils/api';
 import { translateValue } from '../utils/translation';
 
+const normalizeSlug = (value = '') =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/['"]/g, '')
+    .replace(/[^a-z0-9\u0590-\u05ff]+/gi, '-')
+    .replace(/^-+|-+$/g, '');
+
 function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading }) {
   const [formState, setFormState] = useState({
     pageTitle: '',
@@ -30,6 +38,56 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
     return new URLSearchParams(query).get('slug') ?? '';
   };
   const [selectedSlug, setSelectedSlug] = useState(getSelectedSlug);
+  const selectedPage = useMemo(() => {
+    if (!selectedSlug) {
+      return null;
+    }
+    return (
+      personalPages.find((page) => page.slug === selectedSlug) ??
+      personalPages.find((page) => normalizeSlug(page.name) === selectedSlug) ??
+      null
+    );
+  }, [personalPages, selectedSlug]);
+  const selectedPageSlug = selectedPage ? selectedPage.slug ?? normalizeSlug(selectedPage.name) : '';
+  const donationList = useMemo(() => {
+    if (!selectedPage) {
+      return [];
+    }
+    const total = Math.max(Number(selectedPage.progress) || 0, 0);
+    if (total === 0) {
+      return [];
+    }
+    const ratios = [0.45, 0.3, 0.25];
+    const donors = t.personalPage.sampleDonors ?? [];
+    let remaining = total;
+    return ratios.map((ratio, index) => {
+      const amount =
+        index === ratios.length - 1
+          ? Math.max(remaining, 0)
+          : Math.max(Math.floor(total * ratio), 1);
+      remaining -= amount;
+      return {
+        id: `${selectedPageSlug}-donation-${index}`,
+        donor: donors[index % donors.length] ?? t.personalPage.anonymousDonor,
+        amount,
+      };
+    });
+  }, [selectedPage, selectedPageSlug, t.personalPage.anonymousDonor, t.personalPage.sampleDonors]);
+  const goalStats = useMemo(() => {
+    if (!selectedPage) {
+      return null;
+    }
+    const goal = Number(selectedPage.goal) || 0;
+    const progress = Number(selectedPage.progress) || 0;
+    const percent = goal > 0 ? Math.min(Math.round((progress / goal) * 100), 100) : 0;
+    const remaining = Math.max(goal - progress, 0);
+    return {
+      goal,
+      progress,
+      percent,
+      remaining,
+    };
+  }, [selectedPage]);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -67,6 +125,13 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
     }
     return `${window.location.origin}/#personal-page?slug=${loggedInPage.slug}`;
   }, [loggedInPage]);
+
+  const handleSelectPage = (slug) => () => {
+    if (!slug) {
+      return;
+    }
+    window.location.hash = `#personal-page?slug=${slug}`;
+  };
 
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
@@ -205,8 +270,12 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
               {personalPages.map((page) => (
                 <article
                   key={page.name}
-                  id={page.slug ? `personal-page-${page.slug}` : undefined}
-                  className={page.slug && page.slug === selectedSlug ? 'personal-page-highlight' : undefined}
+                  id={`personal-page-${page.slug ?? normalizeSlug(page.name)}`}
+                  className={
+                    (page.slug ?? normalizeSlug(page.name)) === selectedSlug
+                      ? 'personal-page-highlight'
+                      : undefined
+                  }
                 >
                   <h3>{translateValue(personalPageNames, language, page.name)}</h3>
                   <p>
@@ -215,10 +284,93 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
                   <p>
                     {t.personal.progress}: ${page.progress.toLocaleString()}
                   </p>
-                  <button type="button">{t.personalPage.donateAction}</button>
+                  <button
+                    type="button"
+                    onClick={handleSelectPage(page.slug ?? normalizeSlug(page.name))}
+                  >
+                    {t.personalPage.donateAction}
+                  </button>
                 </article>
               ))}
             </div>
+          )}
+        </section>
+        <section className="section personal-page-detail">
+          <div className="section-header">
+            <h2>{t.personalPage.detailTitle}</h2>
+            <p>{t.personalPage.detailDescription}</p>
+          </div>
+          {selectedPage && goalStats ? (
+            <article className="personal-detail-card">
+              <div className="personal-detail-header">
+                <div>
+                  <p className="detail-eyebrow">{t.personalPage.detailEyebrow}</p>
+                  <h3>{translateValue(personalPageNames, language, selectedPage.name)}</h3>
+                  <p className="detail-meta">
+                    {t.personalPage.goalLabel}: ${goalStats.goal.toLocaleString()}
+                  </p>
+                </div>
+                <button type="button" className="primary">
+                  {t.personalPage.newDonationAction}
+                </button>
+              </div>
+              <div className="personal-detail-progress">
+                <div className="goal-metrics">
+                  <div className="goal-metric">
+                    <span>{t.personalPage.raisedLabel}</span>
+                    <strong>${goalStats.progress.toLocaleString()}</strong>
+                  </div>
+                  <div className="goal-metric">
+                    <span>{t.personalPage.remainingLabel}</span>
+                    <strong>${goalStats.remaining.toLocaleString()}</strong>
+                  </div>
+                  <div className="goal-metric">
+                    <span>{t.personalPage.percentLabel}</span>
+                    <strong>{goalStats.percent}%</strong>
+                  </div>
+                </div>
+                <div className="progress-track" role="presentation">
+                  <div className="progress-bar" style={{ width: `${goalStats.percent}%` }} />
+                </div>
+              </div>
+              <div className="personal-detail-grid">
+                <div>
+                  <h4>{t.personalPage.donationListTitle}</h4>
+                  {donationList.length > 0 ? (
+                    <ul className="donation-list">
+                      {donationList.map((donation) => (
+                        <li key={donation.id} className="donation-card">
+                          <span>{donation.donor}</span>
+                          <strong>${donation.amount.toLocaleString()}</strong>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="donation-empty">{t.personalPage.donationListEmpty}</p>
+                  )}
+                </div>
+                <div>
+                  <h4>{t.personalPage.statusTitle}</h4>
+                  <p className="detail-meta">{t.personalPage.statusDescription}</p>
+                  <div className="goal-summary">
+                    <div className="goal-summary-row">
+                      <span>{t.personalPage.goalLabel}</span>
+                      <strong>${goalStats.goal.toLocaleString()}</strong>
+                    </div>
+                    <div className="goal-summary-row">
+                      <span>{t.personalPage.raisedLabel}</span>
+                      <strong>${goalStats.progress.toLocaleString()}</strong>
+                    </div>
+                    <div className="goal-summary-row">
+                      <span>{t.personalPage.remainingLabel}</span>
+                      <strong>${goalStats.remaining.toLocaleString()}</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ) : (
+            <p className="detail-empty">{t.personalPage.selectPrompt}</p>
           )}
         </section>
         <section className="section">
