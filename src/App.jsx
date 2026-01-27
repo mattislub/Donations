@@ -3,6 +3,7 @@ import './App.css';
 import { initialDataState, uiTranslations } from './data/content';
 import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
+import PersonalManagePage from './pages/PersonalManagePage';
 import PersonalPage from './pages/PersonalPage';
 import { buildApiUrl } from './utils/api';
 
@@ -25,6 +26,9 @@ function App() {
       pathname === '/personal'
     ) {
       return 'personal-page';
+    }
+    if (hash === '#personal-manage' || pathname === '/personal-manage') {
+      return 'personal-manage';
     }
     return 'home';
   };
@@ -111,6 +115,12 @@ function App() {
           onLanguageChange={setLanguage}
           personalPages={data.personalPages}
           isLoading={isLoading}
+        />
+      ) : currentView === 'personal-manage' ? (
+        <PersonalManagePage
+          t={t}
+          language={language}
+          onLanguageChange={setLanguage}
         />
       ) : (
         <HomePage
