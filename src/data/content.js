@@ -154,9 +154,12 @@ export const uiTranslations = {
       sending: 'Sending...',
       createSuccess: 'Your page request was received. A link has been sent by email.',
       createError: 'Unable to create the page. Please try again.',
+      manageAction: 'Manage my page',
+      manageEyebrow: 'Personal page access',
       manageTitle: 'Manage your personal page',
       manageDescription:
         'Log in with the access code from your email to share your link and invite supporters.',
+      backToPersonal: 'Back to personal pages',
       loginTitle: 'Login to your page',
       loginDescription: 'Enter the email and access code we sent you.',
       loginFields: {
@@ -658,9 +661,12 @@ export const uiTranslations = {
       sending: 'שולח...',
       createSuccess: 'הבקשה התקבלה וקישור נשלח למייל.',
       createError: 'לא ניתן ליצור את הדף. נסו שוב.',
+      manageAction: 'ניהול הדף שלי',
+      manageEyebrow: 'גישה לדף האישי',
       manageTitle: 'ניהול דף תרומה אישי',
       manageDescription:
         'התחברו עם קוד הגישה שקיבלתם במייל כדי לשתף את הקישור ולבקש תרומות.',
+      backToPersonal: 'חזרה לדפים האישיים',
       loginTitle: 'התחברות לדף האישי',
       loginDescription: 'הזינו את המייל וקוד הגישה שקיבלתם.',
       loginFields: {
