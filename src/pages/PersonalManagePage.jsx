@@ -112,78 +112,83 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
             <p>{t.personalPage.manageDescription}</p>
           </div>
           <div className="personal-manage-grid">
-            <article className="personal-manage-card">
-              <h3>{t.personalPage.loginTitle}</h3>
-              <p>{t.personalPage.loginDescription}</p>
-              <form className="personal-form" onSubmit={handleLoginSubmit}>
-                <label>
-                  {t.personalPage.loginFields.email}
-                  <input
-                    type="email"
-                    value={loginState.email}
-                    onChange={handleLoginChange('email')}
-                    placeholder={t.personalPage.loginPlaceholders.email}
-                    required
-                  />
-                </label>
-                <label>
-                  {t.personalPage.loginFields.accessCode}
-                  <input
-                    type="password"
-                    value={loginState.accessCode}
-                    onChange={handleLoginChange('accessCode')}
-                    placeholder={t.personalPage.loginPlaceholders.accessCode}
-                    required
-                  />
-                </label>
-                {loginStatus ? (
-                  <p className={loginStatus.type === 'success' ? 'form-success' : 'form-error'}>
-                    {loginStatus.message}
-                  </p>
+            {!loggedInPage ? (
+              <article className="personal-manage-card">
+                <h3>{t.personalPage.loginTitle}</h3>
+                <p>{t.personalPage.loginDescription}</p>
+                <form className="personal-form" onSubmit={handleLoginSubmit}>
+                  <label>
+                    {t.personalPage.loginFields.email}
+                    <input
+                      type="email"
+                      value={loginState.email}
+                      onChange={handleLoginChange('email')}
+                      placeholder={t.personalPage.loginPlaceholders.email}
+                      required
+                    />
+                  </label>
+                  <label>
+                    {t.personalPage.loginFields.accessCode}
+                    <input
+                      type="password"
+                      value={loginState.accessCode}
+                      onChange={handleLoginChange('accessCode')}
+                      placeholder={t.personalPage.loginPlaceholders.accessCode}
+                      required
+                    />
+                  </label>
+                  {loginStatus ? (
+                    <p className={loginStatus.type === 'success' ? 'form-success' : 'form-error'}>
+                      {loginStatus.message}
+                    </p>
+                  ) : null}
+                  <button type="submit" className="primary">
+                    {t.personalPage.loginAction}
+                  </button>
+                </form>
+              </article>
+            ) : null}
+            {loggedInPage ? (
+              <article className="personal-manage-card">
+                <h3>{t.personalPage.inviteTitle}</h3>
+                <p>{t.personalPage.inviteDescription}</p>
+                {loginStatus?.type === 'success' ? (
+                  <p className="form-success">{loginStatus.message}</p>
                 ) : null}
-                <button type="submit" className="primary">
-                  {t.personalPage.loginAction}
-                </button>
-              </form>
-              {loggedInPage ? (
+                <form className="personal-form" onSubmit={handleInviteSubmit}>
+                  <label>
+                    {t.personalPage.inviteFields.recipients}
+                    <textarea
+                      rows={4}
+                      value={inviteState.recipients}
+                      onChange={handleInviteChange('recipients')}
+                      placeholder={t.personalPage.invitePlaceholders.recipients}
+                    />
+                  </label>
+                  <label>
+                    {t.personalPage.inviteFields.message}
+                    <textarea
+                      rows={3}
+                      value={inviteState.message}
+                      onChange={handleInviteChange('message')}
+                      placeholder={t.personalPage.invitePlaceholders.message}
+                    />
+                  </label>
+                  {inviteStatus ? (
+                    <p className={inviteStatus.type === 'success' ? 'form-success' : 'form-error'}>
+                      {inviteStatus.message}
+                    </p>
+                  ) : null}
+                  <button type="submit" className="primary" disabled={isSendingInvites || !loggedInPage}>
+                    {isSendingInvites ? t.personalPage.sending : t.personalPage.inviteAction}
+                  </button>
+                </form>
                 <div className="personal-share">
                   <p>{t.personalPage.shareLabel}</p>
                   <a href={shareLink}>{shareLink}</a>
                 </div>
-              ) : null}
-            </article>
-            <article className="personal-manage-card">
-              <h3>{t.personalPage.inviteTitle}</h3>
-              <p>{t.personalPage.inviteDescription}</p>
-              <form className="personal-form" onSubmit={handleInviteSubmit}>
-                <label>
-                  {t.personalPage.inviteFields.recipients}
-                  <textarea
-                    rows={4}
-                    value={inviteState.recipients}
-                    onChange={handleInviteChange('recipients')}
-                    placeholder={t.personalPage.invitePlaceholders.recipients}
-                  />
-                </label>
-                <label>
-                  {t.personalPage.inviteFields.message}
-                  <textarea
-                    rows={3}
-                    value={inviteState.message}
-                    onChange={handleInviteChange('message')}
-                    placeholder={t.personalPage.invitePlaceholders.message}
-                  />
-                </label>
-                {inviteStatus ? (
-                  <p className={inviteStatus.type === 'success' ? 'form-success' : 'form-error'}>
-                    {inviteStatus.message}
-                  </p>
-                ) : null}
-                <button type="submit" className="primary" disabled={isSendingInvites || !loggedInPage}>
-                  {isSendingInvites ? t.personalPage.sending : t.personalPage.inviteAction}
-                </button>
-              </form>
-            </article>
+              </article>
+            ) : null}
           </div>
         </section>
       </main>
