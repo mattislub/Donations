@@ -643,7 +643,8 @@ textarea {
   gap: 12px;
 }
 
-.personal-manage-nav a {
+.personal-manage-nav a,
+.personal-manage-nav button {
   text-decoration: none;
   color: #0f2a55;
   font-weight: 600;
@@ -652,11 +653,24 @@ textarea {
   background: #ffffff;
   border: 1px solid #dbe4f0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: left;
 }
 
-.personal-manage-nav a:hover {
+.personal-manage-nav a:hover,
+.personal-manage-nav button:hover {
   transform: translateX(2px);
   box-shadow: 0 10px 20px rgba(15, 42, 85, 0.12);
+}
+
+.personal-manage-nav button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.personal-manage-nav .is-active {
+  border-color: #1d4ed8;
+  box-shadow: 0 12px 24px rgba(29, 78, 216, 0.18);
 }
 
 .personal-manage-action {

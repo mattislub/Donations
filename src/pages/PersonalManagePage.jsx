@@ -7,6 +7,7 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
   const [loginState, setLoginState] = useState({ email: '', accessCode: '' });
   const [loginStatus, setLoginStatus] = useState(null);
   const [loggedInPage, setLoggedInPage] = useState(null);
+  const [activePanel, setActivePanel] = useState('overview');
   const [inviteState, setInviteState] = useState({ recipients: '', message: '' });
   const [inviteStatus, setInviteStatus] = useState(null);
   const [isSendingInvites, setIsSendingInvites] = useState(false);
@@ -45,6 +46,7 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
       const payload = await response.json();
       setLoggedInPage(payload.page);
       setLoginStatus({ type: 'success', message: t.personalPage.loginSuccess });
+      setActivePanel('overview');
     } catch (error) {
       setLoginStatus({ type: 'error', message: t.personalPage.loginError });
     }
@@ -119,6 +121,7 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
     loggedInPage?.name ||
     loggedInPage?.pageTitle ||
     t.personalPage.manageMenu.defaultName;
+  const panelId = `personal-manage-${activePanel}`;
 
   return (
     <>
@@ -201,103 +204,144 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
                       </span>
                     </div>
                   </div>
-                  <nav className="personal-manage-nav">
-                    <a href="#personal-manage-overview">{t.personalPage.manageMenu.overview}</a>
-                    <a href="#personal-manage-invites">{t.personalPage.manageMenu.invites}</a>
-                    <a href="#personal-manage-share">{t.personalPage.manageMenu.share}</a>
+                  <nav className="personal-manage-nav" aria-label={t.personalPage.manageMenu.title}>
+                    <button
+                      type="button"
+                      className={activePanel === 'overview' ? 'is-active' : ''}
+                      onClick={() => setActivePanel('overview')}
+                    >
+                      {t.personalPage.manageMenu.overview}
+                    </button>
+                    <button
+                      type="button"
+                      className={activePanel === 'invites' ? 'is-active' : ''}
+                      onClick={() => setActivePanel('invites')}
+                    >
+                      {t.personalPage.manageMenu.invites}
+                    </button>
+                    <button
+                      type="button"
+                      className={activePanel === 'share' ? 'is-active' : ''}
+                      onClick={() => setActivePanel('share')}
+                    >
+                      {t.personalPage.manageMenu.share}
+                    </button>
+                    <button
+                      type="button"
+                      className={activePanel === 'donations' ? 'is-active' : ''}
+                      onClick={() => setActivePanel('donations')}
+                    >
+                      {t.personalPage.manageMenu.addDonation}
+                    </button>
                   </nav>
-                  <a className="personal-manage-action primary" href="/#donations">
-                    {t.personalPage.manageMenu.addDonation}
-                  </a>
                 </aside>
                 <div className="personal-manage-content">
-                  <section id="personal-manage-overview" className="personal-manage-panel">
-                    <h3>{t.personalPage.manageMenu.overview}</h3>
-                    <p className="detail-meta">{t.personalPage.manageMenu.overviewDescription}</p>
-                    <div className="goal-summary">
-                      <div className="goal-summary-row">
-                        <span>{t.personalPage.goalLabel}</span>
-                        <strong>${goal.toLocaleString()}</strong>
-                      </div>
-                      <div className="goal-summary-row">
-                        <span>{t.personalPage.raisedLabel}</span>
-                        <strong>${progress.toLocaleString()}</strong>
-                      </div>
-                      <div className="goal-summary-row">
-                        <span>{t.personalPage.remainingLabel}</span>
-                        <strong>${remaining.toLocaleString()}</strong>
-                      </div>
-                    </div>
-                    {donationSummary ? (
+                  {activePanel === 'overview' ? (
+                    <section id={panelId} className="personal-manage-panel">
+                      <h3>{t.personalPage.manageMenu.overview}</h3>
+                      <p className="detail-meta">{t.personalPage.manageMenu.overviewDescription}</p>
                       <div className="goal-summary">
                         <div className="goal-summary-row">
-                          <span>{t.personalPage.manageMenu.donationSummary}</span>
-                          <strong>{donationSummary.totalCount.toLocaleString()}</strong>
+                          <span>{t.personalPage.goalLabel}</span>
+                          <strong>${goal.toLocaleString()}</strong>
                         </div>
                         <div className="goal-summary-row">
-                          <span>{t.personalPage.manageMenu.donationTotalAmount}</span>
-                          <strong>${donationSummary.totalAmount.toLocaleString()}</strong>
+                          <span>{t.personalPage.raisedLabel}</span>
+                          <strong>${progress.toLocaleString()}</strong>
                         </div>
                         <div className="goal-summary-row">
-                          <span>{t.personalPage.manageMenu.donationCreditCount}</span>
-                          <strong>{donationSummary.creditCount.toLocaleString()}</strong>
-                        </div>
-                        <div className="goal-summary-row">
-                          <span>{t.personalPage.manageMenu.donationCashCount}</span>
-                          <strong>{donationSummary.cashCount.toLocaleString()}</strong>
+                          <span>{t.personalPage.remainingLabel}</span>
+                          <strong>${remaining.toLocaleString()}</strong>
                         </div>
                       </div>
-                    ) : null}
-                  </section>
-                  <section id="personal-manage-invites" className="personal-manage-panel">
-                    <h3>{t.personalPage.inviteTitle}</h3>
-                    <p>{t.personalPage.inviteDescription}</p>
-                    {loginStatus?.type === 'success' ? (
-                      <p className="form-success">{loginStatus.message}</p>
-                    ) : null}
-                    <form className="personal-form" onSubmit={handleInviteSubmit}>
-                      <label>
-                        {t.personalPage.inviteFields.recipients}
-                        <textarea
-                          rows={4}
-                          value={inviteState.recipients}
-                          onChange={handleInviteChange('recipients')}
-                          placeholder={t.personalPage.invitePlaceholders.recipients}
-                        />
-                      </label>
-                      <label>
-                        {t.personalPage.inviteFields.message}
-                        <textarea
-                          rows={3}
-                          value={inviteState.message}
-                          onChange={handleInviteChange('message')}
-                          placeholder={t.personalPage.invitePlaceholders.message}
-                        />
-                      </label>
-                      {inviteStatus ? (
-                        <p
-                          className={inviteStatus.type === 'success' ? 'form-success' : 'form-error'}
-                        >
-                          {inviteStatus.message}
-                        </p>
+                      {donationSummary ? (
+                        <div className="goal-summary">
+                          <div className="goal-summary-row">
+                            <span>{t.personalPage.manageMenu.donationSummary}</span>
+                            <strong>{donationSummary.totalCount.toLocaleString()}</strong>
+                          </div>
+                          <div className="goal-summary-row">
+                            <span>{t.personalPage.manageMenu.donationTotalAmount}</span>
+                            <strong>${donationSummary.totalAmount.toLocaleString()}</strong>
+                          </div>
+                          <div className="goal-summary-row">
+                            <span>{t.personalPage.manageMenu.donationCreditCount}</span>
+                            <strong>{donationSummary.creditCount.toLocaleString()}</strong>
+                          </div>
+                          <div className="goal-summary-row">
+                            <span>{t.personalPage.manageMenu.donationCashCount}</span>
+                            <strong>{donationSummary.cashCount.toLocaleString()}</strong>
+                          </div>
+                        </div>
                       ) : null}
-                      <button
-                        type="submit"
-                        className="primary"
-                        disabled={isSendingInvites || !loggedInPage}
-                      >
-                        {isSendingInvites ? t.personalPage.sending : t.personalPage.inviteAction}
-                      </button>
-                    </form>
-                  </section>
-                  <section id="personal-manage-share" className="personal-manage-panel">
-                    <h3>{t.personalPage.manageMenu.share}</h3>
-                    <p className="detail-meta">{t.personalPage.manageMenu.shareDescription}</p>
-                    <div className="personal-share">
-                      <p>{t.personalPage.shareLabel}</p>
-                      <a href={shareLink}>{shareLink}</a>
-                    </div>
-                  </section>
+                    </section>
+                  ) : null}
+                  {activePanel === 'invites' ? (
+                    <section id={panelId} className="personal-manage-panel">
+                      <h3>{t.personalPage.inviteTitle}</h3>
+                      <p>{t.personalPage.inviteDescription}</p>
+                      {loginStatus?.type === 'success' ? (
+                        <p className="form-success">{loginStatus.message}</p>
+                      ) : null}
+                      <form className="personal-form" onSubmit={handleInviteSubmit}>
+                        <label>
+                          {t.personalPage.inviteFields.recipients}
+                          <textarea
+                            rows={4}
+                            value={inviteState.recipients}
+                            onChange={handleInviteChange('recipients')}
+                            placeholder={t.personalPage.invitePlaceholders.recipients}
+                          />
+                        </label>
+                        <label>
+                          {t.personalPage.inviteFields.message}
+                          <textarea
+                            rows={3}
+                            value={inviteState.message}
+                            onChange={handleInviteChange('message')}
+                            placeholder={t.personalPage.invitePlaceholders.message}
+                          />
+                        </label>
+                        {inviteStatus ? (
+                          <p
+                            className={
+                              inviteStatus.type === 'success' ? 'form-success' : 'form-error'
+                            }
+                          >
+                            {inviteStatus.message}
+                          </p>
+                        ) : null}
+                        <button
+                          type="submit"
+                          className="primary"
+                          disabled={isSendingInvites || !loggedInPage}
+                        >
+                          {isSendingInvites ? t.personalPage.sending : t.personalPage.inviteAction}
+                        </button>
+                      </form>
+                    </section>
+                  ) : null}
+                  {activePanel === 'share' ? (
+                    <section id={panelId} className="personal-manage-panel">
+                      <h3>{t.personalPage.manageMenu.share}</h3>
+                      <p className="detail-meta">{t.personalPage.manageMenu.shareDescription}</p>
+                      <div className="personal-share">
+                        <p>{t.personalPage.shareLabel}</p>
+                        <a href={shareLink}>{shareLink}</a>
+                      </div>
+                    </section>
+                  ) : null}
+                  {activePanel === 'donations' ? (
+                    <section id={panelId} className="personal-manage-panel">
+                      <h3>{t.personalPage.manageMenu.addDonation}</h3>
+                      <p className="detail-meta">
+                        {t.personalPage.manageMenu.addDonationDescription}
+                      </p>
+                      <a className="primary personal-manage-action" href="/#donations">
+                        {t.personalPage.manageMenu.addDonation}
+                      </a>
+                    </section>
+                  ) : null}
                 </div>
               </div>
             ) : null}

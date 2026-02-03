@@ -170,6 +170,8 @@ export const uiTranslations = {
         invites: 'Send invitations',
         share: 'Share link',
         addDonation: 'Add donations',
+        addDonationDescription:
+          'Jump to the donation form to record a contribution or help a supporter donate quickly.',
         shareDescription: 'Copy your personal link and share it with friends and family.',
         defaultName: 'My personal page',
       },
@@ -691,6 +693,7 @@ export const uiTranslations = {
         invites: 'שליחת הזמנות',
         share: 'שיתוף הקישור',
         addDonation: 'הוסף תרומות',
+        addDonationDescription: 'עברו לטופס התרומה כדי להוסיף תרומה או לסייע לתומכים.',
         shareDescription: 'העתיקו את הקישור האישי ושלחו למשפחה ולחברים.',
         defaultName: 'הדף האישי שלי',
       },
