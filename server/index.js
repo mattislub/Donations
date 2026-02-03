@@ -8,6 +8,7 @@ import {
   findPersonalPageByAccess,
   findPersonalPageBySlug,
   initializeDatabase,
+  updatePersonalPageEmailSettings,
   upsertAccessCode,
   upsertAdminProfile,
 } from './db.js';
@@ -208,13 +209,15 @@ app.post('/api/personal-pages/:slug/invite', async (req, res) => {
       return res.status(403).json({ error: 'Invalid access code.' });
     }
 
+    const resolvedMessage =
+      typeof message === 'string' ? message : page.invite_message || '';
     const pageLink = getPageLink(req, slug);
     const mailer = await createMailer();
     const { subject, html, text } = buildPersonalPageInviteEmail({
       language,
       pageLink,
-      senderName: page.owner_name || page.name,
-      message,
+      senderName: page.invite_sender_name || page.owner_name || page.name,
+      message: resolvedMessage,
     });
 
     await Promise.all(
@@ -226,13 +229,50 @@ app.post('/api/personal-pages/:slug/invite', async (req, res) => {
     await addPersonalPageInvites({
       pageId: page.id,
       recipients: uniqueRecipients,
-      message,
+      message: resolvedMessage,
     });
 
     return res.json({ status: 'ok', sent: uniqueRecipients.length });
   } catch (error) {
     console.error('Failed to send personal page invites:', error);
     return res.status(500).json({ error: 'Failed to send invites.' });
+  }
+});
+
+app.post('/api/personal-pages/:slug/email-settings', async (req, res) => {
+  const { slug } = req.params;
+  const { accessCode, senderName, message } = req.body ?? {};
+
+  if (!accessCode) {
+    return res.status(400).json({ error: 'Access code is required.' });
+  }
+
+  try {
+    const page = await findPersonalPageBySlug(slug);
+    if (!page || page.access_code !== accessCode) {
+      return res.status(403).json({ error: 'Invalid access code.' });
+    }
+
+    const normalizedSenderName =
+      typeof senderName === 'string' && senderName.trim() ? senderName.trim() : null;
+    const normalizedMessage =
+      typeof message === 'string' && message.trim() ? message.trim() : null;
+
+    const settings = await updatePersonalPageEmailSettings({
+      pageId: page.id,
+      senderName: normalizedSenderName,
+      message: normalizedMessage,
+    });
+
+    return res.json({
+      settings: {
+        senderName: settings?.invite_sender_name ?? null,
+        message: settings?.invite_message ?? null,
+      },
+    });
+  } catch (error) {
+    console.error('Failed to update personal page email settings:', error);
+    return res.status(500).json({ error: 'Failed to update email settings.' });
   }
 });
 
