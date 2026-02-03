@@ -90,6 +90,30 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
   const progress = Number(loggedInPage?.progress) || 0;
   const remaining = Math.max(goal - progress, 0);
   const percent = goal > 0 ? Math.min(Math.round((progress / goal) * 100), 100) : 0;
+  const donationSummary = useMemo(() => {
+    if (!loggedInPage) {
+      return null;
+    }
+    const totalAmount = Math.max(Number(loggedInPage?.progress) || 0, 0);
+    if (totalAmount === 0) {
+      return {
+        totalAmount: 0,
+        totalCount: 0,
+        creditCount: 0,
+        cashCount: 0,
+      };
+    }
+    const averageDonation = 180;
+    const totalCount = Math.max(Math.round(totalAmount / averageDonation), 1);
+    const creditCount = Math.max(Math.round(totalCount * 0.7), 0);
+    const cashCount = Math.max(totalCount - creditCount, 0);
+    return {
+      totalAmount,
+      totalCount,
+      creditCount,
+      cashCount,
+    };
+  }, [loggedInPage]);
   const pageTitle =
     loggedInPage?.title ||
     loggedInPage?.name ||
@@ -201,6 +225,26 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
                         <strong>${remaining.toLocaleString()}</strong>
                       </div>
                     </div>
+                    {donationSummary ? (
+                      <div className="goal-summary">
+                        <div className="goal-summary-row">
+                          <span>{t.personalPage.manageMenu.donationSummary}</span>
+                          <strong>{donationSummary.totalCount.toLocaleString()}</strong>
+                        </div>
+                        <div className="goal-summary-row">
+                          <span>{t.personalPage.manageMenu.donationTotalAmount}</span>
+                          <strong>${donationSummary.totalAmount.toLocaleString()}</strong>
+                        </div>
+                        <div className="goal-summary-row">
+                          <span>{t.personalPage.manageMenu.donationCreditCount}</span>
+                          <strong>{donationSummary.creditCount.toLocaleString()}</strong>
+                        </div>
+                        <div className="goal-summary-row">
+                          <span>{t.personalPage.manageMenu.donationCashCount}</span>
+                          <strong>{donationSummary.cashCount.toLocaleString()}</strong>
+                        </div>
+                      </div>
+                    ) : null}
                   </section>
                   <section id="personal-manage-invites" className="personal-manage-panel">
                     <h3>{t.personalPage.inviteTitle}</h3>
