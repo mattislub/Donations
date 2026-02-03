@@ -206,6 +206,9 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
                     <a href="#personal-manage-invites">{t.personalPage.manageMenu.invites}</a>
                     <a href="#personal-manage-share">{t.personalPage.manageMenu.share}</a>
                   </nav>
+                  <a className="personal-manage-action primary" href="/#donations">
+                    {t.personalPage.manageMenu.addDonation}
+                  </a>
                 </aside>
                 <div className="personal-manage-content">
                   <section id="personal-manage-overview" className="personal-manage-panel">

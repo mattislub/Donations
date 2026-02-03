@@ -659,6 +659,11 @@ textarea {
   box-shadow: 0 10px 20px rgba(15, 42, 85, 0.12);
 }
 
+.personal-manage-action {
+  width: 100%;
+  text-decoration: none;
+}
+
 .personal-manage-content {
   display: grid;
   gap: 24px;
