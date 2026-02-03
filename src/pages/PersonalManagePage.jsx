@@ -86,6 +86,16 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
     }
   };
 
+  const goal = Number(loggedInPage?.goal) || 0;
+  const progress = Number(loggedInPage?.progress) || 0;
+  const remaining = Math.max(goal - progress, 0);
+  const percent = goal > 0 ? Math.min(Math.round((progress / goal) * 100), 100) : 0;
+  const pageTitle =
+    loggedInPage?.title ||
+    loggedInPage?.name ||
+    loggedInPage?.pageTitle ||
+    t.personalPage.manageMenu.defaultName;
+
   return (
     <>
       <header className="hero" style={{ backgroundImage: `url(${heroBackground})` }}>
@@ -149,45 +159,100 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
               </article>
             ) : null}
             {loggedInPage ? (
-              <article className="personal-manage-card">
-                <h3>{t.personalPage.inviteTitle}</h3>
-                <p>{t.personalPage.inviteDescription}</p>
-                {loginStatus?.type === 'success' ? (
-                  <p className="form-success">{loginStatus.message}</p>
-                ) : null}
-                <form className="personal-form" onSubmit={handleInviteSubmit}>
-                  <label>
-                    {t.personalPage.inviteFields.recipients}
-                    <textarea
-                      rows={4}
-                      value={inviteState.recipients}
-                      onChange={handleInviteChange('recipients')}
-                      placeholder={t.personalPage.invitePlaceholders.recipients}
-                    />
-                  </label>
-                  <label>
-                    {t.personalPage.inviteFields.message}
-                    <textarea
-                      rows={3}
-                      value={inviteState.message}
-                      onChange={handleInviteChange('message')}
-                      placeholder={t.personalPage.invitePlaceholders.message}
-                    />
-                  </label>
-                  {inviteStatus ? (
-                    <p className={inviteStatus.type === 'success' ? 'form-success' : 'form-error'}>
-                      {inviteStatus.message}
-                    </p>
-                  ) : null}
-                  <button type="submit" className="primary" disabled={isSendingInvites || !loggedInPage}>
-                    {isSendingInvites ? t.personalPage.sending : t.personalPage.inviteAction}
-                  </button>
-                </form>
-                <div className="personal-share">
-                  <p>{t.personalPage.shareLabel}</p>
-                  <a href={shareLink}>{shareLink}</a>
+              <div className="personal-manage-shell">
+                <aside className="personal-manage-sidebar">
+                  <div className="personal-manage-profile">
+                    <p className="detail-eyebrow">{t.personalPage.manageMenu.title}</p>
+                    <h3>{pageTitle}</h3>
+                    <p className="detail-meta">{loginState.email}</p>
+                    <div className="personal-sidebar-progress">
+                      <span>
+                        {t.personalPage.raisedLabel}: ${progress.toLocaleString()}
+                      </span>
+                      <div className="progress-track" role="presentation">
+                        <div className="progress-bar" style={{ width: `${percent}%` }} />
+                      </div>
+                      <span>
+                        {t.personalPage.percentLabel}: {percent}%
+                      </span>
+                    </div>
+                  </div>
+                  <nav className="personal-manage-nav">
+                    <a href="#personal-manage-overview">{t.personalPage.manageMenu.overview}</a>
+                    <a href="#personal-manage-invites">{t.personalPage.manageMenu.invites}</a>
+                    <a href="#personal-manage-share">{t.personalPage.manageMenu.share}</a>
+                  </nav>
+                </aside>
+                <div className="personal-manage-content">
+                  <section id="personal-manage-overview" className="personal-manage-panel">
+                    <h3>{t.personalPage.manageMenu.overview}</h3>
+                    <p className="detail-meta">{t.personalPage.manageMenu.overviewDescription}</p>
+                    <div className="goal-summary">
+                      <div className="goal-summary-row">
+                        <span>{t.personalPage.goalLabel}</span>
+                        <strong>${goal.toLocaleString()}</strong>
+                      </div>
+                      <div className="goal-summary-row">
+                        <span>{t.personalPage.raisedLabel}</span>
+                        <strong>${progress.toLocaleString()}</strong>
+                      </div>
+                      <div className="goal-summary-row">
+                        <span>{t.personalPage.remainingLabel}</span>
+                        <strong>${remaining.toLocaleString()}</strong>
+                      </div>
+                    </div>
+                  </section>
+                  <section id="personal-manage-invites" className="personal-manage-panel">
+                    <h3>{t.personalPage.inviteTitle}</h3>
+                    <p>{t.personalPage.inviteDescription}</p>
+                    {loginStatus?.type === 'success' ? (
+                      <p className="form-success">{loginStatus.message}</p>
+                    ) : null}
+                    <form className="personal-form" onSubmit={handleInviteSubmit}>
+                      <label>
+                        {t.personalPage.inviteFields.recipients}
+                        <textarea
+                          rows={4}
+                          value={inviteState.recipients}
+                          onChange={handleInviteChange('recipients')}
+                          placeholder={t.personalPage.invitePlaceholders.recipients}
+                        />
+                      </label>
+                      <label>
+                        {t.personalPage.inviteFields.message}
+                        <textarea
+                          rows={3}
+                          value={inviteState.message}
+                          onChange={handleInviteChange('message')}
+                          placeholder={t.personalPage.invitePlaceholders.message}
+                        />
+                      </label>
+                      {inviteStatus ? (
+                        <p
+                          className={inviteStatus.type === 'success' ? 'form-success' : 'form-error'}
+                        >
+                          {inviteStatus.message}
+                        </p>
+                      ) : null}
+                      <button
+                        type="submit"
+                        className="primary"
+                        disabled={isSendingInvites || !loggedInPage}
+                      >
+                        {isSendingInvites ? t.personalPage.sending : t.personalPage.inviteAction}
+                      </button>
+                    </form>
+                  </section>
+                  <section id="personal-manage-share" className="personal-manage-panel">
+                    <h3>{t.personalPage.manageMenu.share}</h3>
+                    <p className="detail-meta">{t.personalPage.manageMenu.shareDescription}</p>
+                    <div className="personal-share">
+                      <p>{t.personalPage.shareLabel}</p>
+                      <a href={shareLink}>{shareLink}</a>
+                    </div>
+                  </section>
                 </div>
-              </article>
+              </div>
             ) : null}
           </div>
         </section>

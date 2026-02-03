@@ -159,6 +159,15 @@ export const uiTranslations = {
       manageTitle: 'Manage your personal page',
       manageDescription:
         'Log in with the access code from your email to share your link and invite supporters.',
+      manageMenu: {
+        title: 'Personal page menu',
+        overview: 'Overview',
+        overviewDescription: 'Keep track of your fundraising goal and progress at a glance.',
+        invites: 'Send invitations',
+        share: 'Share link',
+        shareDescription: 'Copy your personal link and share it with friends and family.',
+        defaultName: 'My personal page',
+      },
       backToPersonal: 'Back to personal pages',
       loginTitle: 'Login to your page',
       loginDescription: 'Enter the email and access code we sent you.',
@@ -666,6 +675,15 @@ export const uiTranslations = {
       manageTitle: 'ניהול דף תרומה אישי',
       manageDescription:
         'התחברו עם קוד הגישה שקיבלתם במייל כדי לשתף את הקישור ולבקש תרומות.',
+      manageMenu: {
+        title: 'תפריט הדף האישי',
+        overview: 'סקירה כללית',
+        overviewDescription: 'מעקב מהיר אחרי היעד וההתקדמות שלכם.',
+        invites: 'שליחת הזמנות',
+        share: 'שיתוף הקישור',
+        shareDescription: 'העתיקו את הקישור האישי ושלחו למשפחה ולחברים.',
+        defaultName: 'הדף האישי שלי',
+      },
       backToPersonal: 'חזרה לדפים האישיים',
       loginTitle: 'התחברות לדף האישי',
       loginDescription: 'הזינו את המייל וקוד הגישה שקיבלתם.',
