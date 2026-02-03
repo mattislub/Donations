@@ -169,10 +169,13 @@ export const uiTranslations = {
         donationCashCount: 'Donations by cash',
         invites: 'Send invitations',
         share: 'Share link',
+        emailSettings: 'Email settings',
         addDonation: 'Add donations',
         addDonationDescription:
           'Jump to the donation form to record a contribution or help a supporter donate quickly.',
         shareDescription: 'Copy your personal link and share it with friends and family.',
+        emailSettingsDescription:
+          'Edit the sender name and the message supporters will receive in your email invites.',
         defaultName: 'My personal page',
       },
       backToPersonal: 'Back to personal pages',
@@ -195,15 +198,31 @@ export const uiTranslations = {
         'Add a list of emails (one per line or separated by commas) and we will send your request.',
       inviteFields: {
         recipients: 'Recipients list',
-        message: 'Personal message (optional)',
       },
       invitePlaceholders: {
         recipients: 'name1@email.com, name2@email.com',
-        message: 'Write a short note to your supporters.',
       },
       inviteAction: 'Send requests',
       inviteSuccess: 'Your invitations were sent successfully.',
       inviteError: 'Unable to send invitations. Please try again.',
+      inviteEmailPreviewTitle: 'Invite email preview',
+      inviteEmailPreviewDescription:
+        'Need to adjust the wording? Update it in the email settings panel.',
+      emailSettingsTitle: 'Edit invite email',
+      emailSettingsDescription:
+        'Set the sender name and message that will appear in your supporter emails. Your changes will be saved for next time.',
+      emailSettingsFields: {
+        senderName: 'Sender name',
+        message: 'Email message',
+      },
+      emailSettingsPlaceholders: {
+        senderName: 'Your name or team name',
+        message: 'Write a short message to invite supporters.',
+      },
+      emailSettingsAction: 'Save email settings',
+      emailSettingsSuccess: 'Email settings saved.',
+      emailSettingsError: 'Unable to save email settings. Please try again.',
+      emailSettingsEmptyMessage: 'No message saved yet.',
     },
     info: {
       title: 'More information',
@@ -692,9 +711,11 @@ export const uiTranslations = {
         donationCashCount: 'כמה תרומות במזומן',
         invites: 'שליחת הזמנות',
         share: 'שיתוף הקישור',
+        emailSettings: 'הגדרות מייל',
         addDonation: 'הוסף תרומות',
         addDonationDescription: 'עברו לטופס התרומה כדי להוסיף תרומה או לסייע לתומכים.',
         shareDescription: 'העתיקו את הקישור האישי ושלחו למשפחה ולחברים.',
+        emailSettingsDescription: 'ערכו את שם השולח ואת נוסח המייל שנשלח לתומכים.',
         defaultName: 'הדף האישי שלי',
       },
       backToPersonal: 'חזרה לדפים האישיים',
@@ -717,15 +738,31 @@ export const uiTranslations = {
         'הוסיפו רשימת מיילים (שורה לכל כתובת או מופרדים בפסיקים) והמערכת תשלח עבורכם.',
       inviteFields: {
         recipients: 'רשימת נמענים',
-        message: 'הודעה אישית (אופציונלי)',
       },
       invitePlaceholders: {
         recipients: 'name1@email.com, name2@email.com',
-        message: 'כתבו הודעה קצרה לתומכים.',
       },
       inviteAction: 'שליחת בקשה',
       inviteSuccess: 'ההודעות נשלחו בהצלחה.',
       inviteError: 'לא ניתן לשלוח הודעות. נסו שוב.',
+      inviteEmailPreviewTitle: 'תצוגה מקדימה למייל',
+      inviteEmailPreviewDescription:
+        'רוצים לשנות את הטקסט? עדכנו אותו בלשונית הגדרות המייל.',
+      emailSettingsTitle: 'עריכת מייל הזמנה',
+      emailSettingsDescription:
+        'קבעו את שם השולח ואת הטקסט שיופיע במיילים לתומכים. השינויים יישמרו לפעם הבאה.',
+      emailSettingsFields: {
+        senderName: 'שם השולח',
+        message: 'טקסט המייל',
+      },
+      emailSettingsPlaceholders: {
+        senderName: 'שם מלא או שם צוות',
+        message: 'כתבו הודעה קצרה להזמנה לתומכים.',
+      },
+      emailSettingsAction: 'שמירת הגדרות מייל',
+      emailSettingsSuccess: 'הגדרות המייל נשמרו.',
+      emailSettingsError: 'לא ניתן לשמור את ההגדרות. נסו שוב.',
+      emailSettingsEmptyMessage: 'טרם נשמר טקסט.',
     },
     info: {
       title: 'עוד מידע',

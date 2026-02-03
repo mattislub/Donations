@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import heroBackground from '../assets/hero-background.png';
 import NavBar from '../components/NavBar';
 import { buildApiUrl } from '../utils/api';
@@ -8,9 +8,12 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
   const [loginStatus, setLoginStatus] = useState(null);
   const [loggedInPage, setLoggedInPage] = useState(null);
   const [activePanel, setActivePanel] = useState('overview');
-  const [inviteState, setInviteState] = useState({ recipients: '', message: '' });
+  const [inviteState, setInviteState] = useState({ recipients: '' });
   const [inviteStatus, setInviteStatus] = useState(null);
   const [isSendingInvites, setIsSendingInvites] = useState(false);
+  const [emailSettings, setEmailSettings] = useState({ senderName: '', message: '' });
+  const [emailStatus, setEmailStatus] = useState(null);
+  const [isSavingEmailSettings, setIsSavingEmailSettings] = useState(false);
 
   const handleLoginChange = (field) => (event) => {
     setLoginState((prev) => ({ ...prev, [field]: event.target.value }));
@@ -19,6 +22,21 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
   const handleInviteChange = (field) => (event) => {
     setInviteState((prev) => ({ ...prev, [field]: event.target.value }));
   };
+
+  const handleEmailChange = (field) => (event) => {
+    setEmailSettings((prev) => ({ ...prev, [field]: event.target.value }));
+  };
+
+  useEffect(() => {
+    if (!loggedInPage) {
+      return;
+    }
+    setEmailSettings({
+      senderName:
+        loggedInPage.invite_sender_name || loggedInPage.owner_name || loggedInPage.name || '',
+      message: loggedInPage.invite_message || '',
+    });
+  }, [loggedInPage]);
 
   const shareLink = useMemo(() => {
     if (!loggedInPage?.slug) {
@@ -69,7 +87,6 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
           body: JSON.stringify({
             accessCode: loginState.accessCode,
             recipients: inviteState.recipients,
-            message: inviteState.message,
             language,
           }),
         },
@@ -80,11 +97,55 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
       }
 
       setInviteStatus({ type: 'success', message: t.personalPage.inviteSuccess });
-      setInviteState({ recipients: '', message: '' });
+      setInviteState({ recipients: '' });
     } catch (error) {
       setInviteStatus({ type: 'error', message: t.personalPage.inviteError });
     } finally {
       setIsSendingInvites(false);
+    }
+  };
+
+  const handleEmailSubmit = async (event) => {
+    event.preventDefault();
+    if (!loggedInPage) {
+      return;
+    }
+    setEmailStatus(null);
+    setIsSavingEmailSettings(true);
+
+    try {
+      const response = await fetch(
+        buildApiUrl(`/api/personal-pages/${loggedInPage.slug}/email-settings`),
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            accessCode: loginState.accessCode,
+            senderName: emailSettings.senderName,
+            message: emailSettings.message,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to save email settings');
+      }
+
+      const payload = await response.json();
+      setLoggedInPage((prev) =>
+        prev
+          ? {
+              ...prev,
+              invite_sender_name: payload.settings.senderName,
+              invite_message: payload.settings.message,
+            }
+          : prev,
+      );
+      setEmailStatus({ type: 'success', message: t.personalPage.emailSettingsSuccess });
+    } catch (error) {
+      setEmailStatus({ type: 'error', message: t.personalPage.emailSettingsError });
+    } finally {
+      setIsSavingEmailSettings(false);
     }
   };
 
@@ -228,6 +289,13 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
                     </button>
                     <button
                       type="button"
+                      className={activePanel === 'email' ? 'is-active' : ''}
+                      onClick={() => setActivePanel('email')}
+                    >
+                      {t.personalPage.manageMenu.emailSettings}
+                    </button>
+                    <button
+                      type="button"
                       className={activePanel === 'donations' ? 'is-active' : ''}
                       onClick={() => setActivePanel('donations')}
                     >
@@ -283,6 +351,23 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
                       {loginStatus?.type === 'success' ? (
                         <p className="form-success">{loginStatus.message}</p>
                       ) : null}
+                      <div className="personal-share">
+                        <p>{t.personalPage.inviteEmailPreviewTitle}</p>
+                        <p className="detail-meta">
+                          {t.personalPage.inviteEmailPreviewDescription}
+                        </p>
+                        <div>
+                          <strong>{t.personalPage.emailSettingsFields.senderName}:</strong>{' '}
+                          {emailSettings.senderName ||
+                            loggedInPage?.invite_sender_name ||
+                            loggedInPage?.owner_name ||
+                            loggedInPage?.name}
+                        </div>
+                        <div>
+                          <strong>{t.personalPage.emailSettingsFields.message}:</strong>{' '}
+                          {emailSettings.message || t.personalPage.emailSettingsEmptyMessage}
+                        </div>
+                      </div>
                       <form className="personal-form" onSubmit={handleInviteSubmit}>
                         <label>
                           {t.personalPage.inviteFields.recipients}
@@ -291,15 +376,6 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
                             value={inviteState.recipients}
                             onChange={handleInviteChange('recipients')}
                             placeholder={t.personalPage.invitePlaceholders.recipients}
-                          />
-                        </label>
-                        <label>
-                          {t.personalPage.inviteFields.message}
-                          <textarea
-                            rows={3}
-                            value={inviteState.message}
-                            onChange={handleInviteChange('message')}
-                            placeholder={t.personalPage.invitePlaceholders.message}
                           />
                         </label>
                         {inviteStatus ? (
@@ -329,6 +405,46 @@ function PersonalManagePage({ t, language, onLanguageChange }) {
                         <p>{t.personalPage.shareLabel}</p>
                         <a href={shareLink}>{shareLink}</a>
                       </div>
+                    </section>
+                  ) : null}
+                  {activePanel === 'email' ? (
+                    <section id={panelId} className="personal-manage-panel">
+                      <h3>{t.personalPage.emailSettingsTitle}</h3>
+                      <p>{t.personalPage.emailSettingsDescription}</p>
+                      <form className="personal-form" onSubmit={handleEmailSubmit}>
+                        <label>
+                          {t.personalPage.emailSettingsFields.senderName}
+                          <input
+                            type="text"
+                            value={emailSettings.senderName}
+                            onChange={handleEmailChange('senderName')}
+                            placeholder={t.personalPage.emailSettingsPlaceholders.senderName}
+                          />
+                        </label>
+                        <label>
+                          {t.personalPage.emailSettingsFields.message}
+                          <textarea
+                            rows={4}
+                            value={emailSettings.message}
+                            onChange={handleEmailChange('message')}
+                            placeholder={t.personalPage.emailSettingsPlaceholders.message}
+                          />
+                        </label>
+                        {emailStatus ? (
+                          <p
+                            className={
+                              emailStatus.type === 'success' ? 'form-success' : 'form-error'
+                            }
+                          >
+                            {emailStatus.message}
+                          </p>
+                        ) : null}
+                        <button type="submit" className="primary" disabled={isSavingEmailSettings}>
+                          {isSavingEmailSettings
+                            ? t.personalPage.sending
+                            : t.personalPage.emailSettingsAction}
+                        </button>
+                      </form>
                     </section>
                   ) : null}
                   {activePanel === 'donations' ? (
