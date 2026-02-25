@@ -3,6 +3,7 @@ import './App.css';
 import { initialDataState, uiTranslations } from './data/content';
 import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
+import DonateNowPage from './pages/DonateNowPage';
 import PersonalManagePage from './pages/PersonalManagePage';
 import PersonalPage from './pages/PersonalPage';
 import { buildApiUrl } from './utils/api';
@@ -29,6 +30,9 @@ function App() {
     }
     if (hash === '#personal-manage' || pathname === '/personal-manage') {
       return 'personal-manage';
+    }
+    if (hash === '#donate-now' || pathname === '/donate-now') {
+      return 'donate-now';
     }
     return 'home';
   };
@@ -121,6 +125,15 @@ function App() {
           t={t}
           language={language}
           onLanguageChange={setLanguage}
+        />
+      ) : currentView === 'donate-now' ? (
+        <DonateNowPage
+          t={t}
+          language={language}
+          onLanguageChange={setLanguage}
+          data={data}
+          percent={percent}
+          isLoading={isLoading}
         />
       ) : (
         <HomePage

@@ -1197,3 +1197,18 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+.donate-now-minimal {
+  min-height: 70vh;
+  display: grid;
+  align-content: center;
+  gap: 28px;
+}
+
+.donate-now-header {
+  text-align: center;
+}
+
+.donate-now-header h1 {
+  margin-bottom: 8px;
+}
