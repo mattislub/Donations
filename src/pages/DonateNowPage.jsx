@@ -3,6 +3,16 @@ import { useState } from 'react';
 function DonateNowPage({ t }) {
   const [customAmount, setCustomAmount] = useState('');
 
+  const normalizedAmount = Number(customAmount);
+  const hasValidAmount = Number.isFinite(normalizedAmount) && normalizedAmount > 0;
+
+  const handleContinueToDonorDetails = () => {
+    if (!hasValidAmount) {
+      return;
+    }
+    window.location.hash = '#donations';
+  };
+
   return (
     <>
       <main>
@@ -12,7 +22,7 @@ function DonateNowPage({ t }) {
             <p>{t.logoSubtitle}</p>
           </div>
 
-          <div className="donation-options">
+          <div className="donation-options donate-now-options-stack">
             <article className="donation-option-card">
               <h3>{t.donateNowFlow.withPersonalTitle}</h3>
               <a className="primary" href="#personal-page">
@@ -37,10 +47,16 @@ function DonateNowPage({ t }) {
                   onChange={(event) => setCustomAmount(event.target.value)}
                   placeholder={t.donateNowFlow.customAmountPlaceholder}
                 />
-                <a className="secondary" href="#donations">
-                  {t.donateNowFlow.customAmountAction}
-                  {customAmount ? `: ${customAmount}` : ''}
-                </a>
+                <button
+                  type="button"
+                  className="secondary donate-now-continue"
+                  onClick={handleContinueToDonorDetails}
+                  disabled={!hasValidAmount}
+                >
+                  {hasValidAmount
+                    ? `${t.donateNowFlow.customAmountAction}: ${customAmount}`
+                    : t.donateNowFlow.selectAmountFirstAction}
+                </button>
               </div>
             </article>
           </div>
