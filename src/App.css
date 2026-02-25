@@ -1212,3 +1212,9 @@ footer {
 .donate-now-header h1 {
   margin-bottom: 8px;
 }
+
+.custom-amount-box {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}

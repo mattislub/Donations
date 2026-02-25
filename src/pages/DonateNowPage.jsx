@@ -1,4 +1,8 @@
+import { useState } from 'react';
+
 function DonateNowPage({ t }) {
+  const [customAmount, setCustomAmount] = useState('');
+
   return (
     <>
       <main>
@@ -21,6 +25,23 @@ function DonateNowPage({ t }) {
               <a className="primary" href="#donations">
                 {t.donateNowFlow.withoutPersonalAction}
               </a>
+
+              <div className="custom-amount-box">
+                <label htmlFor="custom-amount">{t.donateNowFlow.customAmountLabel}</label>
+                <input
+                  id="custom-amount"
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={customAmount}
+                  onChange={(event) => setCustomAmount(event.target.value)}
+                  placeholder={t.donateNowFlow.customAmountPlaceholder}
+                />
+                <a className="secondary" href="#donations">
+                  {t.donateNowFlow.customAmountAction}
+                  {customAmount ? `: ${customAmount}` : ''}
+                </a>
+              </div>
             </article>
           </div>
         </section>
