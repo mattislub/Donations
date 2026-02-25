@@ -9,6 +9,7 @@ import {
   findPersonalPageBySlug,
   initializeDatabase,
   updatePersonalPageEmailSettings,
+  updateCampaignTarget,
   upsertAccessCode,
   upsertAdminProfile,
 } from './db.js';
@@ -66,6 +67,22 @@ app.post('/api/admin/profile', async (req, res) => {
     return res.json({ status: 'ok' });
   } catch (error) {
     return res.status(500).json({ error: 'Failed to save profile.' });
+  }
+});
+
+app.post('/api/admin/campaign-target', async (req, res) => {
+  const { target } = req.body ?? {};
+  const numericTarget = Number(target);
+
+  if (!Number.isFinite(numericTarget) || numericTarget <= 0) {
+    return res.status(400).json({ error: 'Target must be a positive number.' });
+  }
+
+  try {
+    const progressStats = await updateCampaignTarget(Math.round(numericTarget));
+    return res.json({ progress: progressStats.progress, target: progressStats.target });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to save campaign target.' });
   }
 });
 

@@ -15,6 +15,10 @@ function App() {
   const [adminForm, setAdminForm] = useState({ username: '', password: '' });
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [adminError, setAdminError] = useState('');
+
+  const handleCampaignTargetUpdated = (nextTarget) => {
+    setData((prev) => ({ ...prev, target: nextTarget }));
+  };
   const getViewFromLocation = () => {
     const { hash, pathname } = window.location;
     if (hash === '#admin' || pathname === '/admin') {
@@ -132,6 +136,8 @@ function App() {
           onAdminChange={handleAdminChange}
           onAdminSubmit={handleAdminSubmit}
           onAdminSignOut={handleAdminSignOut}
+          campaignTarget={data.target}
+          onCampaignTargetUpdated={handleCampaignTargetUpdated}
         />
       ) : currentView === 'personal-page' ? (
         <PersonalPage

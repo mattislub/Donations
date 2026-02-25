@@ -1287,3 +1287,16 @@ footer {
 .donate-now-continue:disabled:hover {
   transform: none;
 }
+
+.admin-feedback {
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
+.admin-feedback.success {
+  color: #1b5e20;
+}
+
+.admin-feedback.error {
+  color: #b00020;
+}
