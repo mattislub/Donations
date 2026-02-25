@@ -1218,3 +1218,28 @@ footer {
   gap: 8px;
   margin-top: 8px;
 }
+
+.donate-now-options-stack {
+  grid-template-columns: 1fr;
+  max-width: 720px;
+  margin: 0 auto 24px;
+}
+
+.donate-now-continue {
+  width: 100%;
+  background: #f6c453;
+  color: #1a1405;
+  border: 1px solid #f6c453;
+}
+
+.donate-now-continue:disabled {
+  background: #e5e7eb;
+  color: #6b7280;
+  border-color: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.donate-now-continue:disabled:hover {
+  transform: none;
+}
