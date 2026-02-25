@@ -1,7 +1,21 @@
+import { useState } from 'react';
 import { budgetItemNames } from '../../data/content';
 import { translateValue } from '../../utils/translation';
 
 function DonationsSection({ t, language, budgetItems }) {
+  const [customAmount, setCustomAmount] = useState('');
+
+  const normalizedAmount = Number(customAmount);
+  const hasValidAmount = Number.isFinite(normalizedAmount) && normalizedAmount > 0;
+
+  const handleContinueToDonorDetails = () => {
+    if (!hasValidAmount) {
+      return;
+    }
+
+    window.location.hash = '#contact';
+  };
+
   return (
     <section id="donations" className="section">
       <div className="section-header">
@@ -18,6 +32,28 @@ function DonationsSection({ t, language, budgetItems }) {
                 {amount}
               </button>
             ))}
+          </div>
+          <div className="custom-amount-box">
+            <label htmlFor="custom-amount">{t.donateNowFlow.customAmountLabel}</label>
+            <input
+              id="custom-amount"
+              type="number"
+              min="1"
+              step="1"
+              value={customAmount}
+              onChange={(event) => setCustomAmount(event.target.value)}
+              placeholder={t.donateNowFlow.customAmountPlaceholder}
+            />
+            <button
+              type="button"
+              className="secondary donate-now-continue"
+              onClick={handleContinueToDonorDetails}
+              disabled={!hasValidAmount}
+            >
+              {hasValidAmount
+                ? `${t.donateNowFlow.customAmountAction}: ${customAmount}`
+                : t.donateNowFlow.selectAmountFirstAction}
+            </button>
           </div>
         </article>
         <article className="donation-option-card" role="listitem">
