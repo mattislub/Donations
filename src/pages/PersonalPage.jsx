@@ -24,6 +24,7 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
   });
   const [formStatus, setFormStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const getSelectedSlug = () => {
     const [, query] = window.location.hash.split('?');
     if (!query) {
@@ -149,6 +150,7 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
         phone: '',
         notes: '',
       });
+      setIsCreateModalOpen(false);
     } catch (error) {
       console.error('Personal page creation error (client).', error);
       setFormStatus({ type: 'error', message: t.personalPage.createError });
@@ -298,95 +300,121 @@ function PersonalPage({ t, language, onLanguageChange, personalPages, isLoading 
         <section className="section">
           <div className="section-header">
             <h2>{t.personalPage.createTitle}</h2>
-            <p>{t.personalPage.createDescription}</p>
           </div>
-          <form className="personal-form" onSubmit={handleCreateSubmit}>
-            <div className="form-row">
-              <label htmlFor="pageTitle">
-                {t.personalPage.fields.pageTitle}
-                <input
-                  id="pageTitle"
-                  name="pageTitle"
-                  placeholder={t.personalPage.placeholders.pageTitle}
-                  value={formState.pageTitle}
-                  onChange={handleFormChange('pageTitle')}
-                  required
-                />
-              </label>
-              <label htmlFor="goal">
-                {t.personalPage.fields.goal}
-                <input
-                  id="goal"
-                  name="goal"
-                  placeholder={t.personalPage.placeholders.goal}
-                  value={formState.goal}
-                  onChange={handleFormChange('goal')}
-                  type="number"
-                  min="1"
-                  required
-                />
-              </label>
-            </div>
-            <div className="form-row">
-              <label htmlFor="fullName">
-                {t.personalPage.fields.fullName}
-                <input
-                  id="fullName"
-                  name="fullName"
-                  placeholder={t.personalPage.placeholders.fullName}
-                  value={formState.fullName}
-                  onChange={handleFormChange('fullName')}
-                  required
-                />
-              </label>
-              <label htmlFor="email">
-                {t.personalPage.fields.email}
-                <input
-                  id="email"
-                  name="email"
-                  placeholder={t.personalPage.placeholders.email}
-                  value={formState.email}
-                  onChange={handleFormChange('email')}
-                  type="email"
-                  required
-                />
-              </label>
-            </div>
-            <div className="form-row">
-              <label htmlFor="phone">
-                {t.personalPage.fields.phone}
-                <input
-                  id="phone"
-                  name="phone"
-                  placeholder={t.personalPage.placeholders.phone}
-                  value={formState.phone}
-                  onChange={handleFormChange('phone')}
-                  type="tel"
-                />
-              </label>
-              <label htmlFor="notes" className="full-width">
-                {t.personalPage.fields.notes}
-                <textarea
-                  id="notes"
-                  name="notes"
-                  placeholder={t.personalPage.placeholders.notes}
-                  rows={4}
-                  value={formState.notes}
-                  onChange={handleFormChange('notes')}
-                />
-              </label>
-            </div>
-            {formStatus ? (
-              <p className={formStatus.type === 'success' ? 'form-success' : 'form-error'}>
-                {formStatus.message}
-              </p>
-            ) : null}
-            <button type="submit" className="primary" disabled={isSubmitting}>
-              {isSubmitting ? t.personalPage.sending : t.personalPage.submit}
-            </button>
-          </form>
+          <button type="button" className="primary" onClick={() => setIsCreateModalOpen(true)}>
+            {t.personalPage.createTitle}
+          </button>
         </section>
       </main>
+      {isCreateModalOpen ? (
+        <div className="modal-backdrop" role="presentation" onClick={() => setIsCreateModalOpen(false)}>
+          <div
+            className="modal-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="create-personal-page-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h3 id="create-personal-page-title">{t.personalPage.createTitle}</h3>
+              <button
+                type="button"
+                className="modal-close"
+                onClick={() => setIsCreateModalOpen(false)}
+                aria-label={t.close}
+              >
+                ×
+              </button>
+            </div>
+            <p className="modal-description">{t.personalPage.createDescription}</p>
+            <form className="personal-form" onSubmit={handleCreateSubmit}>
+              <div className="form-row">
+                <label htmlFor="pageTitle">
+                  {t.personalPage.fields.pageTitle}
+                  <input
+                    id="pageTitle"
+                    name="pageTitle"
+                    placeholder={t.personalPage.placeholders.pageTitle}
+                    value={formState.pageTitle}
+                    onChange={handleFormChange('pageTitle')}
+                    required
+                  />
+                </label>
+                <label htmlFor="goal">
+                  {t.personalPage.fields.goal}
+                  <input
+                    id="goal"
+                    name="goal"
+                    placeholder={t.personalPage.placeholders.goal}
+                    value={formState.goal}
+                    onChange={handleFormChange('goal')}
+                    type="number"
+                    min="1"
+                    required
+                  />
+                </label>
+              </div>
+              <div className="form-row">
+                <label htmlFor="fullName">
+                  {t.personalPage.fields.fullName}
+                  <input
+                    id="fullName"
+                    name="fullName"
+                    placeholder={t.personalPage.placeholders.fullName}
+                    value={formState.fullName}
+                    onChange={handleFormChange('fullName')}
+                    required
+                  />
+                </label>
+                <label htmlFor="email">
+                  {t.personalPage.fields.email}
+                  <input
+                    id="email"
+                    name="email"
+                    placeholder={t.personalPage.placeholders.email}
+                    value={formState.email}
+                    onChange={handleFormChange('email')}
+                    type="email"
+                    required
+                  />
+                </label>
+              </div>
+              <div className="form-row">
+                <label htmlFor="phone">
+                  {t.personalPage.fields.phone}
+                  <input
+                    id="phone"
+                    name="phone"
+                    placeholder={t.personalPage.placeholders.phone}
+                    value={formState.phone}
+                    onChange={handleFormChange('phone')}
+                    type="tel"
+                  />
+                </label>
+                <label htmlFor="notes" className="full-width">
+                  {t.personalPage.fields.notes}
+                  <textarea
+                    id="notes"
+                    name="notes"
+                    placeholder={t.personalPage.placeholders.notes}
+                    rows={4}
+                    value={formState.notes}
+                    onChange={handleFormChange('notes')}
+                  />
+                </label>
+              </div>
+              {formStatus ? (
+                <p className={formStatus.type === 'success' ? 'form-success' : 'form-error'}>
+                  {formStatus.message}
+                </p>
+              ) : null}
+              <button type="submit" className="primary" disabled={isSubmitting}>
+                {isSubmitting ? t.personalPage.sending : t.personalPage.submit}
+              </button>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
