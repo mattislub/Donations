@@ -164,7 +164,6 @@ function App() {
           data={data}
           percent={percent}
           isLoading={isLoading}
-          currentView={currentView}
         />
       )}
     </div>
