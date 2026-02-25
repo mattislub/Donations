@@ -34,6 +34,27 @@ function App() {
     if (hash === '#donate-now' || pathname === '/donate-now') {
       return 'donate-now';
     }
+    if (hash === '#donations' || pathname === '/donations') {
+      return 'donations';
+    }
+    if (hash === '#levels' || pathname === '/levels') {
+      return 'levels';
+    }
+    if (hash === '#steps' || pathname === '/steps') {
+      return 'steps';
+    }
+    if (hash === '#status' || pathname === '/status') {
+      return 'status';
+    }
+    if (hash === '#personal-section' || pathname === '/personal-sections') {
+      return 'personal';
+    }
+    if (hash === '#info' || pathname === '/info') {
+      return 'info';
+    }
+    if (hash === '#contact' || pathname === '/contact') {
+      return 'contact';
+    }
     return 'home';
   };
   const [currentView, setCurrentView] = useState(getViewFromLocation);
@@ -143,6 +164,7 @@ function App() {
           data={data}
           percent={percent}
           isLoading={isLoading}
+          currentView={currentView}
         />
       )}
     </div>

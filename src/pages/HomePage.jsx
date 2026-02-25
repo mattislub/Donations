@@ -8,7 +8,36 @@ import PersonalSection from '../components/sections/PersonalSection';
 import InfoSection from '../components/sections/InfoSection';
 import ContactFooter from '../components/sections/ContactFooter';
 
-function HomePage({ t, language, onLanguageChange, data, percent, isLoading }) {
+function HomePage({ t, language, onLanguageChange, data, percent, isLoading, currentView }) {
+  const renderSection = () => {
+    switch (currentView) {
+      case 'donations':
+        return <DonationsSection t={t} language={language} budgetItems={data.budgetItems} />;
+      case 'levels':
+        return <LevelsSection t={t} language={language} levels={data.levels} />;
+      case 'steps':
+        return <StepsSection t={t} language={language} />;
+      case 'status':
+        return <StatusSection t={t} language={language} statusMarkers={data.statusMarkers} />;
+      case 'personal':
+        return <PersonalSection t={t} language={language} personalPages={data.personalPages} />;
+      case 'info':
+        return <InfoSection t={t} />;
+      case 'contact':
+        return null;
+      case 'home':
+      default:
+        return (
+          <section className="section">
+            <div className="section-header">
+              <h2>{t.hero.title}</h2>
+              <p>{t.hero.description}</p>
+            </div>
+          </section>
+        );
+    }
+  };
+
   return (
     <>
       <HeroSection
@@ -26,14 +55,9 @@ function HomePage({ t, language, onLanguageChange, data, percent, isLoading }) {
             </div>
           </section>
         ) : null}
-        <DonationsSection t={t} language={language} budgetItems={data.budgetItems} />
-        <LevelsSection t={t} language={language} levels={data.levels} />
-        <StepsSection t={t} language={language} />
-        <StatusSection t={t} language={language} statusMarkers={data.statusMarkers} />
-        <PersonalSection t={t} language={language} personalPages={data.personalPages} />
-        <InfoSection t={t} />
+        {renderSection()}
       </main>
-      <ContactFooter t={t} />
+      {currentView === 'contact' ? <ContactFooter t={t} /> : null}
     </>
   );
 }
