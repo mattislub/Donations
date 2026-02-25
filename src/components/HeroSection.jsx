@@ -10,7 +10,7 @@ function HeroSection({ t, data, percent, nav }) {
         <h1>{t.hero.title}</h1>
         <p className="hero-description">{t.hero.description}</p>
         <div className="hero-actions">
-          <a className="primary" href="#donations">
+          <a className="primary" href="#donate-now">
             {t.hero.donateNow}
           </a>
           <a className="secondary" href="#levels">

@@ -50,6 +50,25 @@ export const uiTranslations = {
       donatedLabel: 'Donated',
       action: 'Choose to donate',
     },
+
+    donateNowFlow: {
+      title: 'Choose how you would like to donate',
+      description: 'Select one of the two donation paths below.',
+      withPersonalTitle: 'Donate via Personal Donation Pages',
+      withPersonalDescription: 'Open the list of all personal donation pages and donate through a selected page.',
+      withPersonalAction: 'View Personal Donation Pages',
+      withoutPersonalTitle: 'Donate without Personal Donation Pages',
+      withoutPersonalDescription: 'Continue to choose your preferred type of direct donation.',
+      withoutPersonalAction: 'Continue without Personal Donation Pages',
+      customAmountLabel: 'Enter a custom donation amount',
+      customAmountPlaceholder: 'Enter amount',
+      customAmountAction: 'Continue with this amount',
+      itemAmountTitle: 'Choose amount for a donation item',
+      itemAmountDescription: 'Select a specific budget item and donate according to its cost.',
+      directAmountTitle: 'Choose donation amount',
+      directAmountDescription: 'Choose one of the predefined donation amounts.',
+    },
+
     levels: {
       title: 'Donation Levels',
       description: 'Three clear levels with meaningful value and benefits.',
@@ -600,6 +619,25 @@ export const uiTranslations = {
       donatedLabel: 'נתרם',
       action: 'בחרו לתרום',
     },
+
+    donateNowFlow: {
+      title: 'בחרו כיצד תרצו לתרום',
+      description: 'בחרו אחת משתי אפשרויות התרומה שלפניכם.',
+      withPersonalTitle: 'תרומה דרך Personal Donation Pages',
+      withPersonalDescription: 'פתיחת רשימה של כל דפי התרומה האישיים ותרומה דרך דף נבחר.',
+      withPersonalAction: 'לרשימת Personal Donation Pages',
+      withoutPersonalTitle: 'תרומה ללא Personal Donation Pages',
+      withoutPersonalDescription: 'המשיכו לבחירת סוג התרומה הישירה שמתאימה לכם.',
+      withoutPersonalAction: 'המשך ללא Personal Donation Pages',
+      customAmountLabel: 'הזינו סכום תרומה עצמאי',
+      customAmountPlaceholder: 'הזינו סכום',
+      customAmountAction: 'המשך עם סכום זה',
+      itemAmountTitle: 'בחירת סכום עבור פריט לתרומה',
+      itemAmountDescription: 'בחרו פריט תקציבי לתרומה בהתאם לעלות שלו.',
+      directAmountTitle: 'בחירת סכום לתרומה',
+      directAmountDescription: 'בחרו אחד מסכומי התרומה המוגדרים מראש.',
+    },
+
     levels: {
       title: 'רמות תרומה',
       description: 'שלוש רמות ברורות עם ערך רגשי ותועלות משמעותיות.',
