@@ -13,6 +13,8 @@ function AdminPage({
   onAdminChange,
   onAdminSubmit,
   onAdminSignOut,
+  campaignTarget,
+  onCampaignTargetUpdated,
 }) {
   const cloneAdminContent = (source) => JSON.parse(JSON.stringify(source));
   const [adminContent, setAdminContent] = useState(() => cloneAdminContent(t.admin));
@@ -28,11 +30,12 @@ function AdminPage({
   });
   const [profileStatus, setProfileStatus] = useState(null);
   const [campaignForm, setCampaignForm] = useState({
-    totalGoal: '1800000',
+    totalGoal: String(campaignTarget ?? ''),
     defaultPersonalGoal: '50000',
     allowPersonalGoals: true,
     requireApproval: true,
   });
+  const [campaignStatus, setCampaignStatus] = useState(null);
   const adminSectionClassName = 'section admin-section admin-section-background';
   const adminSectionStyle = { backgroundImage: `url(${heroBackground})` };
   const adminText = isEditMode ? adminDraft : adminContent;
@@ -51,6 +54,10 @@ function AdminPage({
     setAdminDraft(nextAdminContent);
     setIsEditMode(false);
   }, [t]);
+
+  useEffect(() => {
+    setCampaignForm((prev) => ({ ...prev, totalGoal: String(campaignTarget ?? '') }));
+  }, [campaignTarget]);
 
   const updateAdminDraft = (path, value) => {
     setAdminDraft((prev) => {
@@ -143,6 +150,37 @@ function AdminPage({
       setProfileStatus({ type: 'error', message: adminText.profile.error });
     }
   };
+
+
+  const handleCampaignSubmit = async (event) => {
+    event.preventDefault();
+    setCampaignStatus(null);
+
+    const numericGoal = Number(campaignForm.totalGoal);
+    if (!Number.isFinite(numericGoal) || numericGoal <= 0) {
+      setCampaignStatus({ type: 'error', message: adminText.pages.campaign.error });
+      return;
+    }
+
+    try {
+      const response = await fetch(buildApiUrl('/api/admin/campaign-target'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target: Math.round(numericGoal) }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save campaign target');
+      }
+
+      const payload = await response.json();
+      onCampaignTargetUpdated(payload.target);
+      setCampaignStatus({ type: 'success', message: adminText.pages.campaign.success });
+    } catch (error) {
+      setCampaignStatus({ type: 'error', message: adminText.pages.campaign.error });
+    }
+  };
+
 
   return (
     <>
@@ -539,7 +577,7 @@ function AdminPage({
                             <p>{adminText.pages.campaign.formDescription}</p>
                           </>
                         )}
-                        <form className="admin-form">
+                        <form className="admin-form" onSubmit={handleCampaignSubmit}>
                           <div className="form-row">
                             <label>
                               {adminText.pages.campaign.fields.totalGoal}
@@ -574,9 +612,12 @@ function AdminPage({
                             />
                             <span>{adminText.pages.campaign.fields.requireApproval}</span>
                           </label>
-                          <button className="primary" type="button">
+                          <button className="primary" type="submit">
                             {adminText.pages.campaign.save}
                           </button>
+                          {campaignStatus ? (
+                            <p className={`admin-feedback ${campaignStatus.type}`}>{campaignStatus.message}</p>
+                          ) : null}
                         </form>
                       </div>
                       <div className="admin-crm-modules">

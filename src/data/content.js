@@ -367,6 +367,8 @@ export const uiTranslations = {
             requireApproval: 'Require approval for goal changes',
           },
           save: 'Save campaign settings',
+          success: 'Campaign goal updated successfully.',
+          error: 'Failed to update campaign goal. Please check the entered value.',
           guidelines: [
             {
               title: 'Goal tiers',
@@ -934,6 +936,8 @@ export const uiTranslations = {
             requireApproval: 'דרוש אישור לשינוי יעד',
           },
           save: 'שמירת הגדרות קמפיין',
+          success: 'יעד הקמפיין עודכן בהצלחה.',
+          error: 'עדכון יעד הקמפיין נכשל. יש לבדוק את הערך שהוזן.',
           guidelines: [
             {
               title: 'יעדי ביניים',

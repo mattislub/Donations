@@ -419,6 +419,31 @@ export async function upsertAdminProfile({ fullName, phone, email, address }) {
   );
 }
 
+export async function updateCampaignTarget(target) {
+  const { rows } = await pool.query(
+    `UPDATE progress_stats
+     SET target = $1
+     WHERE id = (
+       SELECT id
+       FROM progress_stats
+       ORDER BY id
+       LIMIT 1
+     )
+     RETURNING progress, target`,
+    [target]
+  );
+
+  if (rows[0]) {
+    return rows[0];
+  }
+
+  const insertResult = await pool.query(
+    'INSERT INTO progress_stats (progress, target) VALUES (0, $1) RETURNING progress, target',
+    [target]
+  );
+  return insertResult.rows[0];
+}
+
 export async function createPersonalPage({
   name,
   goal,
