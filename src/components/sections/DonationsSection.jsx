@@ -16,11 +16,6 @@ function DonationsSection({ t, language, budgetItems }) {
     window.location.hash = '#contact';
   };
 
-  const handlePresetAmountClick = (amount) => {
-    const parsedAmount = amount.replace(/[^\d.]/g, '');
-    setCustomAmount(parsedAmount);
-  };
-
   return (
     <section id="donations" className="section">
       <div className="section-header">
