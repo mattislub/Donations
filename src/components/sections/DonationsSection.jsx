@@ -16,6 +16,11 @@ function DonationsSection({ t, language, budgetItems }) {
     window.location.hash = '#contact';
   };
 
+  const handlePresetAmountClick = (amount) => {
+    const parsedAmount = amount.replace(/[^\d.]/g, '');
+    setCustomAmount(parsedAmount);
+  };
+
   return (
     <section id="donations" className="section">
       <div className="section-header">
@@ -28,7 +33,12 @@ function DonationsSection({ t, language, budgetItems }) {
           <p>{t.donations.amountOptionDescription}</p>
           <div className="donation-option-amounts">
             {t.donations.amountOptions.map((amount) => (
-              <button key={amount} type="button" className="donation-option-pill">
+              <button
+                key={amount}
+                type="button"
+                className="donation-option-pill"
+                onClick={() => handlePresetAmountClick(amount)}
+              >
                 {amount}
               </button>
             ))}
