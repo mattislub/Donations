@@ -8,12 +8,16 @@ function DonationsSection({ t, language, budgetItems }) {
   const normalizedAmount = Number(customAmount);
   const hasValidAmount = Number.isFinite(normalizedAmount) && normalizedAmount > 0;
 
+  const goToDonorDetails = () => {
+    window.location.hash = '#donor-details';
+  };
+
   const handleContinueToDonorDetails = () => {
     if (!hasValidAmount) {
       return;
     }
 
-    window.location.hash = '#contact';
+    goToDonorDetails();
   };
 
   return (
@@ -32,7 +36,7 @@ function DonationsSection({ t, language, budgetItems }) {
                 key={amount}
                 type="button"
                 className="donation-option-pill"
-                onClick={() => handlePresetAmountClick(amount)}
+                onClick={goToDonorDetails}
               >
                 {amount}
               </button>
@@ -83,7 +87,9 @@ function DonationsSection({ t, language, budgetItems }) {
                 <strong>{item.donated}</strong>
               </div>
             </div>
-            <button type="button">{t.donations.action}</button>
+            <button type="button" onClick={goToDonorDetails}>
+              {t.donations.action}
+            </button>
           </article>
         ))}
       </div>

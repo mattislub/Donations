@@ -66,7 +66,7 @@ function StepsSection({ t, language }) {
   };
 
   return (
-    <section className="section">
+    <section id="donor-details" className="section">
       <div className="section-header">
         <h2>{t.steps.title}</h2>
         <p>{t.steps.description}</p>
