@@ -28,7 +28,12 @@ function DonationsSection({ t, language, budgetItems }) {
           <p>{t.donations.amountOptionDescription}</p>
           <div className="donation-option-amounts">
             {t.donations.amountOptions.map((amount) => (
-              <button key={amount} type="button" className="donation-option-pill">
+              <button
+                key={amount}
+                type="button"
+                className="donation-option-pill"
+                onClick={() => handlePresetAmountClick(amount)}
+              >
                 {amount}
               </button>
             ))}
