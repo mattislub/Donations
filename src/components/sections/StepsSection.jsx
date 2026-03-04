@@ -3,7 +3,7 @@ import { budgetItemNames, levelItems, levelNames } from '../../data/content';
 import { buildApiUrl } from '../../utils/api';
 import { translateValue, translateWithFallback } from '../../utils/translation';
 
-function StepsSection({ t, language }) {
+function StepsSection({ t, language, selectedDonation }) {
   const levelOptions = Object.keys(levelNames);
   const itemOptions = ['חדר לימוד', 'חלון מעוטר', 'לבני קיר'];
   const [formData, setFormData] = useState({
@@ -43,6 +43,8 @@ function StepsSection({ t, language }) {
           dedication: formData.dedication,
           currency: formData.currency,
           message: formData.message,
+          selectedAmount: selectedDonation?.amount ?? '',
+          selectedItem: selectedDonation?.item ?? '',
           language,
         }),
       });
@@ -160,6 +162,13 @@ function StepsSection({ t, language }) {
             placeholder={t.form.placeholders.message}
           />
         </label>
+        {selectedDonation?.amount || selectedDonation?.item ? (
+          <p className="form-note">
+            {selectedDonation?.amount
+              ? `${t.form.donationLevel}: ${selectedDonation.amount}`
+              : `${t.form.itemSelection}: ${selectedDonation.item}`}
+          </p>
+        ) : null}
         {status.type === 'error' && <p className="form-error">{status.message}</p>}
         {status.type === 'success' && <p className="form-success">{status.message}</p>}
         <button className="primary" type="submit" disabled={status.type === 'sending'}>

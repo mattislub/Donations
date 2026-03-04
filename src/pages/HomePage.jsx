@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import HeroSection from '../components/HeroSection';
 import NavBar from '../components/NavBar';
 import DonationsSection from '../components/sections/DonationsSection';
@@ -9,6 +10,8 @@ import InfoSection from '../components/sections/InfoSection';
 import ContactFooter from '../components/sections/ContactFooter';
 
 function HomePage({ t, language, onLanguageChange, data, percent, isLoading }) {
+  const [selectedDonation, setSelectedDonation] = useState(null);
+
   return (
     <>
       <HeroSection
@@ -26,9 +29,14 @@ function HomePage({ t, language, onLanguageChange, data, percent, isLoading }) {
             </div>
           </section>
         ) : null}
-        <DonationsSection t={t} language={language} budgetItems={data.budgetItems} />
+        <DonationsSection
+          t={t}
+          language={language}
+          budgetItems={data.budgetItems}
+          onSelectDonation={setSelectedDonation}
+        />
         <LevelsSection t={t} language={language} levels={data.levels} />
-        <StepsSection t={t} language={language} />
+        <StepsSection t={t} language={language} selectedDonation={selectedDonation} />
         <StatusSection t={t} language={language} statusMarkers={data.statusMarkers} />
         <PersonalSection t={t} language={language} personalPages={data.personalPages} />
         <InfoSection t={t} />
