@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { budgetItemNames } from '../../data/content';
 import { translateValue } from '../../utils/translation';
 
-function DonationsSection({ t, language, budgetItems }) {
+function DonationsSection({ t, language, budgetItems, onSelectDonation }) {
   const [customAmount, setCustomAmount] = useState('');
 
   const normalizedAmount = Number(customAmount);
@@ -12,11 +12,22 @@ function DonationsSection({ t, language, budgetItems }) {
     window.location.hash = '#donor-details';
   };
 
+  const handleSelectAmount = (amount) => {
+    onSelectDonation?.({ amount: String(amount) });
+    goToDonorDetails();
+  };
+
   const handleContinueToDonorDetails = () => {
     if (!hasValidAmount) {
       return;
     }
 
+    onSelectDonation?.({ amount: String(normalizedAmount) });
+    goToDonorDetails();
+  };
+
+  const handleSelectItem = (item) => {
+    onSelectDonation?.({ item: translateValue(budgetItemNames, language, item.name) });
     goToDonorDetails();
   };
 
@@ -36,7 +47,7 @@ function DonationsSection({ t, language, budgetItems }) {
                 key={amount}
                 type="button"
                 className="donation-option-pill"
-                onClick={goToDonorDetails}
+                onClick={() => handleSelectAmount(amount)}
               >
                 {amount}
               </button>
@@ -87,7 +98,7 @@ function DonationsSection({ t, language, budgetItems }) {
                 <strong>{item.donated}</strong>
               </div>
             </div>
-            <button type="button" onClick={goToDonorDetails}>
+            <button type="button" onClick={() => handleSelectItem(item)}>
               {t.donations.action}
             </button>
           </article>
